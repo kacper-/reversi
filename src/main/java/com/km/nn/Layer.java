@@ -12,6 +12,7 @@ class Layer implements Serializable {
     private double[] inputs;
     private int neuronCount;
     private int weightCount;
+
     Layer(int neuronCount, int weightCount) {
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;

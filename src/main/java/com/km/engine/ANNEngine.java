@@ -1,6 +1,5 @@
 package com.km.engine;
 
-import com.km.game.GameBoard;
 import com.km.game.GameController;
 import com.km.game.Move;
 import com.km.nn.NetUtil;

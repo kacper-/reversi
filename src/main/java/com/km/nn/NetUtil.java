@@ -11,9 +11,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class NetUtil {
-    private static String filePath;
     private static final double TRAIN_T1 = 0.05d;
     private static final int TRAIN_T2 = 4;
+    private static String filePath;
     private static Net net;
     private static int trainCount;
 
@@ -59,9 +59,7 @@ public class NetUtil {
             return false;
         if ((start.getLoses() + start.getWins()) < TRAIN_T2)
             return false;
-        if ((end.getLoses() + end.getWins()) < TRAIN_T2)
-            return false;
-        return true;
+        return (end.getLoses() + end.getWins()) >= TRAIN_T2;
     }
 
     private static double expected(Nodes start, Nodes end) {
