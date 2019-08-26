@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class GameController {
     private boolean gameSaved = false;
@@ -24,6 +25,20 @@ public class GameController {
     private int wins = 0;
     private int loses = 0;
     private boolean simulation;
+
+    public GameController copy() {
+        GameController controller = new GameController();
+        controller.gameSaved = gameSaved;
+        controller.gameBoard = gameBoard.copy();
+        controller.historyBlack = historyBlack.stream().map(HistoryItem::copy).collect(Collectors.toList());
+        controller.historyWhite = historyWhite.stream().map(HistoryItem::copy).collect(Collectors.toList());
+        controller.moveEngine = moveEngine;
+        controller.simCount = simCount;
+        controller.wins = wins;
+        controller.loses = loses;
+        controller.simulation = simulation;
+        return controller;
+    }
 
     public boolean isSimulation() {
         return simulation;
@@ -146,7 +161,7 @@ public class GameController {
         gameBoard.setTurn(gameBoard.getTurn().opposite());
     }
 
-    private void updateBoard(Move move) {
+    public void updateBoard(Move move) {
         HistoryItem parent = HistoryItem.fromGB(gameBoard);
         Logger.debug(String.format("turn\t[%s] move = [%d, %d]", gameBoard.getTurn().name(), move.getI(), move.getJ()));
         GameRules.updateBoard(move, gameBoard);

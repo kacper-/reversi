@@ -22,7 +22,7 @@ public class GameBoard {
         turn = Slot.EMPTY;
     }
 
-    public int count(Slot s) {
+    int count(Slot s) {
         int c = 0;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -80,9 +80,7 @@ public class GameBoard {
     private Slot[][] copyBoard() {
         Slot[][] b = new Slot[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                b[i][j] = board[i][j];
-            }
+            System.arraycopy(board[i], 0, b[i], 0, SIZE);
         }
         return b;
     }

@@ -1,5 +1,6 @@
 package com.km.engine;
 
+import com.km.game.GameBoard;
 import com.km.game.GameController;
 import com.km.game.Move;
 import com.km.nn.NetUtil;
@@ -30,9 +31,9 @@ public class ANNEngine implements MoveEngine {
     }
 
     private double scoreMove(Move m) {
-        // TODO zaimplementować ruchy zgodnie z ANN
-        //NetUtil.process();
-        return 0;
+        GameController copy = controller.copy();
+        copy.updateBoard(m);
+        return NetUtil.process(copy.getGameBoard().toDBString());
     }
 
     @Override

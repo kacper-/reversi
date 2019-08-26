@@ -49,7 +49,7 @@ public class TreeSearchEngine implements MoveEngine {
         for (Pair<Move, Integer> m : simulations.keySet()) {
             Pair<Integer, Integer> p = simulations.get(m);
             double mcValue = getMCvalue(bigN, p.getFirst(), p.getSecond());
-            Logger.debug(String.format("algo\toption from simulation node id = [%d] mcval = [%f] ann = [%f]", m.getSecond(), mcValue, NetUtil.process(GameService.getNode(m.getSecond()).getBoard())));
+            Logger.debug(String.format("algo\toption from simulation node id = [%d] mcval = [%f]", m.getSecond(), mcValue));
             if (mcValue > score) {
                 best = m;
                 score = mcValue;
