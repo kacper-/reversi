@@ -65,7 +65,7 @@ public class GameController {
     }
 
     private void runSimulations() {
-        if (simulation)
+        if (simulation || EngineType.TREE != moveEngine.getType())
             return;
         Logger.debug("sim\tstarting simulations");
         simCount = 1;
@@ -182,7 +182,7 @@ public class GameController {
             gameSaved = true;
             Score score = getScore();
             GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
-            if (!simulation) {
+            if (!simulation && EngineType.TREE == moveEngine.getType()) {
                 NetUtil.runTraining();
                 printStats(score);
             }
