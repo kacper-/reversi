@@ -15,7 +15,7 @@ public class EngineFactory {
             case SUPER:
                 engine = new SuperEngine();
                 break;
-            case TREE_SEARCH:
+            case TREE:
                 engine = new TreeSearchEngine();
                 break;
         }

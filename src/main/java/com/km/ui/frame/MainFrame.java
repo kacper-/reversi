@@ -43,7 +43,8 @@ public class MainFrame extends JFrame implements ScoreListener {
     private JPanel createRightPanel() {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.add(getButtonPanel());
+        rightPanel.add(getButtonRow1());
+        rightPanel.add(getButtonRow2());
         rightPanel.add(getInfoPanel());
         return rightPanel;
     }
@@ -57,14 +58,13 @@ public class MainFrame extends JFrame implements ScoreListener {
         return infoPanel;
     }
 
-    private JPanel getButtonPanel() {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+    private JPanel getButtonRow1() {
+        JPanel p1 = new JPanel();
+        p1.setLayout(new FlowLayout());
         Button newGameBlack = new Button("BLACK");
         Button newGameWhite = new Button("WHITE");
-        Button newGameWar = new Button("War");
         JComboBox<EngineType> type = new JComboBox<>(EngineType.values());
-        type.setPrototypeDisplayValue(EngineType.TREE_SEARCH);
+        type.setSelectedItem(EngineType.TREE);
         type.setEditable(false);
         newGameBlack.addActionListener(click -> {
             board.startNewGame(Slot.BLACK, type.getPrototypeDisplayValue());
@@ -72,14 +72,29 @@ public class MainFrame extends JFrame implements ScoreListener {
         newGameWhite.addActionListener(click -> {
             board.startNewGame(Slot.WHITE, type.getPrototypeDisplayValue());
         });
+        p1.add(newGameBlack);
+        p1.add(newGameWhite);
+        p1.add(type);
+        return p1;
+    }
+
+    private JPanel getButtonRow2() {
+        JPanel p2 = new JPanel();
+        p2.setLayout(new FlowLayout());
+        Button newGameWar = new Button("War");
+        JComboBox<EngineType> typeW = new JComboBox<>(EngineType.values());
+        typeW.setSelectedItem(EngineType.TREE);
+        typeW.setEditable(false);
+        JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
+        typeB.setSelectedItem(EngineType.ANN);
+        typeB.setEditable(false);
         newGameWar.addActionListener(click -> {
             // TODO start war
         });
-        buttonPanel.add(newGameBlack);
-        buttonPanel.add(newGameWhite);
-        buttonPanel.add(newGameWar);
-        buttonPanel.add(type);
-        return buttonPanel;
+        p2.add(newGameWar);
+        p2.add(typeW);
+        p2.add(typeB);
+        return p2;
     }
 
     @Override

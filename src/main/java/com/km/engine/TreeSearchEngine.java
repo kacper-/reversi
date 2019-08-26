@@ -37,7 +37,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     @Override
     public EngineType getType() {
-        return EngineType.TREE_SEARCH;
+        return EngineType.TREE;
     }
 
     private Move evaluateSimulations(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {

@@ -44,7 +44,7 @@ public class GameController {
     }
 
     private void prepareSimulationGame(GameBoard gameBoard, List<HistoryItem> historyBlack, List<HistoryItem> historyWhite) {
-        prepareMoveEngine(EngineType.TREE_SEARCH);
+        prepareMoveEngine(EngineType.TREE);
         this.gameBoard = gameBoard;
         initHistoryForSimulation(historyBlack, historyWhite);
         gameSaved = false;
