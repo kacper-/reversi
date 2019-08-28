@@ -48,6 +48,7 @@ public class GameController {
         simulation = false;
         Logger.debug(String.format("game\tpreparing for [%d] cores game", Tuning.CORES));
         Logger.debug(String.format("game\thuman plays [%s]", human.name()));
+        Logger.debug(String.format("game\topponent type [%s]", type.name()));
         GameService.clear();
         prepareMoveEngine(type);
         GameRules.initGameBoard(gameBoard);
