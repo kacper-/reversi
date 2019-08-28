@@ -25,6 +25,8 @@ public class GameController {
     private int wins = 0;
     private int loses = 0;
     private boolean simulation;
+    private GameController controllerB;
+    private GameController controllerW;
 
     public GameController copy() {
         GameController controller = new GameController();
@@ -46,7 +48,8 @@ public class GameController {
 
     public void startNewGame(Slot human, EngineType type) {
         simulation = false;
-        Logger.debug(String.format("game\tpreparing for [%d] cores game", Tuning.CORES));
+        if (type == EngineType.TREE)
+            Logger.debug(String.format("game\tpreparing for [%d] cores game", Tuning.CORES));
         Logger.debug(String.format("game\thuman plays [%s]", human.name()));
         Logger.debug(String.format("game\topponent type [%s]", type.name()));
         GameService.clear();
@@ -57,6 +60,27 @@ public class GameController {
             makeMove();
         }
         gameSaved = false;
+    }
+
+    public void startWarGame(EngineType typeB, EngineType typeW) {
+        controllerB = new GameController();
+        controllerB.startNewGame(Slot.WHITE, typeB);
+        controllerW = new GameController();
+        controllerW.startNewGame(Slot.BLACK, typeW);
+        gameBoard = controllerB.gameBoard;
+        gameSaved = true;
+    }
+
+    public void makeWarMove() {
+        if (controllerB.getGameBoard().getTurn() == Slot.WHITE) {
+            controllerW.gameBoard = controllerB.gameBoard;
+            controllerW.makeMove();
+            gameBoard = controllerW.gameBoard;
+        } else {
+            controllerB.gameBoard = controllerW.gameBoard;
+            controllerB.makeMove();
+            gameBoard = controllerB.gameBoard;
+        }
     }
 
     private void prepareSimulationGame(GameBoard gameBoard, List<HistoryItem> historyBlack, List<HistoryItem> historyWhite) {

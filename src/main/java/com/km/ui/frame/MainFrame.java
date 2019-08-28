@@ -89,11 +89,11 @@ public class MainFrame extends JFrame implements ScoreListener {
         typeB.setSelectedItem(EngineType.ANN);
         typeB.setEditable(false);
         newGameWar.addActionListener(click -> {
-            // TODO start war
+            board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()));
         });
         p2.add(newGameWar);
-        p2.add(typeW);
         p2.add(typeB);
+        p2.add(typeW);
         return p2;
     }
 

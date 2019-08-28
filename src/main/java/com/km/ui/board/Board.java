@@ -98,6 +98,23 @@ public class Board extends Canvas implements MouseListener {
         repaint();
     }
 
+    public void startWarGame(EngineType typeB, EngineType typeW) {
+        getGameController().startWarGame(typeB, typeW);
+        showAvailable = false;
+        repaint();
+        new Thread(() -> {
+            while (!getGameController().isFinished()) {
+                getGameController().makeWarMove();
+                try {
+                    Thread.sleep(250);
+                    repaint();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         if (!getGameController().isFinished()) {
