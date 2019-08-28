@@ -102,7 +102,7 @@ public class GameRules {
         }
     }
 
-    static List<Move> getCorners() {
+    public static List<Move> getCorners() {
         Move[] moves = new Move[]{
                 new Move(0, 0, null),
                 new Move(0, 7, null),

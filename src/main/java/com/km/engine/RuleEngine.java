@@ -1,11 +1,12 @@
 package com.km.engine;
 
+import com.km.Logger;
 import com.km.game.GameController;
+import com.km.game.GameRules;
 import com.km.game.Move;
 
 import java.util.Set;
 
-// TODO implement
 public class RuleEngine implements MoveEngine {
     private GameController controller;
 
@@ -16,7 +17,32 @@ public class RuleEngine implements MoveEngine {
 
     @Override
     public Move chooseMove(Set<Move> moves) {
-        return null;
+        double score;
+        double bestScore = Double.MIN_VALUE;
+        Move best = null;
+        Logger.debug(String.format("algo\tnumber of available moves = [%d]", moves.size()));
+        for (Move m : moves) {
+            score = scoreMove(m);
+            Logger.debug(String.format("algo\tmove = [%d, %d] score = [%f]", m.getI(), m.getJ(), score));
+            if (bestScore < score) {
+                bestScore = score;
+                best = m;
+            }
+        }
+        Logger.debug(String.format("algo\tbest = [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
+        return best;
+    }
+
+    private double scoreMove(Move m) {
+        if (isCorner(m))
+            return 1d;
+        // TODO implement
+        return 0d;
+    }
+
+    private boolean isCorner(Move m) {
+        Move e = new Move(m.getI(), m.getJ(), null);
+        return GameRules.getCorners().contains(e);
     }
 
     @Override
