@@ -182,7 +182,7 @@ public class GameController {
         }
     }
 
-    private void nextTurn() {
+    public void nextTurn() {
         gameBoard.setTurn(gameBoard.getTurn().opposite());
     }
 
