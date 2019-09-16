@@ -25,6 +25,7 @@ public class GameController {
     private int wins = 0;
     private int loses = 0;
     private boolean simulation;
+    private boolean warMode = false;
     private GameController controllerB;
     private GameController controllerW;
 
@@ -48,6 +49,7 @@ public class GameController {
 
     public void startNewGame(Slot human, EngineType type) {
         simulation = false;
+        warMode = false;
         if (type == EngineType.TREE)
             Logger.debug(String.format("game\tpreparing for [%d] cores game", Tuning.CORES));
         Logger.debug(String.format("game\thuman plays [%s]", human.name()));
@@ -63,6 +65,7 @@ public class GameController {
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW) {
+        warMode = true;
         controllerB = new GameController();
         controllerB.startNewGame(Slot.WHITE, typeB);
         controllerW = new GameController();
@@ -83,7 +86,14 @@ public class GameController {
         }
     }
 
+    private boolean isWarFinished() {
+        boolean b = controllerB.isFinished();
+        boolean w = controllerW.isFinished();
+        return b || w;
+    }
+
     private void prepareSimulationGame(GameBoard gameBoard, List<HistoryItem> historyBlack, List<HistoryItem> historyWhite) {
+        warMode = false;
         prepareMoveEngine(EngineType.TREE);
         this.gameBoard = gameBoard;
         initHistoryForSimulation(historyBlack, historyWhite);
@@ -217,6 +227,8 @@ public class GameController {
     }
 
     public boolean isFinished() {
+        if (warMode)
+            return isWarFinished();
         boolean finished = GameRules.isGameFinished(gameBoard);
         if (finished && !gameSaved) {
             gameSaved = true;

@@ -16,6 +16,7 @@ public class MainFrame extends JFrame implements ScoreListener {
     private static final String TITLE = "Reversi 1.0";
     private Board board;
     private TextField score = new TextField("no score yet");
+    private TextField count = new TextField("5");
 
     public MainFrame() {
         super(TITLE);
@@ -89,11 +90,12 @@ public class MainFrame extends JFrame implements ScoreListener {
         typeB.setSelectedItem(EngineType.ANN);
         typeB.setEditable(false);
         newGameWar.addActionListener(click -> {
-            board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()));
+            board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()), Integer.parseInt(count.getText()));
         });
         p2.add(newGameWar);
         p2.add(typeB);
         p2.add(typeW);
+        p2.add(count);
         return p2;
     }
 

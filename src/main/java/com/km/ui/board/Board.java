@@ -15,6 +15,7 @@ public class Board extends Canvas implements MouseListener {
     private GameController controller;
     private boolean showAvailable = true;
     private ScoreListener scoreListener;
+    private volatile boolean warReady = true;
 
     public Board(ScoreListener scoreListener) {
         this.scoreListener = scoreListener;
@@ -98,20 +99,40 @@ public class Board extends Canvas implements MouseListener {
         repaint();
     }
 
-    public void startWarGame(EngineType typeB, EngineType typeW) {
-        getGameController().startWarGame(typeB, typeW);
+    public void startWarGame(EngineType typeB, EngineType typeW, int count) {
         showAvailable = false;
+        runWars(typeB, typeW, count);
+    }
+
+    private void runWars(EngineType typeB, EngineType typeW, int count) {
+        new Thread(() -> {
+            for (int i = 0; i < count; i++) {
+                try {
+                    runWar(typeB, typeW);
+                    while (!warReady)
+                        Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void runWar(EngineType typeB, EngineType typeW) {
+        getGameController().startWarGame(typeB, typeW);
         repaint();
+        warReady = false;
         new Thread(() -> {
             while (!getGameController().isFinished()) {
                 getGameController().makeWarMove();
                 try {
                     Thread.sleep(250);
-                    repaint();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                repaint();
             }
+            warReady = true;
         }).start();
     }
 

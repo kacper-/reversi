@@ -17,7 +17,7 @@ public class Score {
 
     @Override
     public String toString() {
-        String output = "W=" + white + "_B=" + black;
+        String output = "B=" + black + "_W=" + white;
         if (winner != null) {
             output += "_W" + winner.getSymbol();
         }
