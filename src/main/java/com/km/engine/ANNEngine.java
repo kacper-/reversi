@@ -18,7 +18,7 @@ public class ANNEngine implements MoveEngine {
     @Override
     public Move chooseMove(Set<Move> moves) {
         double score;
-        double bestScore = Integer.MIN_VALUE;
+        double bestScore = -Double.MAX_VALUE;
         Move best = null;
         Logger.debug(String.format("algo\tnumber of available moves = [%d]", moves.size()));
         for (Move m : moves) {
