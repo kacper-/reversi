@@ -15,7 +15,7 @@ public class Board extends Canvas implements MouseListener {
     private GameController controller;
     private boolean showAvailable = true;
     private ScoreListener scoreListener;
-    private volatile boolean warReady = true;
+    private boolean warReady = true;
 
     public Board(ScoreListener scoreListener) {
         this.scoreListener = scoreListener;
