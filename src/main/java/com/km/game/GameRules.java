@@ -90,7 +90,7 @@ public class GameRules {
         return getAvailableMoves(g1).isEmpty() && getAvailableMoves(g2).isEmpty();
     }
 
-    public static void updateBoard(Move move, GameBoard gameBoard) {
+    static void updateBoard(Move move, GameBoard gameBoard) {
         Set<Move> directions = GameRules.isMoveAvailable(move, gameBoard);
         for (Move d : directions) {
             gameBoard.setValue(gameBoard.getTurn(), move.getI(), move.getJ());
