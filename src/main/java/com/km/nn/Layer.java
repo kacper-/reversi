@@ -5,7 +5,7 @@ import java.util.Random;
 
 class Layer implements Serializable {
     private final static double WEIGHT_INIT_LIMIT = 0.05d;
-    private final static double LEARNING_FACTOR = 0.02d;
+    private final static double LEARNING_FACTOR = 0.015d;
     private double[][] weights;
     private double[][] weightDeltas;
     private double[] outputs;

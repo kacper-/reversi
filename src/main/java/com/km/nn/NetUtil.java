@@ -8,7 +8,7 @@ import com.km.repos.GameService;
 import java.io.*;
 
 public class NetUtil {
-    private static final double TRAIN_T1 = 0.05d;
+    private static final double TRAIN_T1 = 0.02d;
     private static final int TRAIN_T2 = 4;
     private static String filePath;
     private static Net net;
@@ -57,7 +57,7 @@ public class NetUtil {
     }
 
     private static boolean validate(Nodes start, Nodes end, double exp) {
-        if (Math.abs(exp) < rf(TRAIN_T1))
+        if (Math.abs(exp) < Math.abs(rf(TRAIN_T1)))
             return false;
         if ((start.getLoses() + start.getWins()) < TRAIN_T2)
             return false;
