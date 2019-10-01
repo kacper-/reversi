@@ -1,5 +1,6 @@
 package com.km.ui.board;
 
+import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.game.*;
 
@@ -107,6 +108,7 @@ public class Board extends Canvas implements MouseListener {
     private void runWars(EngineType typeB, EngineType typeW, int count) {
         new Thread(() -> {
             for (int i = 0; i < count; i++) {
+                Logger.debug(String.format("board\tstarting game [%d] of [%d]", i + 1, count));
                 try {
                     runWar(typeB, typeW);
                     while (!warReady)
