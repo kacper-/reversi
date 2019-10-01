@@ -5,10 +5,7 @@ import com.km.entities.Nodes;
 import com.km.game.DBSlot;
 import com.km.repos.GameService;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 public class NetUtil {
     private static final double TRAIN_T1 = 0.05d;
@@ -35,14 +32,19 @@ public class NetUtil {
 
     private static void load() {
         Logger.debug(String.format("net\tloading file [%s]", filePath));
-        try {
-            FileInputStream fileIn = new FileInputStream(filePath);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            net = (Net) objectIn.readObject();
-            objectIn.close();
-        } catch (Exception e) {
-            Logger.debug(String.format("net\terror loading file [%s]", filePath));
+        if (!new File(filePath).exists()) {
+            Logger.debug(String.format("net\tfile [%s] does not exist, creating new", filePath));
             net = new Net();
+            save();
+        } else {
+            try {
+                FileInputStream fileIn = new FileInputStream(filePath);
+                ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                net = (Net) objectIn.readObject();
+                objectIn.close();
+            } catch (Exception e) {
+                Logger.debug(String.format("net\terror loading file [%s]", filePath));
+            }
         }
     }
 
@@ -77,7 +79,7 @@ public class NetUtil {
     private static double ratio(Nodes n) {
         double wins = n.getWins();
         double loses = n.getLoses();
-        return wins / (wins + loses);
+        return 1 - (wins / (wins + loses));
     }
 
     public static void runTraining() {
