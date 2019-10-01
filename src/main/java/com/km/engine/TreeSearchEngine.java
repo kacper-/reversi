@@ -39,6 +39,11 @@ public class TreeSearchEngine implements MoveEngine {
         return EngineType.TREE;
     }
 
+    @Override
+    public boolean isSimRequired() {
+        return true;
+    }
+
     private Move evaluateSimulations(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {
         Pair<Move, Integer> best = simulations.keySet().iterator().next();
         double score = MC_DEFAULT_SCORE;

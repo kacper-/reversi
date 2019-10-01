@@ -115,7 +115,7 @@ public class GameController {
     }
 
     private void runSimulations() {
-        if (simulation || EngineType.TREE != moveEngine.getType())
+        if (simulation || !moveEngine.isSimRequired())
             return;
         Logger.debug("sim\tstarting simulations");
         simCount = 1;
@@ -137,8 +137,7 @@ public class GameController {
             executor.execute(this::startSingleSimulation);
         }
         executor.shutdown();
-        while (!executor.isTerminated()) {
-        }
+        while (!executor.isTerminated());
     }
 
     private void startSingleSimulation() {

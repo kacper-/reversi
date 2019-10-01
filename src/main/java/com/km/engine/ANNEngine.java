@@ -47,4 +47,9 @@ public class ANNEngine implements MoveEngine {
     public EngineType getType() {
         return EngineType.ANN;
     }
+
+    @Override
+    public boolean isSimRequired() {
+        return false;
+    }
 }
