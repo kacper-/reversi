@@ -46,11 +46,6 @@ public class RuleEngine implements MoveEngine {
     }
 
     @Override
-    public EngineType getType() {
-        return EngineType.RULE;
-    }
-
-    @Override
     public boolean isSimRequired() {
         return false;
     }

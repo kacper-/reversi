@@ -35,11 +35,6 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     @Override
-    public EngineType getType() {
-        return EngineType.TREE;
-    }
-
-    @Override
     public boolean isSimRequired() {
         return true;
     }

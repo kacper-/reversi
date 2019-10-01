@@ -20,11 +20,6 @@ public class SuperEngine implements MoveEngine {
     }
 
     @Override
-    public EngineType getType() {
-        return EngineType.SUPER;
-    }
-
-    @Override
     public boolean isSimRequired() {
         return true;
     }

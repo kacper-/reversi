@@ -10,7 +10,5 @@ public interface MoveEngine {
 
     Move chooseMove(Set<Move> moves);
 
-    EngineType getType();
-
     boolean isSimRequired();
 }

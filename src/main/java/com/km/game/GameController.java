@@ -115,8 +115,6 @@ public class GameController {
     }
 
     private void runSimulations() {
-        if (simulation || !moveEngine.isSimRequired())
-            return;
         Logger.debug("sim\tstarting simulations");
         simCount = 1;
         wins = 0;
@@ -137,7 +135,7 @@ public class GameController {
             executor.execute(this::startSingleSimulation);
         }
         executor.shutdown();
-        while (!executor.isTerminated());
+        while (!executor.isTerminated()) ;
     }
 
     private void startSingleSimulation() {
@@ -215,7 +213,8 @@ public class GameController {
     private void makeMove() {
         Set<Move> moves = GameRules.getAvailableMoves(gameBoard);
         if (!moves.isEmpty()) {
-            runSimulations();
+            if (usesSim())
+                runSimulations();
             Move move = moveEngine.chooseMove(moves);
             updateBoard(move);
             if (!isFinished() && GameRules.getAvailableMoves(gameBoard).isEmpty()) {
@@ -233,12 +232,16 @@ public class GameController {
             gameSaved = true;
             Score score = getScore();
             GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
-            if (!simulation && EngineType.TREE == moveEngine.getType()) {
+            if (usesSim()) {
                 NetUtil.runTraining();
                 printStats(score);
             }
         }
         return finished;
+    }
+
+    private boolean usesSim() {
+        return !simulation && moveEngine.isSimRequired();
     }
 
     private void printStats(Score score) {
