@@ -17,6 +17,8 @@ public class Board extends Canvas implements MouseListener {
     private boolean showAvailable = true;
     private ScoreListener scoreListener;
     private boolean warReady = true;
+    private int warScoreB = 0;
+    private int warScoreW = 0;
 
     public Board(ScoreListener scoreListener) {
         this.scoreListener = scoreListener;
@@ -102,6 +104,8 @@ public class Board extends Canvas implements MouseListener {
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
         showAvailable = false;
+        warScoreW = 0;
+        warScoreB = 0;
         runWars(typeB, typeW, count);
     }
 
@@ -117,6 +121,7 @@ public class Board extends Canvas implements MouseListener {
                     e.printStackTrace();
                 }
             }
+            Logger.debug(String.format("\nboard\twar score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }).start();
     }
 
@@ -134,6 +139,10 @@ public class Board extends Canvas implements MouseListener {
                 }
                 repaint();
             }
+            if (getGameController().getScore().getWinner() == Slot.BLACK)
+                warScoreB++;
+            else
+                warScoreW++;
             warReady = true;
         }).start();
     }
