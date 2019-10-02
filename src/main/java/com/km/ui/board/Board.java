@@ -116,7 +116,7 @@ public class Board extends Canvas implements MouseListener {
                 try {
                     runWar(typeB, typeW);
                     while (!warReady)
-                        Thread.sleep(500);
+                        Thread.sleep(250);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -133,7 +133,7 @@ public class Board extends Canvas implements MouseListener {
             while (!getGameController().isFinished()) {
                 getGameController().makeWarMove();
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -160,7 +160,7 @@ public class Board extends Canvas implements MouseListener {
                 }).start();
                 try {
                     showAvailable = false;
-                    Thread.sleep(250);
+                    Thread.sleep(100);
                     repaint();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
