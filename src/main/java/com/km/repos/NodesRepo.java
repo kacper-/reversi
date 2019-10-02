@@ -13,6 +13,10 @@ class NodesRepo {
     private static Map<String, Nodes> map = new HashMap<>();
     private static List<Nodes> list = new ArrayList<>();
 
+    static List<Nodes> getNodes() {
+        return list;
+    }
+
     static Nodes findByBoard(String board) {
         return map.get(board);
     }
@@ -32,10 +36,6 @@ class NodesRepo {
 
     static Nodes findById(int nodeId) {
         return list.get(nodeId);
-    }
-
-    static int count() {
-        return list.size();
     }
 
     static void clear() {

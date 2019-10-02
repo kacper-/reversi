@@ -1,7 +1,7 @@
 package com.km.game;
 
 class Tuning {
-    static final long SIM_TIME = 2000;
+    static final long SIM_TIME = 1000;
     static final int SIM_COUNT_L1 = 10000;
     static final int SIM_COUNT_L2 = 2500;
     static final int SIM_COUNT_L3 = 200;

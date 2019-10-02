@@ -9,8 +9,7 @@ import com.km.game.HistoryItem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static com.km.Logger.debug;
 
@@ -32,10 +31,6 @@ public class GameService {
             }
             MovesRepo.save(new Moves(snode.getId(), node.getId()));
         }
-    }
-
-    public static Nodes getNode(int id) {
-        return NodesRepo.findById(id);
     }
 
     public static void updateScores(List<HistoryItem> historyWhite, List<HistoryItem> historyBlack, int winsWhite, int losesWhite, int winsBlack, int losesBlack) {
@@ -74,26 +69,9 @@ public class GameService {
         return simulations;
     }
 
-    public static void visitMoves(BiConsumer<Nodes, Nodes> c) {
-        for (int i = 0; i < NodesRepo.count(); i++) {
-            List<Moves> moves = MovesRepo.findByParent(i);
-            if (moves != null) {
-                for (Moves m : moves) {
-                    c.accept(NodesRepo.findById(m.getSnode()), NodesRepo.findById(m.getEnode()));
-                }
-            }
-        }
-    }
-
-    public static void visitMovesRandomly(BiConsumer<Nodes, Nodes> c, int cycles) {
-        int count = cycles * NodesRepo.count();
-        for (int i = 0; i < count; i++) {
-            List<Moves> moves = MovesRepo.findByParent(new Random().nextInt(NodesRepo.count()));
-            if (moves != null) {
-                for (Moves m : moves) {
-                    c.accept(NodesRepo.findById(m.getSnode()), NodesRepo.findById(m.getEnode()));
-                }
-            }
+    public static void visitMoves(Consumer<Nodes> c) {
+        for (Nodes n : NodesRepo.getNodes()) {
+            c.accept(n);
         }
     }
 

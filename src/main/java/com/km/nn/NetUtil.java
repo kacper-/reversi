@@ -8,9 +8,8 @@ import com.km.repos.GameService;
 import java.io.*;
 
 public class NetUtil {
-    private static final double TRAIN_T1 = 0.04d;
-    private static final int TRAIN_T2 = 4;
-    private static final int TRAIN_T3 = 5;
+    private static final int SIM_COUNT = 5;
+    private static final int TRAIN_CYCLES = 3;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -49,36 +48,33 @@ public class NetUtil {
         }
     }
 
-    private static void train(Nodes start, Nodes end) {
-        if (!validate(start, end))
+    private static void train(Nodes n) {
+        if (!validate(n))
             return;
-        net.teach(translate(end.getBoard()), expected(end));
+        net.teach(translate(n.getBoard()), expected(n));
         trainCount++;
     }
 
-    private static boolean validate(Nodes start, Nodes end) {
-        if (Math.abs(ratio(start) - ratio(end)) < TRAIN_T1)
-            return false;
-        if ((start.getLoses() + start.getWins()) < TRAIN_T2)
-            return false;
-        return (end.getLoses() + end.getWins()) >= TRAIN_T2;
+    private static boolean validate(Nodes n) {
+        return (n.getLoses() + n.getWins()) > SIM_COUNT && n.getWins() > 0 && n.getLoses() > 0;
     }
 
     private static double expected(Nodes end) {
-        return (2d * ratio(end)) - 1d;
+        return (2d * Math.sqrt(ratio(end))) - 1d;
     }
 
     private static double ratio(Nodes n) {
         double wins = n.getWins();
         double loses = n.getLoses();
-        return 1 - (wins / (wins + loses));
+        return wins / (wins + loses);
     }
 
     public static void runTraining() {
         load();
         trainCount = 0;
         Logger.debug("net\ttraining started...");
-        GameService.visitMovesRandomly(NetUtil::train, TRAIN_T3);
+        for (int i = 0; i < TRAIN_CYCLES; i++)
+            GameService.visitMoves(NetUtil::train);
         Logger.debug(String.format("net\ttraining finished after [%d] iterations", trainCount));
         save();
     }

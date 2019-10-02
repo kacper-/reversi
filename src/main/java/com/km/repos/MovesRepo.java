@@ -3,10 +3,7 @@ package com.km.repos;
 import com.km.Logger;
 import com.km.entities.Moves;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class MovesRepo {
     private static Map<Integer, List<Moves>> map = new HashMap<>();
