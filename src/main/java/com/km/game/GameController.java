@@ -4,15 +4,11 @@ import com.km.Logger;
 import com.km.engine.EngineFactory;
 import com.km.engine.EngineType;
 import com.km.engine.MoveEngine;
-import com.km.nn.NetUtil;
 import com.km.repos.GameService;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class GameController {
@@ -21,9 +17,6 @@ public class GameController {
     private List<HistoryItem> historyBlack;
     private List<HistoryItem> historyWhite;
     private MoveEngine moveEngine;
-    private int simCount = 0;
-    private int wins = 0;
-    private int loses = 0;
     private boolean simulation;
     private boolean warMode = false;
     private GameController controllerB;
@@ -36,9 +29,6 @@ public class GameController {
         controller.historyBlack = historyBlack.stream().map(HistoryItem::copy).collect(Collectors.toList());
         controller.historyWhite = historyWhite.stream().map(HistoryItem::copy).collect(Collectors.toList());
         controller.moveEngine = moveEngine;
-        controller.simCount = simCount;
-        controller.wins = wins;
-        controller.loses = loses;
         controller.simulation = simulation;
         return controller;
     }
@@ -50,8 +40,6 @@ public class GameController {
     public void startNewGame(Slot human, EngineType type) {
         simulation = false;
         warMode = false;
-        if (type == EngineType.TREE)
-            Logger.debug(String.format("game\tpreparing for [%d] cores game", Tuning.CORES));
         Logger.debug(String.format("game\thuman plays [%s]", human.name()));
         Logger.debug(String.format("game\topponent type [%s]", type.name()));
         GameService.clear();
@@ -92,11 +80,11 @@ public class GameController {
         return b || w;
     }
 
-    private void prepareSimulationGame(GameBoard gameBoard, List<HistoryItem> historyBlack, List<HistoryItem> historyWhite) {
+    public void prepareSimulationGame(GameController copyFrom, EngineType type) {
         warMode = false;
-        prepareMoveEngine(EngineType.TREE);
-        this.gameBoard = gameBoard;
-        initHistoryForSimulation(historyBlack, historyWhite);
+        prepareMoveEngine(type);
+        this.gameBoard = copyFrom.gameBoard.copy();
+        initHistoryForSimulation(copyFrom.historyBlack, copyFrom.historyWhite);
         gameSaved = false;
         simulation = true;
     }
@@ -112,60 +100,6 @@ public class GameController {
             this.historyBlack.add(historyBlack.get(historyBlack.size() - 1).copy());
         if (!historyWhite.isEmpty())
             this.historyWhite.add(historyWhite.get(historyWhite.size() - 1).copy());
-    }
-
-    private void runSimulations() {
-        Logger.debug("sim\tstarting simulations");
-        simCount = 1;
-        wins = 0;
-        loses = 0;
-        long start = new Date().getTime();
-        while (continueSim(start, simCount)) {
-            Logger.setDebugOff();
-            startSimulationPool();
-            Logger.setDebugOn();
-        }
-        Logger.debug(String.format("sim\t[%d] simulations with result = [%d, %d] success ratio = [%.2f]", simCount - 1, wins, loses, ((float) wins) / (float) (loses + wins)));
-    }
-
-    private void startSimulationPool() {
-        ExecutorService executor = Executors.newFixedThreadPool(Tuning.CORES);
-        int taskCount = Tuning.CORES * Tuning.SIM_HB;
-        for (int i = 0; i < taskCount; i++) {
-            executor.execute(this::startSingleSimulation);
-        }
-        executor.shutdown();
-        while (!executor.isTerminated()) ;
-    }
-
-    private void startSingleSimulation() {
-        GameController controller = new GameController();
-        controller.prepareSimulationGame(gameBoard.copy(), historyBlack, historyWhite);
-        while (!controller.isFinished()) {
-            controller.makeMove();
-        }
-        updateSimResults(controller.getScore());
-    }
-
-    private void updateSimResults(Score s) {
-        if (s.getWinner() == gameBoard.getTurn())
-            wins++;
-        else
-            loses++;
-        simCount++;
-    }
-
-    private boolean continueSim(long start, int count) {
-        long stop = new Date().getTime();
-        if (count > Tuning.SIM_COUNT_L1 || (stop - start) > Tuning.SIM_TIME)
-            return false;
-        Score s = getScore();
-        int gameProgress = s.getBlack() + s.getWhite();
-        if (gameProgress > Tuning.SIM_L2 && count > Tuning.SIM_COUNT_L2)
-            return false;
-        if (gameProgress > Tuning.SIM_L3 && count > Tuning.SIM_COUNT_L3)
-            return false;
-        return !(gameProgress > Tuning.SIM_L4 && count > Tuning.SIM_COUNT_L4);
     }
 
     private void initHistory() {
@@ -210,11 +144,9 @@ public class GameController {
         return gameBoard;
     }
 
-    private void makeMove() {
+    public void makeMove() {
         Set<Move> moves = GameRules.getAvailableMoves(gameBoard);
         if (!moves.isEmpty()) {
-            if (usesSim())
-                runSimulations();
             Move move = moveEngine.chooseMove(moves);
             updateBoard(move);
             if (!isFinished() && GameRules.getAvailableMoves(gameBoard).isEmpty()) {
@@ -232,16 +164,10 @@ public class GameController {
             gameSaved = true;
             Score score = getScore();
             GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
-            if (usesSim()) {
-                NetUtil.runTraining();
-                printStats(score);
-            }
+            moveEngine.afterGame();
+            printStats(score);
         }
         return finished;
-    }
-
-    private boolean usesSim() {
-        return !simulation && moveEngine.isSimRequired();
     }
 
     private void printStats(Score score) {

@@ -6,6 +6,8 @@ import com.km.game.*;
 import com.km.repos.GameService;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TreeSearchEngine implements MoveEngine {
     private static final double MC_FACTOR_SIM = 1.7d;
@@ -13,14 +15,30 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
+    private static final long SIM_TIME = 1000;
+    private static final int SIM_COUNT_L1 = 10000;
+    private static final int SIM_COUNT_L2 = 2500;
+    private static final int SIM_COUNT_L3 = 200;
+    private static final int SIM_COUNT_L4 = 10;
+    private static final int SIM_L2 = 53;
+    private static final int SIM_L3 = 57;
+    private static final int SIM_L4 = 60;
+    private static final int SIM_HB = 100;
+    private static final int CORES = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
+    private int simCount = 0;
+    private int wins = 0;
+    private int loses = 0;
     private GameController controller;
 
     @Override
-    public void setGameController(GameController controler) {
-        this.controller = controler;
+    public void setGameController(GameController controller) {
+        this.controller = controller;
+        Logger.debug(String.format("algo\tpreparing for [%d] cores", CORES));
     }
 
     public Move chooseMove(Set<Move> moves) {
+        if (!controller.isSimulation())
+            runSimulations();
         HistoryItem parent = HistoryItem.fromGB(controller.getGameBoard());
         Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = GameService.findSimulations(parent);
         if (simulations.isEmpty()) {
@@ -34,10 +52,60 @@ public class TreeSearchEngine implements MoveEngine {
         }
     }
 
-    @Override
-    public boolean isSimRequired() {
-        return true;
+    private void runSimulations() {
+        Logger.debug("algo\tstarting simulations");
+        simCount = 1;
+        wins = 0;
+        loses = 0;
+        long start = new Date().getTime();
+        while (continueSim(start, simCount)) {
+            Logger.setDebugOff();
+            startSimulationPool();
+            Logger.setDebugOn();
+        }
+        Logger.debug(String.format("algo\t[%d] simulations with result = [%d, %d] success ratio = [%.2f]", simCount - 1, wins, loses, ((float) wins) / (float) (loses + wins)));
     }
+
+    private void startSimulationPool() {
+        ExecutorService executor = Executors.newFixedThreadPool(CORES);
+        int taskCount = CORES * SIM_HB;
+        for (int i = 0; i < taskCount; i++) {
+            executor.execute(this::startSingleSimulation);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated());
+    }
+
+    private void startSingleSimulation() {
+        GameController simController = new GameController();
+        simController.prepareSimulationGame(controller, EngineType.TREE);
+        while (!simController.isFinished()) {
+            simController.makeMove();
+        }
+        updateSimResults(simController.getScore());
+    }
+
+    private void updateSimResults(Score s) {
+        if (s.getWinner() == controller.getGameBoard().getTurn())
+            wins++;
+        else
+            loses++;
+        simCount++;
+    }
+
+    private boolean continueSim(long start, int count) {
+        long stop = new Date().getTime();
+        if (count > SIM_COUNT_L1 || (stop - start) > SIM_TIME)
+            return false;
+        Score s = controller.getScore();
+        int gameProgress = s.getBlack() + s.getWhite();
+        if (gameProgress > SIM_L2 && count > SIM_COUNT_L2)
+            return false;
+        if (gameProgress > SIM_L3 && count > SIM_COUNT_L3)
+            return false;
+        return !(gameProgress > SIM_L4 && count > SIM_COUNT_L4);
+    }
+
 
     private Move evaluateSimulations(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {
         Pair<Move, Integer> best = simulations.keySet().iterator().next();
@@ -107,4 +175,10 @@ public class TreeSearchEngine implements MoveEngine {
         }
         return null;
     }
+
+    @Override
+    public void afterGame() {
+        return;
+    }
+
 }

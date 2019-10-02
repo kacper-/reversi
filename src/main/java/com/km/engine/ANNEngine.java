@@ -44,7 +44,9 @@ public class ANNEngine implements MoveEngine {
     }
 
     @Override
-    public boolean isSimRequired() {
-        return false;
+    public void afterGame() {
+        NetUtil.runTraining();
     }
+
+
 }

@@ -46,7 +46,7 @@ public class RuleEngine implements MoveEngine {
     }
 
     @Override
-    public boolean isSimRequired() {
-        return false;
+    public void afterGame() {
+        return;
     }
 }

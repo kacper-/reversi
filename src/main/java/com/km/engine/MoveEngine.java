@@ -10,5 +10,5 @@ public interface MoveEngine {
 
     Move chooseMove(Set<Move> moves);
 
-    boolean isSimRequired();
+    void afterGame();
 }

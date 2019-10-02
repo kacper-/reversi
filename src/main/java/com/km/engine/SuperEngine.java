@@ -20,7 +20,7 @@ public class SuperEngine implements MoveEngine {
     }
 
     @Override
-    public boolean isSimRequired() {
-        return true;
+    public void afterGame() {
+        return;
     }
 }
