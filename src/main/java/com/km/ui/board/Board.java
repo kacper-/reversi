@@ -120,6 +120,7 @@ public class Board extends Canvas implements MouseListener {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                scoreListener.setWarScore(i + 1, warScoreB, warScoreW);
             }
             Logger.debug(String.format("\nboard\twar score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }).start();

@@ -16,6 +16,7 @@ public class MainFrame extends JFrame implements ScoreListener {
     private static final String TITLE = "Reversi 1.0";
     private Board board;
     private TextField score = new TextField("no score yet");
+    private TextField warScore = new TextField("no score yet");
     private TextField count = new TextField("5");
 
     public MainFrame() {
@@ -46,16 +47,26 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(getButtonRow1());
         rightPanel.add(getButtonRow2());
-        rightPanel.add(getInfoPanel());
+        rightPanel.add(getInfoPanel1());
+        rightPanel.add(getInfoPanel2());
         return rightPanel;
     }
 
-    private JPanel getInfoPanel() {
+    private JPanel getInfoPanel1() {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new FlowLayout());
         infoPanel.add(new Label("Score:"));
         score.setEditable(false);
         infoPanel.add(score);
+        return infoPanel;
+    }
+
+    private JPanel getInfoPanel2() {
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new FlowLayout());
+        infoPanel.add(new Label("War Score:"));
+        warScore.setEditable(false);
+        infoPanel.add(warScore);
         return infoPanel;
     }
 
@@ -101,6 +112,11 @@ public class MainFrame extends JFrame implements ScoreListener {
 
     @Override
     public void setScore(Score score) {
-        this.score.setText(score.toString());
+        this.score.setText(String.format("B:%d W:%d", score.getBlack(), score.getWhite()));
+    }
+
+    @Override
+    public void setWarScore(int count, int black, int white) {
+        this.warScore.setText(String.format("G:%d %d:%d", count, black, white));
     }
 }
