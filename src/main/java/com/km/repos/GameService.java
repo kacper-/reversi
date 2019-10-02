@@ -9,6 +9,7 @@ import com.km.game.HistoryItem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.BiConsumer;
 
 import static com.km.Logger.debug;
@@ -76,6 +77,18 @@ public class GameService {
     public static void visitMoves(BiConsumer<Nodes, Nodes> c) {
         for (int i = 0; i < NodesRepo.count(); i++) {
             List<Moves> moves = MovesRepo.findByParent(i);
+            if (moves != null) {
+                for (Moves m : moves) {
+                    c.accept(NodesRepo.findById(m.getSnode()), NodesRepo.findById(m.getEnode()));
+                }
+            }
+        }
+    }
+
+    public static void visitMovesRandomly(BiConsumer<Nodes, Nodes> c, int cycles) {
+        int count = cycles * NodesRepo.count();
+        for (int i = 0; i < count; i++) {
+            List<Moves> moves = MovesRepo.findByParent(new Random().nextInt(NodesRepo.count()));
             if (moves != null) {
                 for (Moves m : moves) {
                     c.accept(NodesRepo.findById(m.getSnode()), NodesRepo.findById(m.getEnode()));

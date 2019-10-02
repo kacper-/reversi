@@ -29,7 +29,7 @@ public class ANNEngine implements MoveEngine {
                 best = m;
             }
         }
-        Logger.debug(String.format("algo\tbest = [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
+        Logger.debug(String.format("algo\tchoosing = [%d, %d]", best.getI(), best.getJ()));
         return best;
     }
 

@@ -8,8 +8,9 @@ import com.km.repos.GameService;
 import java.io.*;
 
 public class NetUtil {
-    private static final double TRAIN_T1 = 0.02d;
+    private static final double TRAIN_T1 = 0.04d;
     private static final int TRAIN_T2 = 4;
+    private static final int TRAIN_T3 = 5;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -49,31 +50,22 @@ public class NetUtil {
     }
 
     private static void train(Nodes start, Nodes end) {
-        double exp = expected(start, end);
-        if (!validate(start, end, exp))
+        if (!validate(start, end))
             return;
-        net.teach(translate(end.getBoard()), exp);
+        net.teach(translate(end.getBoard()), expected(end));
         trainCount++;
     }
 
-    private static boolean validate(Nodes start, Nodes end, double exp) {
-        if (Math.abs(exp) < Math.abs(rf(TRAIN_T1)))
+    private static boolean validate(Nodes start, Nodes end) {
+        if (Math.abs(ratio(start) - ratio(end)) < TRAIN_T1)
             return false;
         if ((start.getLoses() + start.getWins()) < TRAIN_T2)
             return false;
         return (end.getLoses() + end.getWins()) >= TRAIN_T2;
     }
 
-    private static double expected(Nodes start, Nodes end) {
-        double sRatio = ratio(start);
-        double eRatio = ratio(end);
-        if (sRatio > eRatio)
-            return -rf(eRatio - sRatio);
-        return rf(eRatio - sRatio);
-    }
-
-    private static double rf(double x) {
-        return Math.sqrt(Math.abs(x));
+    private static double expected(Nodes end) {
+        return (2d * ratio(end)) - 1d;
     }
 
     private static double ratio(Nodes n) {
@@ -85,8 +77,9 @@ public class NetUtil {
     public static void runTraining() {
         load();
         trainCount = 0;
-        GameService.visitMoves(NetUtil::train);
-        Logger.debug(String.format("net\ttraining with [%d] iterations", trainCount));
+        Logger.debug("net\ttraining started...");
+        GameService.visitMovesRandomly(NetUtil::train, TRAIN_T3);
+        Logger.debug(String.format("net\ttraining finished after [%d] iterations", trainCount));
         save();
     }
 
