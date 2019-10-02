@@ -4,5 +4,6 @@ public enum EngineType {
     TREE,
     ANN,
     RULE,
+    RANDOM,
     SUPER
 }

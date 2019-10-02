@@ -18,6 +18,9 @@ public class EngineFactory {
             case TREE:
                 engine = new TreeSearchEngine();
                 break;
+            case RANDOM:
+                engine = new RandomEngine();
+                break;
         }
         engine.setGameController(controller);
         return engine;
