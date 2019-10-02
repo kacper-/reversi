@@ -1,5 +1,6 @@
 package com.km.engine;
 
+import com.km.Logger;
 import com.km.game.GameController;
 import com.km.game.Move;
 
@@ -19,7 +20,9 @@ public class RandomEngine implements MoveEngine {
     @Override
     public Move chooseMove(Set<Move> moves) {
         List<Move> list = new ArrayList<>(moves);
-        return list.get(new Random().nextInt(moves.size()));
+        Move m = list.get(new Random().nextInt(moves.size()));
+        Logger.debug(String.format("algo\tchoosing [%d, %d] score = [%f]", m.getI(), m.getJ()));
+        return m;
     }
 
     @Override

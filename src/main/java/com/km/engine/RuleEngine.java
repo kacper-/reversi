@@ -29,7 +29,7 @@ public class RuleEngine implements MoveEngine {
                 best = m;
             }
         }
-        Logger.debug(String.format("algo\tbest = [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
+        Logger.debug(String.format("algo\tchoosing [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
         return best;
     }
 
