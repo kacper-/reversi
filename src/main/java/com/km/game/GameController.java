@@ -76,7 +76,7 @@ public class GameController {
     private boolean isWarFinished() {
         boolean b = controllerB.isFinished();
         boolean w = controllerW.isFinished();
-        return b || w;
+        return b && w;
     }
 
     public void prepareSimulationGame(GameController copyFrom, EngineType type) {

@@ -116,13 +116,14 @@ public class Board extends Canvas implements MouseListener {
                 try {
                     runWar(typeB, typeW);
                     while (!warReady)
-                        Thread.sleep(250);
+                        Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 scoreListener.setWarScore(i + 1, warScoreB, warScoreW);
+                Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
             }
-            Logger.info(String.format("board\twar score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+            Logger.info(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }).start();
     }
 
