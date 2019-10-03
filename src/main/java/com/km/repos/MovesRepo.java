@@ -30,7 +30,7 @@ class MovesRepo {
     }
 
     static void printStats() {
-        Logger.debug(String.format("db\tmoves map count = [%d]", map.size()));
+        Logger.trace(String.format("db\tmoves map count = [%d]", map.size()));
     }
 
 }

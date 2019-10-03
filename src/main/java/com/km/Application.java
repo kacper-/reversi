@@ -22,7 +22,7 @@ public class Application {
 
     private static void validateArgs(String... args) {
         if (args == null || args.length == 0) {
-            Logger.debug("No ANN path!");
+            Logger.error("No ANN path!");
             System.exit(0);
         }
         NetUtil.setFilePath(args[0]);

@@ -20,7 +20,7 @@ public class RuleEngine implements MoveEngine {
         double score;
         double bestScore = -Double.MAX_VALUE;
         Move best = null;
-        Logger.debug(String.format("algo\tnumber of available moves = [%d]", moves.size()));
+        Logger.trace(String.format("algo\tnumber of available moves = [%d]", moves.size()));
         for (Move m : moves) {
             score = scoreMove(m);
             Logger.debug(String.format("algo\tmove = [%d, %d] score = [%f]", m.getI(), m.getJ(), score));
@@ -29,7 +29,7 @@ public class RuleEngine implements MoveEngine {
                 best = m;
             }
         }
-        Logger.debug(String.format("algo\tchoosing [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
+        Logger.trace(String.format("algo\tchoosing [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
         return best;
     }
 

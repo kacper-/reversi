@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.km.Logger.debug;
-
 public class GameService {
 
     private static void addGameNode(HistoryItem item, int w, int l) {
@@ -35,9 +33,9 @@ public class GameService {
 
     public static void updateScores(List<HistoryItem> historyWhite, List<HistoryItem> historyBlack, int winsWhite, int losesWhite, int winsBlack, int losesBlack) {
         updateHistory(historyWhite, winsWhite, losesWhite);
-        debug("db\thistoryWhite saved");
+        Logger.trace("db\thistoryWhite saved");
         updateHistory(historyBlack, winsBlack, losesBlack);
-        debug("db\thistoryBlack saved");
+        Logger.trace("db\thistoryBlack saved");
     }
 
     private static synchronized void updateHistory(List<HistoryItem> history, int wins, int loses) {
@@ -80,6 +78,7 @@ public class GameService {
     }
 
     public static void printStats() {
+        Logger.trace("db\tstatistics:");
         NodesRepo.printStats();
         MovesRepo.printStats();
     }

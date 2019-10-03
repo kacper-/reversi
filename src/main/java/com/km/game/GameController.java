@@ -40,8 +40,7 @@ public class GameController {
     public void startNewGame(Slot human, EngineType type) {
         simulation = false;
         warMode = false;
-        Logger.debug(String.format("game\thuman plays [%s]", human.name()));
-        Logger.debug(String.format("game\topponent type [%s]", type.name()));
+        Logger.info(String.format("game\t[%s] plays [%s]", type.name(), human.opposite().name()));
         GameService.clear();
         prepareMoveEngine(type);
         GameRules.initGameBoard(gameBoard);
@@ -129,14 +128,14 @@ public class GameController {
 
     public void updateBoard(Move move) {
         HistoryItem parent = HistoryItem.fromGB(gameBoard);
-        Logger.debug(String.format("turn\t[%s] move = [%d, %d]", gameBoard.getTurn().name(), move.getI(), move.getJ()));
+        Logger.trace(String.format("turn\t[%s] move = [%d, %d]", gameBoard.getTurn().name(), move.getI(), move.getJ()));
         GameRules.updateBoard(move, gameBoard);
         if (gameBoard.getTurn() == Slot.BLACK) {
             historyBlack.add(HistoryItem.fromGBWithParent(gameBoard, parent));
         } else {
             historyWhite.add(HistoryItem.fromGBWithParent(gameBoard, parent));
         }
-        Logger.debug(String.format("score\t[%d, %d]", getScore().getBlack(), getScore().getWhite()));
+        Logger.trace(String.format("score\t[%d, %d]", getScore().getBlack(), getScore().getWhite()));
         nextTurn();
     }
 
@@ -171,10 +170,7 @@ public class GameController {
     }
 
     private void printStats(Score score) {
-        Logger.debug("");
-        Logger.debug("game\tFINISHED");
-        Logger.debug(String.format("game\tBLACK = [%d] WHITE = [%d]", score.getBlack(), score.getWhite()));
-        Logger.debug("db\tstatistics:");
+        Logger.info(String.format("game\tfinished BLACK = [%d] WHITE = [%d]", score.getBlack(), score.getWhite()));
         GameService.printStats();
     }
 

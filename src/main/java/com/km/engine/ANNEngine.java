@@ -20,7 +20,7 @@ public class ANNEngine implements MoveEngine {
         double score;
         double bestScore = -Double.MAX_VALUE;
         Move best = null;
-        Logger.debug(String.format("algo\tnumber of available moves = [%d]", moves.size()));
+        Logger.trace(String.format("algo\tnumber of available moves = [%d]", moves.size()));
         for (Move m : moves) {
             score = scoreMove(m);
             Logger.debug(String.format("algo\tmove = [%d, %d] score = [%f]", m.getI(), m.getJ(), score));
@@ -29,23 +29,23 @@ public class ANNEngine implements MoveEngine {
                 best = m;
             }
         }
-        Logger.debug(String.format("algo\tchoosing = [%d, %d]", best.getI(), best.getJ()));
+        Logger.trace(String.format("algo\tchoosing = [%d, %d]", best.getI(), best.getJ()));
         return best;
     }
 
     private double scoreMove(Move m) {
         GameController copy = controller.copy();
-        Logger.setDebugOff();
+        Logger.setOff();
         copy.updateBoard(m);
         copy.nextTurn();
-        Logger.setDebugOn();
+        Logger.setOn();
         String board = copy.getGameBoard().toDBString();
         return NetUtil.process(board);
     }
 
     @Override
     public void afterGame() {
-        NetUtil.runTraining();
+        return;
     }
 
 

@@ -45,7 +45,7 @@ class NodesRepo {
     }
 
     static void printStats() {
-        Logger.debug(String.format("db\tnodes map count = [%d]", map.size()));
-        Logger.debug(String.format("db\tnodes list count = [%d]", list.size()));
+        Logger.trace(String.format("db\tnodes map count = [%d]", map.size()));
+        Logger.trace(String.format("db\tnodes list count = [%d]", list.size()));
     }
 }

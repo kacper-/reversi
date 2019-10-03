@@ -8,8 +8,7 @@ import com.km.repos.GameService;
 import java.io.*;
 
 public class NetUtil {
-    private static final int SIM_COUNT = 5;
-    private static final int TRAIN_CYCLES = 3;
+    private static final int SIM_COUNT = 7;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -19,7 +18,7 @@ public class NetUtil {
     }
 
     private static void save() {
-        Logger.debug(String.format("net\tsaving file [%s]", filePath));
+        Logger.trace(String.format("net\tsaving file [%s]", filePath));
         try {
             FileOutputStream fileOut = new FileOutputStream(filePath);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
@@ -31,9 +30,9 @@ public class NetUtil {
     }
 
     private static void load() {
-        Logger.debug(String.format("net\tloading file [%s]", filePath));
+        Logger.trace(String.format("net\tloading file [%s]", filePath));
         if (!new File(filePath).exists()) {
-            Logger.debug(String.format("net\tfile [%s] does not exist, creating new", filePath));
+            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath));
             net = new Net();
             save();
         } else {
@@ -43,7 +42,7 @@ public class NetUtil {
                 net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.debug(String.format("net\terror loading file [%s]", filePath));
+                Logger.error(String.format("net\terror loading file [%s]", filePath));
             }
         }
     }
@@ -56,7 +55,7 @@ public class NetUtil {
     }
 
     private static boolean validate(Nodes n) {
-        return (n.getLoses() + n.getWins()) > SIM_COUNT && n.getWins() > 0 && n.getLoses() > 0;
+        return (n.getLoses() + n.getWins()) > SIM_COUNT;
     }
 
     private static double expected(Nodes end) {
@@ -72,10 +71,9 @@ public class NetUtil {
     public static void runTraining() {
         load();
         trainCount = 0;
-        Logger.debug("net\ttraining started...");
-        for (int i = 0; i < TRAIN_CYCLES; i++)
-            GameService.visitMoves(NetUtil::train);
-        Logger.debug(String.format("net\ttraining finished after [%d] iterations", trainCount));
+        Logger.trace("net\ttraining started...");
+        GameService.visitMoves(NetUtil::train);
+        Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
         save();
     }
 

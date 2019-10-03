@@ -21,7 +21,7 @@ public class RandomEngine implements MoveEngine {
     public Move chooseMove(Set<Move> moves) {
         List<Move> list = new ArrayList<>(moves);
         Move m = list.get(new Random().nextInt(moves.size()));
-        Logger.debug(String.format("algo\tchoosing [%d, %d] score = [%f]", m.getI(), m.getJ()));
+        Logger.trace(String.format("algo\tchoosing [%d, %d]", m.getI(), m.getJ()));
         return m;
     }
 

@@ -3,6 +3,7 @@ package com.km.engine;
 import com.km.Logger;
 import com.km.entities.Pair;
 import com.km.game.*;
+import com.km.nn.NetUtil;
 import com.km.repos.GameService;
 
 import java.util.*;
@@ -53,17 +54,17 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private void runSimulations() {
-        Logger.debug("algo\tstarting simulations");
+        Logger.trace("algo\tstarting simulations");
         simCount = 1;
         wins = 0;
         loses = 0;
         long start = new Date().getTime();
         while (continueSim(start, simCount)) {
-            Logger.setDebugOff();
+            Logger.setOff();
             startSimulationPool();
-            Logger.setDebugOn();
+            Logger.setOn();
         }
-        Logger.debug(String.format("algo\t[%d] simulations with result = [%d, %d] success ratio = [%.2f]", simCount - 1, wins, loses, ((float) wins) / (float) (loses + wins)));
+        Logger.trace(String.format("algo\t[%d] simulations with result = [%d, %d] success ratio = [%.2f]", simCount - 1, wins, loses, ((float) wins) / (float) (loses + wins)));
     }
 
     private void startSimulationPool() {
@@ -73,7 +74,7 @@ public class TreeSearchEngine implements MoveEngine {
             executor.execute(this::startSingleSimulation);
         }
         executor.shutdown();
-        while (!executor.isTerminated());
+        while (!executor.isTerminated()) ;
     }
 
     private void startSingleSimulation() {
@@ -111,7 +112,7 @@ public class TreeSearchEngine implements MoveEngine {
         Pair<Move, Integer> best = simulations.keySet().iterator().next();
         double score = MC_DEFAULT_SCORE;
         int bigN = getBigN(simulations);
-        Logger.debug(String.format("algo\tmoves [%d] simulations [%d]", moves.size(), simulations.size()));
+        Logger.trace(String.format("algo\tmoves [%d] simulations [%d]", moves.size(), simulations.size()));
         int good = 0;
         for (Pair<Move, Integer> m : simulations.keySet()) {
             Pair<Integer, Integer> p = simulations.get(m);
@@ -127,7 +128,7 @@ public class TreeSearchEngine implements MoveEngine {
         if (controller.isSimulation() && (good < MIN_GOOD) && (moves.size() > simulations.size())) {
             return expand(simulations, moves);
         } else {
-            Logger.debug(String.format("algo\tchoosing from simulation node id = [%d]", best.getSecond()));
+            Logger.trace(String.format("algo\tchoosing from simulation node id = [%d]", best.getSecond()));
             return best.getFirst();
         }
     }
@@ -142,12 +143,12 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private Move chooseRandomMove(Set<Move> moves) {
-        Logger.debug("algo\trandom options");
+        Logger.debug(String.format("algo\t[%d] random options", moves.size()));
         for (Move m : moves) {
             Logger.debug(String.format("algo\toption move = [%d, %d]", m.getI(), m.getJ()));
         }
         Move move = new ArrayList<>(moves).get(new Random().nextInt(moves.size()));
-        Logger.debug(String.format("algo\tchoosing random move = [%d, %d] from [%d] options", move.getI(), move.getJ(), moves.size()));
+        Logger.trace(String.format("algo\tchoosing random move = [%d, %d] from [%d] options", move.getI(), move.getJ(), moves.size()));
         return move;
     }
 
@@ -178,7 +179,8 @@ public class TreeSearchEngine implements MoveEngine {
 
     @Override
     public void afterGame() {
-        return;
+        if (!controller.isSimulation())
+            NetUtil.runTraining();
     }
 
 }

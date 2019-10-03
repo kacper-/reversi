@@ -112,7 +112,7 @@ public class Board extends Canvas implements MouseListener {
     private void runWars(EngineType typeB, EngineType typeW, int count) {
         new Thread(() -> {
             for (int i = 0; i < count; i++) {
-                Logger.debug(String.format("board\tstarting game [%d] of [%d]", i + 1, count));
+                Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
                 try {
                     runWar(typeB, typeW);
                     while (!warReady)
@@ -122,7 +122,7 @@ public class Board extends Canvas implements MouseListener {
                 }
                 scoreListener.setWarScore(i + 1, warScoreB, warScoreW);
             }
-            Logger.debug(String.format("\nboard\twar score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+            Logger.info(String.format("board\twar score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }).start();
     }
 
