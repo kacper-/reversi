@@ -9,6 +9,7 @@ import com.km.game.HistoryItem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public class GameService {
@@ -66,10 +67,8 @@ public class GameService {
         return simulations;
     }
 
-    public static void visitMoves(Consumer<Nodes> c) {
-        for (Nodes n : NodesRepo.getNodes()) {
-            c.accept(n);
-        }
+    public static List<Nodes> getNodes() {
+        return NodesRepo.getNodes();
     }
 
     public static void clear() {

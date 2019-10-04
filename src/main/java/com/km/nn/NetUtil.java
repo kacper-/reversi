@@ -6,6 +6,9 @@ import com.km.game.DBSlot;
 import com.km.repos.GameService;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 8;
@@ -78,7 +81,10 @@ public class NetUtil {
         load();
         trainCount = 0;
         Logger.trace("net\ttraining started...");
-        GameService.visitMoves(NetUtil::train);
+        List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
+        int count = nodes.size();
+        for (int i = 0; i < count; i++)
+            train(nodes.get(new Random().nextInt(count)));
         Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
         save();
     }
