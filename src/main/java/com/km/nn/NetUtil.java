@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NetUtil {
-    private static final int SIM_COUNT = 8;
+    private static final int SIM_COUNT = 10;
     private static String filePath;
     private static Net net;
     private static int trainCount;
