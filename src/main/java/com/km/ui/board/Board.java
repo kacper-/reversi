@@ -110,6 +110,7 @@ public class Board extends Canvas implements MouseListener {
             Logger.info(String.format("board\tbatch train : cycles count [%d] : train cycle len [%d] : test cycle len [%d]", cycleCount, trainCycleLen, testCycleLen));
             Logger.setLevel(Logger.IMPORTANT);
             for (int i = 0; i < cycleCount; i++) {
+                Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
                 runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
                 runWars(EngineType.ANN, EngineType.RANDOM, testCycleLen);
             }
