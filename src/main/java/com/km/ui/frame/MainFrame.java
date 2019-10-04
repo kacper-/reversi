@@ -4,7 +4,7 @@ import com.km.engine.EngineType;
 import com.km.game.Score;
 import com.km.game.Slot;
 import com.km.ui.board.Board;
-import com.km.ui.board.ScoreListener;
+import com.km.game.ScoreListener;
 
 import javax.swing.*;
 import java.awt.*;
