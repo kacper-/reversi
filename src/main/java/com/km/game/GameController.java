@@ -63,21 +63,24 @@ public class GameController {
 
     public void makeWarMove() {
         if (controllerB.getGameBoard().getTurn() == Slot.WHITE) {
-            controllerW.gameBoard = gameBoard;
             controllerW.makeMove();
             gameBoard = controllerW.gameBoard;
         } else {
-            controllerB.gameBoard = gameBoard;
             controllerB.makeMove();
             gameBoard = controllerB.gameBoard;
         }
+        controllerW.gameBoard = gameBoard;
+        controllerB.gameBoard = gameBoard;
     }
 
     private boolean isWarFinished() {
         boolean b = controllerB.isFinished();
         boolean w = controllerW.isFinished();
-        if (b != w)
-            throw new IllegalStateException();
+        if (b != w) {
+            System.err.println(controllerB.gameBoard.toDBString());
+            System.err.println(controllerW.gameBoard.toDBString());
+            System.exit(0);
+        }
         return b;
     }
 
@@ -150,7 +153,7 @@ public class GameController {
         if (!moves.isEmpty()) {
             Move move = moveEngine.chooseMove(moves);
             updateBoard(move);
-            if (!isFinished() && GameRules.getAvailableMoves(gameBoard).isEmpty()) {
+            if (GameRules.getAvailableMoves(gameBoard).isEmpty()) {
                 nextTurn();
                 makeMove();
             }

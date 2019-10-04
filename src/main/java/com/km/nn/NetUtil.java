@@ -18,6 +18,7 @@ public class NetUtil {
     }
 
     public static void clear() {
+        Logger.info(String.format("net\tclearing file [%s]", filePath));
         net = new Net();
         save();
     }
