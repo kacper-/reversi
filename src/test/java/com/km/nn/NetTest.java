@@ -70,7 +70,7 @@ public class NetTest {
     @Test
     public void teach() {
         Net net = new Net();
-        for (int i = 0; i < 1800; i++) {
+        for (int i = 0; i < 3600; i++) {
             for (int t = 0; t < test.length; t++) {
                 net.teach(test[t], result(t));
             }
