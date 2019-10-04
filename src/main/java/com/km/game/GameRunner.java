@@ -33,16 +33,20 @@ public class GameRunner {
             Logger.setLevel(Logger.IMPORTANT);
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
-                if ((i % 2) == 0)
-                    runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
-                else
-                    runWars(EngineType.RANDOM, EngineType.TREE, trainCycleLen);
+                runTrainingCycle(i, trainCycleLen);
                 runWars(EngineType.ANN, EngineType.RANDOM, testCycleLen);
             }
             Logger.setLevel(level);
             Logger.info("board\tbatch train finished");
             notifyOnUI();
         }).start();
+    }
+
+    private void runTrainingCycle(int i, int trainCycleLen) {
+        if ((i % 2) == 0)
+            runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
+        else
+            runWars(EngineType.RANDOM, EngineType.TREE, trainCycleLen);
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
