@@ -1,6 +1,7 @@
 package com.km.ui.frame;
 
 import com.km.engine.EngineType;
+import com.km.game.GameRunner;
 import com.km.game.Score;
 import com.km.game.Slot;
 import com.km.ui.board.Board;
@@ -17,7 +18,9 @@ public class MainFrame extends JFrame implements ScoreListener {
 
     public MainFrame() {
         super(TITLE);
-        board = new Board(this);
+        GameRunner runner = new GameRunner();
+        runner.setScoreListener(this);
+        board = new Board(runner);
     }
 
     public void createComponents() {
