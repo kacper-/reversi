@@ -150,6 +150,7 @@ public class Board extends Canvas implements MouseListener {
             warScoreB++;
         else
             warScoreW++;
+        getGameController().afterWarGame();
     }
 
     @Override

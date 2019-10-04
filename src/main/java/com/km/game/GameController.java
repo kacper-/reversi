@@ -61,6 +61,11 @@ public class GameController {
         gameSaved = true;
     }
 
+    public void afterWarGame() {
+        controllerW.moveEngine.afterGame();
+        controllerB.moveEngine.afterGame();
+    }
+
     public void makeWarMove() {
         if (controllerB.getGameBoard().getTurn() == Slot.WHITE) {
             controllerW.makeMove();
@@ -77,8 +82,7 @@ public class GameController {
         boolean b = controllerB.isFinished();
         boolean w = controllerW.isFinished();
         if (b != w) {
-            System.err.println(controllerB.gameBoard.toDBString());
-            System.err.println(controllerW.gameBoard.toDBString());
+            Logger.error("board paradox");
             System.exit(0);
         }
         return b;
@@ -168,7 +172,6 @@ public class GameController {
             gameSaved = true;
             Score score = getScore();
             GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
-            moveEngine.afterGame();
             printStats(score);
         }
         return finished;

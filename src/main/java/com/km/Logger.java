@@ -52,7 +52,7 @@ public class Logger {
 
     public static void error(String s) {
         if (on && level <= ERROR) {
-            System.out.println(s);
+            System.err.println(s);
         }
     }
 }
