@@ -112,7 +112,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JPanel p3 = new JPanel();
         p3.setLayout(new FlowLayout());
         Button newGameBatch = new Button("Batch");
-        TextField cycleCount = new TextField("30");
+        TextField cycleCount = new TextField("40");
         TextField trainCycleLen = new TextField("5");
         TextField testCycleLen = new TextField("1000");
         newGameBatch.addActionListener(click -> {
