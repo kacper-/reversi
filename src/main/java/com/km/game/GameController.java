@@ -63,11 +63,11 @@ public class GameController {
 
     public void makeWarMove() {
         if (controllerB.getGameBoard().getTurn() == Slot.WHITE) {
-            controllerW.gameBoard = controllerB.gameBoard;
+            controllerW.gameBoard = gameBoard;
             controllerW.makeMove();
             gameBoard = controllerW.gameBoard;
         } else {
-            controllerB.gameBoard = controllerW.gameBoard;
+            controllerB.gameBoard = gameBoard;
             controllerB.makeMove();
             gameBoard = controllerB.gameBoard;
         }
@@ -76,7 +76,9 @@ public class GameController {
     private boolean isWarFinished() {
         boolean b = controllerB.isFinished();
         boolean w = controllerW.isFinished();
-        return b && w;
+        if (b != w)
+            throw new IllegalStateException();
+        return b;
     }
 
     public void prepareSimulationGame(GameController copyFrom, EngineType type) {

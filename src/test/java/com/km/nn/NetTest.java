@@ -70,7 +70,7 @@ public class NetTest {
     @Test
     public void teach() {
         Net net = new Net();
-        for (int i = 0; i < 600; i++) {
+        for (int i = 0; i < 1800; i++) {
             for (int t = 0; t < test.length; t++) {
                 net.teach(test[t], result(t));
             }
@@ -79,7 +79,7 @@ public class NetTest {
             double expected = result(t);
             double actual = net.process(test[t]);
             System.out.println(t + ">" + expected + ">" + actual);
-            Assert.assertEquals(expected, actual, Math.abs(expected / 3));
+            Assert.assertEquals(expected, actual, Math.abs(expected / 10));
         }
     }
 

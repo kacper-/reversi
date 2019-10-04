@@ -3,6 +3,7 @@ package com.km.ui.board;
 import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.game.*;
+import com.km.nn.NetUtil;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -16,7 +17,6 @@ public class Board extends Canvas implements MouseListener {
     private GameController controller;
     private boolean showAvailable = true;
     private ScoreListener scoreListener;
-    private boolean warReady = true;
     private int warScoreB = 0;
     private int warScoreW = 0;
 
@@ -102,51 +102,54 @@ public class Board extends Canvas implements MouseListener {
         repaint();
     }
 
+    public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
+        showAvailable = false;
+        new Thread(() -> {
+            NetUtil.clear();
+            int level = Logger.getLevel();
+            Logger.info(String.format("board\tbatch train : cycles count [%d] : train cycle len [%d] : test cycle len [%d]", cycleCount, trainCycleLen, testCycleLen));
+            Logger.setLevel(Logger.IMPORTANT);
+            for (int i = 0; i < cycleCount; i++) {
+                runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
+                runWars(EngineType.ANN, EngineType.RANDOM, testCycleLen);
+            }
+            Logger.setLevel(level);
+            Logger.info("board\tbatch train finished");
+            repaint();
+        }).start();
+    }
+
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
         showAvailable = false;
-        warScoreW = 0;
-        warScoreB = 0;
-        runWars(typeB, typeW, count);
+        new Thread(() -> {
+            runWars(typeB, typeW, count);
+            repaint();
+        }).start();
     }
 
     private void runWars(EngineType typeB, EngineType typeW, int count) {
-        new Thread(() -> {
-            for (int i = 0; i < count; i++) {
-                Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
-                try {
-                    runWar(typeB, typeW);
-                    while (!warReady)
-                        Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                scoreListener.setWarScore(i + 1, warScoreB, warScoreW);
-                Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
-            }
-            Logger.info(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
-        }).start();
+        warScoreW = 0;
+        warScoreB = 0;
+        for (int i = 0; i < count; i++) {
+            Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
+            runWar(typeB, typeW);
+            scoreListener.setWarScore(i + 1, warScoreB, warScoreW);
+            Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+        }
+        Logger.important(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
     }
 
     private void runWar(EngineType typeB, EngineType typeW) {
         getGameController().startWarGame(typeB, typeW);
-        repaint();
-        warReady = false;
-        new Thread(() -> {
-            while (!getGameController().isFinished()) {
-                getGameController().makeWarMove();
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        while (!getGameController().isFinished()) {
+            getGameController().makeWarMove();
+            if (typeB == EngineType.TREE || typeW == EngineType.TREE)
                 repaint();
-            }
-            if (getGameController().getScore().getWinner() == Slot.BLACK)
-                warScoreB++;
-            else
-                warScoreW++;
-            warReady = true;
-        }).start();
+        }
+        if (getGameController().getScore().getWinner() == Slot.BLACK)
+            warScoreB++;
+        else
+            warScoreW++;
     }
 
     @Override

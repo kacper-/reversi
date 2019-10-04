@@ -8,13 +8,18 @@ import com.km.repos.GameService;
 import java.io.*;
 
 public class NetUtil {
-    private static final int SIM_COUNT = 7;
+    private static final int SIM_COUNT = 8;
     private static String filePath;
     private static Net net;
     private static int trainCount;
 
     public static void setFilePath(String filePath) {
         NetUtil.filePath = filePath;
+    }
+
+    public static void clear() {
+        net = new Net();
+        save();
     }
 
     private static void save() {
@@ -55,7 +60,7 @@ public class NetUtil {
     }
 
     private static boolean validate(Nodes n) {
-        return (n.getLoses() + n.getWins()) > SIM_COUNT;
+        return (n.getLoses() + n.getWins()) >= SIM_COUNT;
     }
 
     private static double expected(Nodes end) {

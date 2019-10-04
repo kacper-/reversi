@@ -4,13 +4,18 @@ public class Logger {
     public static final int DEBUG = 1;
     public static final int TRACE = 2;
     public static final int INFO = 3;
-    public static final int ERROR = 4;
+    public static final int IMPORTANT = 4;
+    public static final int ERROR = 5;
 
     private static boolean on = true;
     private static int level = INFO;
 
     public static void setLevel(int logLevel) {
         level = logLevel;
+    }
+
+    public static int getLevel() {
+        return level;
     }
 
     public static void setOn() {
@@ -35,6 +40,12 @@ public class Logger {
 
     public static void info(String s) {
         if (on && level <= INFO) {
+            System.out.println(s);
+        }
+    }
+
+    public static void important(String s) {
+        if (on && level <= IMPORTANT) {
             System.out.println(s);
         }
     }

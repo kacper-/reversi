@@ -85,9 +85,10 @@ public class GameRules {
 
     static boolean isGameFinished(GameBoard gameBoard) {
         GameBoard g1 = gameBoard.copy();
-        GameBoard g2 = gameBoard.copy();
-        g2.setTurn(g1.getTurn().opposite());
-        return getAvailableMoves(g1).isEmpty() && getAvailableMoves(g2).isEmpty();
+        int moves = getAvailableMoves(g1).size();
+        g1.setTurn(g1.getTurn().opposite());
+        moves += getAvailableMoves(g1).size();
+        return moves == 0;
     }
 
     static void updateBoard(Move move, GameBoard gameBoard) {

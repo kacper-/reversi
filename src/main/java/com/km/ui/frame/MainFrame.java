@@ -9,15 +9,11 @@ import com.km.ui.board.ScoreListener;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by kacper on 10.01.16.
- */
 public class MainFrame extends JFrame implements ScoreListener {
     private static final String TITLE = "Reversi 1.0";
     private Board board;
     private TextField score = new TextField("no score yet");
     private TextField warScore = new TextField("no score yet");
-    private TextField count = new TextField("5");
 
     public MainFrame() {
         super(TITLE);
@@ -47,6 +43,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(getButtonRow1());
         rightPanel.add(getButtonRow2());
+        rightPanel.add(getButtonRow3());
         rightPanel.add(getInfoPanel1());
         rightPanel.add(getInfoPanel2());
         return rightPanel;
@@ -100,6 +97,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
         typeB.setSelectedItem(EngineType.ANN);
         typeB.setEditable(false);
+        TextField count = new TextField("5");
         newGameWar.addActionListener(click -> {
             board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()), Integer.parseInt(count.getText()));
         });
@@ -108,6 +106,23 @@ public class MainFrame extends JFrame implements ScoreListener {
         p2.add(typeW);
         p2.add(count);
         return p2;
+    }
+
+    private JPanel getButtonRow3() {
+        JPanel p3 = new JPanel();
+        p3.setLayout(new FlowLayout());
+        Button newGameBatch = new Button("Batch");
+        TextField cycleCount = new TextField("20");
+        TextField trainCycleLen = new TextField("5");
+        TextField testCycleLen = new TextField("1000");
+        newGameBatch.addActionListener(click -> {
+            board.startBatchTrain(Integer.parseInt(cycleCount.getText()), Integer.parseInt(trainCycleLen.getText()), Integer.parseInt(testCycleLen.getText()));
+        });
+        p3.add(newGameBatch);
+        p3.add(cycleCount);
+        p3.add(trainCycleLen);
+        p3.add(testCycleLen);
+        return p3;
     }
 
     @Override
