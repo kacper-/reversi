@@ -91,7 +91,8 @@ class Layer implements Serializable {
     void applyWeightDeltas() {
         for (int n = 0; n < neuronCount; n++) {
             for (int w = 0; w < weightCount; w++) {
-                weights[n][w] -= weightDeltas[n][w];
+                if (new Random().nextInt(2) == 0)
+                    weights[n][w] -= weightDeltas[n][w];
                 weightDeltas[n][w] = 0d;
             }
         }
