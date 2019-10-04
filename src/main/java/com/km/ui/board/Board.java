@@ -111,7 +111,10 @@ public class Board extends Canvas implements MouseListener {
             Logger.setLevel(Logger.IMPORTANT);
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
-                runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
+                if ((i % 2) == 0)
+                    runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
+                else
+                    runWars(EngineType.RANDOM, EngineType.TREE, trainCycleLen);
                 runWars(EngineType.ANN, EngineType.RANDOM, testCycleLen);
             }
             Logger.setLevel(level);
