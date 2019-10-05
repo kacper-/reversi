@@ -15,7 +15,7 @@ public class NetUtil {
     static final boolean USE_DECAY = false;
     static final boolean USE_DROPOUT = true;
     public static final int CYCLE_COUNT = 50;
-    public static final int TRAIN_CYCLE_LEN = 3;
+    public static final int TRAIN_CYCLE_LEN = 2;
     public static final int TEST_CYCLE_LEN = 1000;
     private static String filePath;
     private static Net net;
