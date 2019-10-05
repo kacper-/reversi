@@ -34,7 +34,7 @@ public class RuleEngine implements MoveEngine {
         return best;
     }
 
-    private double scoreMove(Move m) {
+    double scoreMove(Move m) {
         Logger.setOff();
         if (isCorner(m))
             return 1d;

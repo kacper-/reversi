@@ -33,7 +33,7 @@ public class ANNEngine implements MoveEngine {
         return best;
     }
 
-    private double scoreMove(Move m) {
+    double scoreMove(Move m) {
         GameController copy = controller.copy();
         Logger.setOff();
         copy.updateBoard(m);
