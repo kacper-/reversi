@@ -10,11 +10,11 @@ class Net implements Serializable {
     private Layer middle;
     private Layer middle2;
 
-    Net() {
-        front = new Layer(SIZE, SIZE);
-        middle = new Layer(SIZE, SIZE);
-        middle2 = new Layer(SIZE, SIZE);
-        back = new Layer(1, SIZE);
+    Net(boolean useDecay) {
+        front = new Layer(SIZE, SIZE, useDecay);
+        middle = new Layer(SIZE, SIZE, useDecay);
+        middle2 = new Layer(SIZE, SIZE, useDecay);
+        back = new Layer(1, SIZE, useDecay);
     }
 
     double process(double[] signal) {
@@ -25,16 +25,17 @@ class Net implements Serializable {
         return back.getOutputs()[0];
     }
 
-    void teach(double[] signal, double expected) {
+    void teach(double[] signal, double expected, int i, int count) {
+        double decay = Math.sqrt(1d - ((double) i / (double) count));
         double result = process(signal);
         double[] backError = new double[]{result - expected};
         double[] middle2Error = calculateError(back.getWeights(), backError);
         double[] middleError = calculateError(middle2.getWeights(), middle2Error);
         double[] frontError = calculateError(middle.getWeights(), middleError);
-        back.calculateWeightDeltas(backError);
-        middle2.calculateWeightDeltas(middle2Error);
-        middle.calculateWeightDeltas(middleError);
-        front.calculateWeightDeltas(frontError);
+        back.calculateWeightDeltas(backError, decay);
+        middle2.calculateWeightDeltas(middle2Error, decay);
+        middle.calculateWeightDeltas(middleError, decay);
+        front.calculateWeightDeltas(frontError, decay);
         apply();
     }
 

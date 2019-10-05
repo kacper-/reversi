@@ -3,6 +3,8 @@ package com.km.nn;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Random;
+
 public class NetTest {
     private double[] tA = new double[]{
             -1, -1, -1, 1, 1, -1, -1, -1,
@@ -69,13 +71,14 @@ public class NetTest {
 
     @Test
     public void teach() {
-        Net net = new Net();
-        for (int i = 0; i < 10000; i++) {
-            for (int t = 0; t < test.length; t++) {
-                net.teach(test[t], result(t));
-            }
+        Net net = new Net(NetUtil.USE_DECAY);
+        int count = 10000 * test.length;
+        int t;
+        for (int i = 0; i < count; i++) {
+            t = new Random().nextInt(test.length);
+            net.teach(test[t], result(t), i, count);
         }
-        for (int t = 0; t < test.length; t++) {
+        for (t = 0; t < test.length; t++) {
             double expected = result(t);
             double actual = net.process(test[t]);
             System.out.println(t + ">" + expected + ">" + actual);

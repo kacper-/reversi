@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 10;
+    static final boolean USE_DECAY = true;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -22,7 +23,7 @@ public class NetUtil {
 
     public static void clear() {
         Logger.info(String.format("net\tclearing file [%s]", filePath));
-        net = new Net();
+        net = new Net(USE_DECAY);
         save();
     }
 
@@ -42,7 +43,7 @@ public class NetUtil {
         Logger.trace(String.format("net\tloading file [%s]", filePath));
         if (!new File(filePath).exists()) {
             Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath));
-            net = new Net();
+            net = new Net(USE_DECAY);
             save();
         } else {
             try {
@@ -56,10 +57,10 @@ public class NetUtil {
         }
     }
 
-    private static void train(Nodes n) {
+    private static void train(Nodes n, int i, int count) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), expected(n));
+        net.teach(translate(n.getBoard()), expected(n), i, count);
         trainCount++;
     }
 
@@ -83,8 +84,9 @@ public class NetUtil {
         Logger.trace("net\ttraining started...");
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         int count = nodes.size();
-        for (int i = 0; i < count; i++)
-            train(nodes.get(new Random().nextInt(count)));
+        for (int i = 0; i < count; i++) {
+            train(nodes.get(new Random().nextInt(count)), i, count);
+        }
         Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
         save();
     }

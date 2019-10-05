@@ -12,8 +12,10 @@ class Layer implements Serializable {
     private double[] inputs;
     private int neuronCount;
     private int weightCount;
+    private boolean useDecay;
 
-    Layer(int neuronCount, int weightCount) {
+    Layer(int neuronCount, int weightCount, boolean useDecay) {
+        this.useDecay = useDecay;
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;
         initWeights();
@@ -78,12 +80,15 @@ class Layer implements Serializable {
         return 1 / Math.pow(1 + Math.abs(x), 2);
     }
 
-    void calculateWeightDeltas(double[] outputDiff) {
+    void calculateWeightDeltas(double[] outputDiff, double decay) {
         double f1Val;
         for (int n = 0; n < neuronCount; n++) {
             f1Val = f1(combinedSignal(n));
             for (int w = 0; w < weightCount; w++) {
-                weightDeltas[n][w] = LEARNING_FACTOR * outputDiff[n] * f1Val * inputs[w];
+                if (useDecay)
+                    weightDeltas[n][w] = decay * LEARNING_FACTOR * outputDiff[n] * f1Val * inputs[w];
+                else
+                    weightDeltas[n][w] = LEARNING_FACTOR * outputDiff[n] * f1Val * inputs[w];
             }
         }
     }
