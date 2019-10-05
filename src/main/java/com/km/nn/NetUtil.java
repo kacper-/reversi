@@ -13,6 +13,7 @@ import java.util.Random;
 public class NetUtil {
     private static final int SIM_COUNT = 10;
     static final boolean USE_DECAY = false;
+    static final boolean USE_DROPOUT = true;
     public static final int CYCLE_COUNT = 50;
     public static final int TRAIN_CYCLE_LEN = 3;
     public static final int TEST_CYCLE_LEN = 1000;
@@ -26,7 +27,7 @@ public class NetUtil {
 
     public static void clear() {
         Logger.info(String.format("net\tclearing file [%s]", filePath));
-        net = new Net(USE_DECAY);
+        net = new Net(USE_DECAY, USE_DROPOUT);
         save();
     }
 
@@ -46,7 +47,7 @@ public class NetUtil {
         Logger.trace(String.format("net\tloading file [%s]", filePath));
         if (!new File(filePath).exists()) {
             Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath));
-            net = new Net(USE_DECAY);
+            net = new Net(USE_DECAY, USE_DROPOUT);
             save();
         } else {
             try {

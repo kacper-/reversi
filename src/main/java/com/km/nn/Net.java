@@ -10,11 +10,11 @@ class Net implements Serializable {
     private Layer middle;
     private Layer middle2;
 
-    Net(boolean useDecay) {
-        front = new Layer(SIZE, SIZE, useDecay);
-        middle = new Layer(SIZE, SIZE, useDecay);
-        middle2 = new Layer(SIZE, SIZE, useDecay);
-        back = new Layer(1, SIZE, useDecay);
+    Net(boolean useDecay, boolean useDropout) {
+        front = new Layer(SIZE, SIZE, useDecay, useDropout);
+        middle = new Layer(SIZE, SIZE, useDecay, useDropout);
+        middle2 = new Layer(SIZE, SIZE, useDecay, useDropout);
+        back = new Layer(1, SIZE, useDecay, useDropout);
     }
 
     double process(double[] signal) {
