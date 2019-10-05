@@ -43,18 +43,12 @@ public class GameRunner {
     }
 
     private void runTrainingCycle(int i, int trainCycleLen) {
-        switch (i % 4) {
+        switch (i % 2) {
             case 0:
                 runWars(EngineType.MCT, EngineType.RANDOM, trainCycleLen);
                 break;
             case 1:
                 runWars(EngineType.RANDOM, EngineType.MCT, trainCycleLen);
-                break;
-            case 2:
-                runWars(EngineType.MCT, EngineType.ANN, trainCycleLen);
-                break;
-            case 3:
-                runWars(EngineType.ANN, EngineType.MCT, trainCycleLen);
                 break;
         }
     }
