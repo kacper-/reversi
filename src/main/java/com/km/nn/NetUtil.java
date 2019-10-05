@@ -14,7 +14,7 @@ public class NetUtil {
     private static final int SIM_COUNT = 12;
     static final boolean USE_DECAY = false;
     static final boolean USE_DROPOUT = true;
-    public static final int CYCLE_COUNT = 100;
+    public static final int CYCLE_COUNT = 70;
     public static final int TRAIN_CYCLE_LEN = 1;
     public static final int TEST_CYCLE_LEN = 1000;
     private static String filePath;
