@@ -113,7 +113,7 @@ public class GameRules {
         return Arrays.asList(moves);
     }
 
-    static List<Move> getSemiCorners() {
+    public static List<Move> getSemiCorners() {
         Move[] moves = new Move[]{
                 new Move(1, 1, null),
                 new Move(1, 6, null),
@@ -121,6 +121,10 @@ public class GameRules {
                 new Move(6, 6, null)
         };
         return Arrays.asList(moves);
+    }
+
+    public static Move toSimpleMove(Move m) {
+        return new Move(m.getI(), m.getJ(), null);
     }
 
     static void initGameBoard(GameBoard gameBoard) {
