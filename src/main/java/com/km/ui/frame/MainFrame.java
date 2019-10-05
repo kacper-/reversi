@@ -77,7 +77,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JButton newGameBlack = new JButton("BLACK");
         JButton newGameWhite = new JButton("WHITE");
         JComboBox<EngineType> type = new JComboBox<>(EngineType.values());
-        type.setSelectedItem(EngineType.TREE);
+        type.setSelectedItem(EngineType.MC);
         type.setEditable(false);
         newGameBlack.addActionListener(click -> {
             board.startNewGame(Slot.BLACK, EngineType.valueOf(type.getSelectedItem().toString()));
@@ -96,7 +96,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         p2.setLayout(new FlowLayout());
         JButton newGameWar = new JButton("War");
         JComboBox<EngineType> typeW = new JComboBox<>(EngineType.values());
-        typeW.setSelectedItem(EngineType.TREE);
+        typeW.setSelectedItem(EngineType.MC);
         typeW.setEditable(false);
         JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
         typeB.setSelectedItem(EngineType.ANN);

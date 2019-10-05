@@ -45,16 +45,16 @@ public class GameRunner {
     private void runTrainingCycle(int i, int trainCycleLen) {
         switch (i % 4) {
             case 0:
-                runWars(EngineType.TREE, EngineType.RANDOM, trainCycleLen);
+                runWars(EngineType.MCT, EngineType.RANDOM, trainCycleLen);
                 break;
             case 1:
-                runWars(EngineType.RANDOM, EngineType.TREE, trainCycleLen);
+                runWars(EngineType.RANDOM, EngineType.MCT, trainCycleLen);
                 break;
             case 2:
-                runWars(EngineType.TREE, EngineType.ANN, trainCycleLen);
+                runWars(EngineType.MCT, EngineType.ANN, trainCycleLen);
                 break;
             case 3:
-                runWars(EngineType.ANN, EngineType.TREE, trainCycleLen);
+                runWars(EngineType.ANN, EngineType.MCT, trainCycleLen);
                 break;
         }
     }
@@ -95,7 +95,7 @@ public class GameRunner {
         getGameController().startWarGame(typeB, typeW);
         while (!getGameController().isFinished()) {
             getGameController().makeWarMove();
-            if (typeB == EngineType.TREE || typeW == EngineType.TREE)
+            if (typeB == EngineType.MCT || typeW == EngineType.MCT || typeB == EngineType.MC || typeW == EngineType.MC)
                 notifyOnUI();
         }
         if (getGameController().getScore().getWinner() == Slot.BLACK)

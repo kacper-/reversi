@@ -1,9 +1,10 @@
 package com.km.engine;
 
 public enum EngineType {
-    TREE,
+    MC,
     ANN,
     RULE,
     RANDOM,
-    SUPER
+    SUPER,
+    MCT
 }

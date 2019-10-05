@@ -9,7 +9,7 @@ public class GameControllerTest {
     @Test
     public void createInitialBoard() {
         GameController controller = new GameController();
-        controller.startNewGame(Slot.BLACK, EngineType.TREE);
+        controller.startNewGame(Slot.BLACK, EngineType.MC);
         Score score = controller.getScore();
         Assert.assertEquals(2, score.getBlack());
         Assert.assertEquals(2, score.getWhite());
@@ -19,7 +19,7 @@ public class GameControllerTest {
     @Test
     public void smokeTest() {
         GameController controller = new GameController();
-        controller.startNewGame(Slot.WHITE, EngineType.TREE);
+        controller.startNewGame(Slot.WHITE, EngineType.MC);
         Score score = controller.getScore();
         Assert.assertEquals(4, score.getBlack());
         Assert.assertEquals(1, score.getWhite());

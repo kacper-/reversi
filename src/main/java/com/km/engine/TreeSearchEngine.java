@@ -29,7 +29,12 @@ public class TreeSearchEngine implements MoveEngine {
     private int simCount = 0;
     private int wins = 0;
     private int loses = 0;
+    private boolean train;
     private GameController controller;
+
+    TreeSearchEngine(boolean train) {
+        this.train = train;
+    }
 
     @Override
     public void setGameController(GameController controller) {
@@ -79,7 +84,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     private void startSingleSimulation() {
         GameController simController = new GameController();
-        simController.prepareSimulationGame(controller, EngineType.TREE);
+        simController.prepareSimulationGame(controller, EngineType.MC);
         while (!simController.isFinished()) {
             simController.makeMove();
         }
@@ -179,7 +184,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     @Override
     public void afterGame() {
-        if (!controller.isSimulation())
+        if (!controller.isSimulation() && train)
             NetUtil.runTraining();
     }
 

@@ -15,8 +15,11 @@ public class EngineFactory {
             case SUPER:
                 engine = new SuperEngine();
                 break;
-            case TREE:
-                engine = new TreeSearchEngine();
+            case MC:
+                engine = new TreeSearchEngine(false);
+                break;
+            case MCT:
+                engine = new TreeSearchEngine(true);
                 break;
             case RANDOM:
                 engine = new RandomEngine();
