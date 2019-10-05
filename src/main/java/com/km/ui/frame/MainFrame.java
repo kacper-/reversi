@@ -14,8 +14,8 @@ import java.awt.*;
 public class MainFrame extends JFrame implements ScoreListener {
     private static final String TITLE = "Reversi 1.0";
     private Board board;
-    private TextField score = new TextField("no score yet");
-    private TextField warScore = new TextField("no score yet");
+    private JTextField score = new JTextField("no score yet");
+    private JTextField warScore = new JTextField("no score yet");
 
     public MainFrame() {
         super(TITLE);
@@ -56,7 +56,7 @@ public class MainFrame extends JFrame implements ScoreListener {
     private JPanel getInfoPanel1() {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new FlowLayout());
-        infoPanel.add(new Label("Score:"));
+        infoPanel.add(new JLabel("Score:"));
         score.setEditable(false);
         infoPanel.add(score);
         return infoPanel;
@@ -65,7 +65,7 @@ public class MainFrame extends JFrame implements ScoreListener {
     private JPanel getInfoPanel2() {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new FlowLayout());
-        infoPanel.add(new Label("War Score:"));
+        infoPanel.add(new JLabel("War Score:"));
         warScore.setEditable(false);
         infoPanel.add(warScore);
         return infoPanel;
@@ -74,8 +74,8 @@ public class MainFrame extends JFrame implements ScoreListener {
     private JPanel getButtonRow1() {
         JPanel p1 = new JPanel();
         p1.setLayout(new FlowLayout());
-        Button newGameBlack = new Button("BLACK");
-        Button newGameWhite = new Button("WHITE");
+        JButton newGameBlack = new JButton("BLACK");
+        JButton newGameWhite = new JButton("WHITE");
         JComboBox<EngineType> type = new JComboBox<>(EngineType.values());
         type.setSelectedItem(EngineType.TREE);
         type.setEditable(false);
@@ -94,14 +94,14 @@ public class MainFrame extends JFrame implements ScoreListener {
     private JPanel getButtonRow2() {
         JPanel p2 = new JPanel();
         p2.setLayout(new FlowLayout());
-        Button newGameWar = new Button("War");
+        JButton newGameWar = new JButton("War");
         JComboBox<EngineType> typeW = new JComboBox<>(EngineType.values());
         typeW.setSelectedItem(EngineType.TREE);
         typeW.setEditable(false);
         JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
         typeB.setSelectedItem(EngineType.ANN);
         typeB.setEditable(false);
-        TextField count = new TextField("5");
+        JTextField count = new JTextField("5");
         newGameWar.addActionListener(click -> {
             board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()), Integer.parseInt(count.getText()));
         });
@@ -115,10 +115,10 @@ public class MainFrame extends JFrame implements ScoreListener {
     private JPanel getButtonRow3() {
         JPanel p3 = new JPanel();
         p3.setLayout(new FlowLayout());
-        Button newGameBatch = new Button("Batch");
-        TextField cycleCount = new TextField(String.valueOf(NetUtil.CYCLE_COUNT));
-        TextField trainCycleLen = new TextField(String.valueOf(NetUtil.TRAIN_CYCLE_LEN));
-        TextField testCycleLen = new TextField(String.valueOf(NetUtil.TEST_CYCLE_LEN));
+        JButton newGameBatch = new JButton("Batch");
+        JTextField cycleCount = new JTextField(String.valueOf(NetUtil.CYCLE_COUNT));
+        JTextField trainCycleLen = new JTextField(String.valueOf(NetUtil.TRAIN_CYCLE_LEN));
+        JTextField testCycleLen = new JTextField(String.valueOf(NetUtil.TEST_CYCLE_LEN));
         newGameBatch.addActionListener(click -> {
             board.startBatchTrain(Integer.parseInt(cycleCount.getText()), Integer.parseInt(trainCycleLen.getText()), Integer.parseInt(testCycleLen.getText()));
         });
