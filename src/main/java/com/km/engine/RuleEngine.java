@@ -36,8 +36,21 @@ public class RuleEngine implements MoveEngine {
     private double scoreMove(Move m) {
         if (isCorner(m))
             return 1d;
+        double risk = calculateRisk(m);
+        if (risk < 0)
+            return risk;
+        int count = countGain(m);
+        return ((double) count) / 64d;
+    }
+
+    private int countGain(Move m) {
         // TODO implement
-        return 0d;
+        return 0;
+    }
+
+    private double calculateRisk(Move m) {
+        // TODO implement
+        return 1d;
     }
 
     private boolean isCorner(Move m) {

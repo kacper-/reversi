@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 10;
-    static final boolean USE_DECAY = true;
+    static final boolean USE_DECAY = false;
     public static final int CYCLE_COUNT = 50;
     public static final int TRAIN_CYCLE_LEN = 3;
     public static final int TEST_CYCLE_LEN = 1000;
