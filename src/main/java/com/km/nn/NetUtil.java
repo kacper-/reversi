@@ -13,6 +13,9 @@ import java.util.Random;
 public class NetUtil {
     private static final int SIM_COUNT = 10;
     static final boolean USE_DECAY = true;
+    public static final int CYCLE_COUNT = 40;
+    public static final int TRAIN_CYCLE_LEN = 5;
+    public static final int TEST_CYCLE_LEN = 1000;
     private static String filePath;
     private static Net net;
     private static int trainCount;

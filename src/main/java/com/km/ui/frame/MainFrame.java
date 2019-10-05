@@ -3,9 +3,10 @@ package com.km.ui.frame;
 import com.km.engine.EngineType;
 import com.km.game.GameRunner;
 import com.km.game.Score;
-import com.km.game.Slot;
-import com.km.ui.board.Board;
 import com.km.game.ScoreListener;
+import com.km.game.Slot;
+import com.km.nn.NetUtil;
+import com.km.ui.board.Board;
 
 import javax.swing.*;
 import java.awt.*;
@@ -115,9 +116,9 @@ public class MainFrame extends JFrame implements ScoreListener {
         JPanel p3 = new JPanel();
         p3.setLayout(new FlowLayout());
         Button newGameBatch = new Button("Batch");
-        TextField cycleCount = new TextField("40");
-        TextField trainCycleLen = new TextField("5");
-        TextField testCycleLen = new TextField("1000");
+        TextField cycleCount = new TextField(String.valueOf(NetUtil.CYCLE_COUNT));
+        TextField trainCycleLen = new TextField(String.valueOf(NetUtil.TRAIN_CYCLE_LEN));
+        TextField testCycleLen = new TextField(String.valueOf(NetUtil.TEST_CYCLE_LEN));
         newGameBatch.addActionListener(click -> {
             board.startBatchTrain(Integer.parseInt(cycleCount.getText()), Integer.parseInt(trainCycleLen.getText()), Integer.parseInt(testCycleLen.getText()));
         });
