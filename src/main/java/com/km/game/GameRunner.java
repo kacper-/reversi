@@ -13,6 +13,12 @@ public class GameRunner {
     private int warScoreB = 0;
     private int warScoreW = 0;
 
+    public boolean isFinished() {
+        return finished;
+    }
+
+    private volatile boolean finished = false;
+
     public GameController getGameController() {
         if (controller == null) {
             controller = new GameController();
@@ -60,6 +66,7 @@ public class GameRunner {
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
+        finished = false;
         new Thread(() -> {
             runWars(typeB, typeW, count);
             notifyOnUI();
@@ -72,10 +79,11 @@ public class GameRunner {
         for (int i = 0; i < count; i++) {
             Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
             runWar(typeB, typeW);
-            scoreListener.setWarScore(i + 1, warScoreB, warScoreW);
+            notifyOnWarScore(i + 1, warScoreB, warScoreW);
             Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }
         Logger.important(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+        finished = true;
     }
 
     public void playerMove(Move move) {

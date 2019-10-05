@@ -35,12 +35,14 @@ public class RuleEngine implements MoveEngine {
     }
 
     private double scoreMove(Move m) {
+        Logger.setOff();
         if (isCorner(m))
             return 1d;
         double risk = calculateRisk(m);
         if (risk < 0)
             return risk;
         int count = countGain(m);
+        Logger.setOn();
         return ((double) count) / 64d;
     }
 
