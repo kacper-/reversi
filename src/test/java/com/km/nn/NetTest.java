@@ -72,7 +72,7 @@ public class NetTest {
     @Test
     public void teach() {
         Net net = new Net(NetUtil.USE_DECAY, NetUtil.USE_DROPOUT);
-        int count = 7000 * test.length;
+        int count = 10000 * test.length;
         int t;
         for (int i = 0; i < count; i++) {
             t = new Random().nextInt(test.length);
