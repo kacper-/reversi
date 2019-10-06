@@ -27,8 +27,12 @@ public class NetUtil {
 
     public static void clear() {
         Logger.info(String.format("net\tclearing file [%s]", filePath));
-        net = new Net(USE_DECAY, USE_DROPOUT);
+        net = createNet();
         save();
+    }
+
+    public static Net createNet() {
+        return new Net4(USE_DECAY, USE_DROPOUT);
     }
 
     private static void save() {
@@ -47,13 +51,13 @@ public class NetUtil {
         Logger.trace(String.format("net\tloading file [%s]", filePath));
         if (!new File(filePath).exists()) {
             Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath));
-            net = new Net(USE_DECAY, USE_DROPOUT);
+            net = new Net4(USE_DECAY, USE_DROPOUT);
             save();
         } else {
             try {
                 FileInputStream fileIn = new FileInputStream(filePath);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-                net = (Net) objectIn.readObject();
+                net = (Net4) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
                 Logger.error(String.format("net\terror loading file [%s]", filePath));
@@ -103,7 +107,7 @@ public class NetUtil {
     }
 
     private static double[] translate(String n) {
-        double[] input = new double[Net.SIZE];
+        double[] input = new double[Net4.SIZE];
         for (int i = 0; i < n.length(); i++) {
             DBSlot slot = DBSlot.fromSymbol(n.charAt(i));
             switch (slot) {

@@ -71,7 +71,7 @@ public class NetTest {
 
     @Test
     public void teach() {
-        Net net = new Net(NetUtil.USE_DECAY, NetUtil.USE_DROPOUT);
+        Net net = NetUtil.createNet();
         int count = 15000 * test.length;
         int t;
         for (int i = 0; i < count; i++) {
