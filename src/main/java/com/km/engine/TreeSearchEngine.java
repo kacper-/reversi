@@ -16,7 +16,7 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    private static final long SIM_TIME = 1000;
+    public static final long SIM_TIME = 1000;
     private static final int SIM_COUNT_L1 = 10000;
     private static final int SIM_COUNT_L2 = 2500;
     private static final int SIM_COUNT_L3 = 200;
@@ -26,11 +26,17 @@ public class TreeSearchEngine implements MoveEngine {
     private static final int SIM_L4 = 60;
     private static final int SIM_HB = 100;
     private static final int CORES = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
+    private static long simTime = SIM_TIME;
     private int simCount = 0;
     private int wins = 0;
     private int loses = 0;
     private boolean train;
     private GameController controller;
+
+    public static void setPower(long power) {
+        simTime = power;
+        Logger.debug(String.format("algo\tpower set to [%d] ms", power));
+    }
 
     TreeSearchEngine(boolean train) {
         this.train = train;
@@ -101,7 +107,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     private boolean continueSim(long start, int count) {
         long stop = new Date().getTime();
-        if (count > SIM_COUNT_L1 || (stop - start) > SIM_TIME)
+        if (count > SIM_COUNT_L1 || (stop - start) > simTime)
             return false;
         Score s = controller.getScore();
         int gameProgress = s.getBlack() + s.getWhite();

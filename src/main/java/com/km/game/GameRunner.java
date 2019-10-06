@@ -1,5 +1,6 @@
 package com.km.game;
 
+import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.nn.NetUtil;
@@ -34,9 +35,9 @@ public class GameRunner {
     public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
         new Thread(() -> {
             NetUtil.clear();
-            int level = Logger.getLevel();
+            LogLevel level = Logger.getLevel();
             Logger.info(String.format("board\tbatch train : cycles count [%d] : train cycle len [%d] : test cycle len [%d]", cycleCount, trainCycleLen, testCycleLen));
-            Logger.setLevel(Logger.IMPORTANT);
+            Logger.setLevel(LogLevel.IMPORTANT);
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
                 runTrainingCycle(i, trainCycleLen);

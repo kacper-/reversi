@@ -1,6 +1,9 @@
 package com.km.ui.frame;
 
+import com.km.LogLevel;
+import com.km.Logger;
 import com.km.engine.EngineType;
+import com.km.engine.TreeSearchEngine;
 import com.km.game.GameRunner;
 import com.km.game.Score;
 import com.km.game.ScoreListener;
@@ -48,6 +51,8 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.add(getButtonRow1());
         rightPanel.add(getButtonRow2());
         rightPanel.add(getButtonRow3());
+        rightPanel.add(getButtonRow4());
+        rightPanel.add(getButtonRow5());
         rightPanel.add(getInfoPanel1());
         rightPanel.add(getInfoPanel2());
         return rightPanel;
@@ -127,6 +132,39 @@ public class MainFrame extends JFrame implements ScoreListener {
         p3.add(trainCycleLen);
         p3.add(testCycleLen);
         return p3;
+    }
+
+    private JPanel getButtonRow4() {
+        JPanel p4 = new JPanel();
+        p4.setLayout(new FlowLayout());
+        JButton clearANN = new JButton("Clear ANN");
+        JButton mcPower = new JButton("MC power");
+        JTextField power = new JTextField(String.valueOf(TreeSearchEngine.SIM_TIME));
+        clearANN.addActionListener(click -> {
+            NetUtil.clear();
+        });
+        mcPower.addActionListener(click -> {
+            TreeSearchEngine.setPower(Long.parseLong(power.getText()));
+        });
+        p4.add(clearANN);
+        p4.add(mcPower);
+        p4.add(power);
+        return p4;
+    }
+
+    private JPanel getButtonRow5() {
+        JPanel p5 = new JPanel();
+        p5.setLayout(new FlowLayout());
+        JButton level = new JButton("Set level");
+        JComboBox<LogLevel> list = new JComboBox<>(LogLevel.values());
+        list.setSelectedItem(Logger.getLevel());
+        list.setEditable(false);
+        level.addActionListener(click -> {
+            Logger.setLevel(LogLevel.valueOf(list.getSelectedItem().toString()));
+        });
+        p5.add(list);
+        p5.add(level);
+        return p5;
     }
 
     @Override

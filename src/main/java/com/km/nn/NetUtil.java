@@ -32,7 +32,7 @@ public class NetUtil {
     }
 
     public static Net createNet() {
-        return new Net4(USE_DECAY, USE_DROPOUT);
+        return new Net2(USE_DECAY, USE_DROPOUT);
     }
 
     private static void save() {
@@ -51,13 +51,12 @@ public class NetUtil {
         Logger.trace(String.format("net\tloading file [%s]", filePath));
         if (!new File(filePath).exists()) {
             Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath));
-            net = new Net4(USE_DECAY, USE_DROPOUT);
-            save();
+            clear();
         } else {
             try {
                 FileInputStream fileIn = new FileInputStream(filePath);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-                net = (Net4) objectIn.readObject();
+                net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
                 Logger.error(String.format("net\terror loading file [%s]", filePath));

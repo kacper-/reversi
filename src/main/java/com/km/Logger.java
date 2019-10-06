@@ -1,20 +1,15 @@
 package com.km;
 
 public class Logger {
-    public static final int DEBUG = 1;
-    public static final int TRACE = 2;
-    public static final int INFO = 3;
-    public static final int IMPORTANT = 4;
-    public static final int ERROR = 5;
-
     private static boolean on = true;
-    private static int level = INFO;
+    private static LogLevel level = LogLevel.INFO;
 
-    public static void setLevel(int logLevel) {
+    public static void setLevel(LogLevel logLevel) {
+        Logger.info(String.format("logger\tsetting level to [%s]",logLevel.name()));
         level = logLevel;
     }
 
-    public static int getLevel() {
+    public static LogLevel getLevel() {
         return level;
     }
 
@@ -27,31 +22,31 @@ public class Logger {
     }
 
     public static void debug(String s) {
-        if (on && level <= DEBUG) {
+        if (on && level.ordinal() <= LogLevel.DEBUG.ordinal()) {
             System.out.println(s);
         }
     }
 
     public static void trace(String s) {
-        if (on && level <= TRACE) {
+        if (on && level.ordinal() <= LogLevel.TRACE.ordinal()) {
             System.out.println(s);
         }
     }
 
     public static void info(String s) {
-        if (on && level <= INFO) {
+        if (on && level.ordinal() <= LogLevel.INFO.ordinal()) {
             System.out.println(s);
         }
     }
 
     public static void important(String s) {
-        if (on && level <= IMPORTANT) {
+        if (on && level.ordinal() <= LogLevel.IMPORTANT.ordinal()) {
             System.out.println(s);
         }
     }
 
     public static void error(String s) {
-        if (on && level <= ERROR) {
+        if (on && level.ordinal() <= LogLevel.ERROR.ordinal()) {
             System.err.println(s);
         }
     }
