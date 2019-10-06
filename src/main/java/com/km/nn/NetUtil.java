@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NetUtil {
-    private static final int SIM_COUNT = 12;
+    private static final int SIM_COUNT = 10;
     static final boolean USE_DECAY = false;
     static final boolean USE_DROPOUT = true;
     public static final int CYCLE_COUNT = 50;
