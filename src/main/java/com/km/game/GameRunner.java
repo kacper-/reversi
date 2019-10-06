@@ -3,11 +3,13 @@ package com.km.game;
 import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
+import com.km.engine.TreeSearchEngine;
 import com.km.nn.NetUtil;
 
 import java.util.Set;
 
 public class GameRunner {
+    private static final int PRE_POWER = 10000;
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;
@@ -45,7 +47,14 @@ public class GameRunner {
 
     public void predefinedTraining() {
         predefinedFinished = false;
-        // TODO implement
+        new Thread(() -> {
+            NetUtil.clear();
+            Logger.important("board\tpredefined train started");
+            TreeSearchEngine.setPower(PRE_POWER);
+            runWar(EngineType.MCT, EngineType.RANDOM);
+            Logger.important("board\tpredefined train finished");
+            predefinedFinished = true;
+        }).start();
     }
 
     public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
@@ -136,12 +145,13 @@ public class GameRunner {
         this.uiListener = uiListener;
     }
 
-    public void notifyOnUI() {
+    private void notifyOnUI() {
+        notifyOnScore();
         if (uiListener != null)
             uiListener.refreshUI();
     }
 
-    public void notifyOnScore() {
+    private void notifyOnScore() {
         if (scoreListener != null && controller != null)
             scoreListener.setScore(controller.getScore());
     }

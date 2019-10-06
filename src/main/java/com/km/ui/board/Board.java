@@ -34,7 +34,6 @@ public class Board extends Canvas implements MouseListener, UIListener {
             g.drawLine(BOARD_OFFSET + (i * SQUARE_SIZE), BOARD_OFFSET, BOARD_OFFSET + (i * SQUARE_SIZE), BOARD_OFFSET + (SQUARE_SIZE * BOARD_SIZE));
         }
         renderBoard(g);
-        gameRunner.notifyOnScore();
     }
 
     private void renderBoard(Graphics g) {

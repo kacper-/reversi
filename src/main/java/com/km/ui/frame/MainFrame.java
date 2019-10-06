@@ -174,6 +174,8 @@ public class MainFrame extends JFrame implements ScoreListener {
         JButton pre = new JButton("Train ANN");
         pre.addActionListener(click -> {
             GameRunner runner = new GameRunner();
+            runner.setUiListener(board);
+            runner.setScoreListener(this);
             runner.predefinedTraining();
         });
         p6.add(pre);
