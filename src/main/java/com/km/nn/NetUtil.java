@@ -32,7 +32,23 @@ public class NetUtil {
     }
 
     public static Net createNet() {
-        return new Net2(USE_DECAY, USE_DROPOUT);
+        return createInstance(NetVersion.NET2);
+    }
+
+    public static Net createNet(NetVersion version) {
+        return createInstance(version);
+    }
+
+    private static Net createInstance(NetVersion version) {
+        switch (version) {
+            case NET2:
+                return new Net2(USE_DECAY, USE_DROPOUT);
+            case NET3:
+                return new Net3(USE_DECAY, USE_DROPOUT);
+            case NET4:
+                return new Net4(USE_DECAY, USE_DROPOUT);
+        }
+        return null;
     }
 
     private static void save() {
