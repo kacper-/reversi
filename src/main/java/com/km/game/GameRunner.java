@@ -14,11 +14,22 @@ public class GameRunner {
     private int warScoreB = 0;
     private int warScoreW = 0;
 
-    public boolean isFinished() {
-        return finished;
+    public boolean isWarFinished() {
+        return warFinished;
     }
 
-    private volatile boolean finished = false;
+    public boolean isBatchFinished() {
+        return batchFinished;
+    }
+
+    private volatile boolean warFinished = false;
+    private volatile boolean batchFinished = false;
+
+    public boolean isPredefinedFinished() {
+        return predefinedFinished;
+    }
+
+    private volatile boolean predefinedFinished = false;
 
     public GameController getGameController() {
         if (controller == null) {
@@ -32,7 +43,13 @@ public class GameRunner {
         return GameRules.getAvailableMoves(getGameController().getGameBoard());
     }
 
+    public void predefinedTraining() {
+        predefinedFinished = false;
+        // TODO implement
+    }
+
     public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
+        batchFinished = false;
         new Thread(() -> {
             NetUtil.clear();
             LogLevel level = Logger.getLevel();
@@ -46,6 +63,7 @@ public class GameRunner {
             Logger.setLevel(level);
             Logger.info("board\tbatch train finished");
             notifyOnUI();
+            batchFinished = true;
         }).start();
     }
 
@@ -57,7 +75,7 @@ public class GameRunner {
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
-        finished = false;
+        warFinished = false;
         new Thread(() -> {
             runWars(typeB, typeW, count);
             notifyOnUI();
@@ -74,7 +92,7 @@ public class GameRunner {
             Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }
         Logger.important(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
-        finished = true;
+        warFinished = true;
     }
 
     public void playerMove(Move move) {

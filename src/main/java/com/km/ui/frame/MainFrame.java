@@ -53,6 +53,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.add(getButtonRow3());
         rightPanel.add(getButtonRow4());
         rightPanel.add(getButtonRow5());
+        rightPanel.add(getButtonRow6());
         rightPanel.add(getInfoPanel1());
         rightPanel.add(getInfoPanel2());
         return rightPanel;
@@ -165,6 +166,18 @@ public class MainFrame extends JFrame implements ScoreListener {
         p5.add(list);
         p5.add(level);
         return p5;
+    }
+
+    private JPanel getButtonRow6() {
+        JPanel p6 = new JPanel();
+        p6.setLayout(new FlowLayout());
+        JButton pre = new JButton("Train ANN");
+        pre.addActionListener(click -> {
+            GameRunner runner = new GameRunner();
+            runner.predefinedTraining();
+        });
+        p6.add(pre);
+        return p6;
     }
 
     @Override
