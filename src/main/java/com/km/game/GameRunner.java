@@ -9,7 +9,7 @@ import com.km.nn.NetUtil;
 import java.util.Set;
 
 public class GameRunner {
-    private static final int PRE_POWER = 10000;
+    private static final int PRE_POWER = 1000;
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;

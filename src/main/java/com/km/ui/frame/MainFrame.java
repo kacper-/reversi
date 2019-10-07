@@ -102,12 +102,12 @@ public class MainFrame extends JFrame implements ScoreListener {
         p2.setLayout(new FlowLayout());
         JButton newGameWar = new JButton("War");
         JComboBox<EngineType> typeW = new JComboBox<>(EngineType.values());
-        typeW.setSelectedItem(EngineType.MC);
+        typeW.setSelectedItem(EngineType.RANDOM);
         typeW.setEditable(false);
         JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
         typeB.setSelectedItem(EngineType.ANN);
         typeB.setEditable(false);
-        JTextField count = new JTextField("5");
+        JTextField count = new JTextField("1000");
         newGameWar.addActionListener(click -> {
             board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()), Integer.parseInt(count.getText()));
         });

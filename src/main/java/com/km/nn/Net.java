@@ -2,5 +2,5 @@ package com.km.nn;
 
 public interface Net {
     double process(double[] signal);
-    void teach(double[] signal, double expected, int i, int count);
+    void teach(double[] signal, double expected, double decay);
 }

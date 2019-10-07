@@ -80,10 +80,10 @@ public class NetUtil {
         }
     }
 
-    private static void train(Nodes n, int i, int count) {
+    private static void train(Nodes n, double decay) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), expected(n), i, count);
+        net.teach(translate(n.getBoard()), expected(n), decay);
         trainCount++;
     }
 
@@ -107,8 +107,11 @@ public class NetUtil {
         Logger.trace("net\ttraining started...");
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         int count = nodes.size();
+        int dCount = count + (count / 10);
+        double decay;
         for (int i = 0; i < count; i++) {
-            train(nodes.get(new Random().nextInt(count)), i, count);
+            decay = ((double) (dCount - i) / (double) dCount);
+            train(nodes.get(new Random().nextInt(count)), decay);
         }
         Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
         save();

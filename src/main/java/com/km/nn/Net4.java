@@ -28,8 +28,7 @@ class Net4 implements Serializable, Net {
         return back.getOutputs()[0];
     }
 
-    public void teach(double[] signal, double expected, int i, int count) {
-        double decay = Math.sqrt(1d - ((double) i / (double) count));
+    public void teach(double[] signal, double expected, double decay) {
         double result = process(signal);
         double[] backError = new double[]{result - expected};
         double[] middle3Error = calculateError(back.getWeights(), backError);

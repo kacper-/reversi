@@ -76,7 +76,7 @@ public class NetTest {
         int t;
         for (int i = 0; i < count; i++) {
             t = new Random().nextInt(test.length);
-            net.teach(test[t], result(t), i, count);
+            net.teach(test[t], result(t), 0);
         }
         for (t = 0; t < test.length; t++) {
             double expected = result(t);
