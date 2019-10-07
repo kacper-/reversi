@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 12;
-    static final boolean USE_DECAY = false;
+    static final boolean USE_DECAY = true;
     static final boolean USE_DROPOUT = true;
     public static final int CYCLE_COUNT = 50;
     public static final int TRAIN_CYCLE_LEN = 1;
@@ -32,7 +32,7 @@ public class NetUtil {
     }
 
     public static Net createNet() {
-        return createInstance(NetVersion.NET2);
+        return createInstance(NetVersion.NET3);
     }
 
     public static Net createNet(NetVersion version) {
