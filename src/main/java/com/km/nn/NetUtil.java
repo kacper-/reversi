@@ -83,16 +83,12 @@ public class NetUtil {
     private static void train(Nodes n, double decay) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), expected(n), decay);
+        net.teach(translate(n.getBoard()), ratio(n), decay);
         trainCount++;
     }
 
     private static boolean validate(Nodes n) {
         return (n.getLoses() + n.getWins()) >= SIM_COUNT;
-    }
-
-    private static double expected(Nodes end) {
-        return (2d * Math.sqrt(ratio(end))) - 1d;
     }
 
     private static double ratio(Nodes n) {
@@ -114,7 +110,32 @@ public class NetUtil {
             train(nodes.get(new Random().nextInt(count)), decay);
         }
         Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
+        verify(nodes);
         save();
+    }
+
+    private static void verify(List<Nodes> nodes) {
+        int count = 0;
+        int result = 0;
+        double actual, expected;
+        for (int i = 0; i < nodes.size(); i++) {
+            if (!validate(nodes.get(i)))
+                continue;
+            actual = process(nodes.get(i).getBoard());
+            expected = ratio(nodes.get(i));
+            if (inRange(expected, actual))
+                result++;
+            count++;
+        }
+        Logger.info(String.format("net\ttraining accuracy [%d %%]", (100 * result) / count));
+    }
+
+    private static boolean inRange(double expected, double actual) {
+        if (expected > 0) {
+            return (0.75 * expected) < actual && (1.25 * expected) > actual;
+        } else {
+            return (0.75 * expected) > actual && (1.25 * expected) < actual;
+        }
     }
 
     public static double process(String n) {
