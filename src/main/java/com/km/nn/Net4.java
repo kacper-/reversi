@@ -11,12 +11,12 @@ class Net4 implements Serializable, Net {
     private Layer middle2;
     private Layer middle3;
 
-    Net4(boolean useDecay, boolean useDropout) {
-        front = new Layer(SIZE, SIZE, useDecay, useDropout);
-        middle = new Layer(SIZE, SIZE, useDecay, useDropout);
-        middle2 = new Layer(SIZE, SIZE, useDecay, useDropout);
-        middle3 = new Layer(SIZE, SIZE, useDecay, useDropout);
-        back = new Layer(1, SIZE, useDecay, useDropout);
+    Net4(boolean useDropout) {
+        front = new Layer(SIZE, SIZE, useDropout);
+        middle = new Layer(SIZE, SIZE, useDropout);
+        middle2 = new Layer(SIZE, SIZE, useDropout);
+        middle3 = new Layer(SIZE, SIZE, useDropout);
+        back = new Layer(1, SIZE, useDropout);
     }
 
     public double process(double[] signal) {
@@ -28,18 +28,18 @@ class Net4 implements Serializable, Net {
         return back.getOutputs()[0];
     }
 
-    public void teach(double[] signal, double expected, double decay) {
+    public void teach(double[] signal, double expected) {
         double result = process(signal);
         double[] backError = new double[]{result - expected};
         double[] middle3Error = calculateError(back.getWeights(), backError);
         double[] middle2Error = calculateError(middle3.getWeights(), middle3Error);
         double[] middleError = calculateError(middle2.getWeights(), middle2Error);
         double[] frontError = calculateError(middle.getWeights(), middleError);
-        back.calculateWeightDeltas(backError, decay);
-        middle3.calculateWeightDeltas(middle3Error, decay);
-        middle2.calculateWeightDeltas(middle2Error, decay);
-        middle.calculateWeightDeltas(middleError, decay);
-        front.calculateWeightDeltas(frontError, decay);
+        back.calculateWeightDeltas(backError);
+        middle3.calculateWeightDeltas(middle3Error);
+        middle2.calculateWeightDeltas(middle2Error);
+        middle.calculateWeightDeltas(middleError);
+        front.calculateWeightDeltas(frontError);
         apply();
     }
 

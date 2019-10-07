@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 class Net3 implements Serializable, Net {
-    static final int SIZE = 64;
+    private static final int SIZE = 64;
     private Layer front;
     private Layer back;
     private Layer middle;
     private Layer middle2;
 
-    Net3(boolean useDecay, boolean useDropout) {
-        front = new Layer(SIZE, SIZE, useDecay, useDropout);
-        middle = new Layer(SIZE, SIZE, useDecay, useDropout);
-        middle2 = new Layer(SIZE, SIZE, useDecay, useDropout);
-        back = new Layer(1, SIZE, useDecay, useDropout);
+    Net3(boolean useDropout) {
+        front = new Layer(SIZE, SIZE, useDropout);
+        middle = new Layer(SIZE, SIZE, useDropout);
+        middle2 = new Layer(SIZE, SIZE, useDropout);
+        back = new Layer(1, SIZE, useDropout);
     }
 
     public double process(double[] signal) {
@@ -25,16 +25,16 @@ class Net3 implements Serializable, Net {
         return back.getOutputs()[0];
     }
 
-    public void teach(double[] signal, double expected, double decay) {
+    public void teach(double[] signal, double expected) {
         double result = process(signal);
         double[] backError = new double[]{result - expected};
         double[] middle2Error = calculateError(back.getWeights(), backError);
         double[] middleError = calculateError(middle2.getWeights(), middle2Error);
         double[] frontError = calculateError(middle.getWeights(), middleError);
-        back.calculateWeightDeltas(backError, decay);
-        middle2.calculateWeightDeltas(middle2Error, decay);
-        middle.calculateWeightDeltas(middleError, decay);
-        front.calculateWeightDeltas(frontError, decay);
+        back.calculateWeightDeltas(backError);
+        middle2.calculateWeightDeltas(middle2Error);
+        middle.calculateWeightDeltas(middleError);
+        front.calculateWeightDeltas(frontError);
         apply();
     }
 

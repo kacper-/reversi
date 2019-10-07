@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 12;
-    static final boolean USE_DECAY = true;
     static final boolean USE_DROPOUT = true;
     public static final int CYCLE_COUNT = 50;
     public static final int TRAIN_CYCLE_LEN = 1;
@@ -42,11 +41,11 @@ public class NetUtil {
     private static Net createInstance(NetVersion version) {
         switch (version) {
             case NET2:
-                return new Net2(USE_DECAY, USE_DROPOUT);
+                return new Net2(USE_DROPOUT);
             case NET3:
-                return new Net3(USE_DECAY, USE_DROPOUT);
+                return new Net3(USE_DROPOUT);
             case NET4:
-                return new Net4(USE_DECAY, USE_DROPOUT);
+                return new Net4(USE_DROPOUT);
         }
         return null;
     }
@@ -80,10 +79,10 @@ public class NetUtil {
         }
     }
 
-    private static void train(Nodes n, double decay) {
+    private static void train(Nodes n) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), ratio(n), decay);
+        net.teach(translate(n.getBoard()), ratio(n));
         trainCount++;
     }
 
@@ -103,11 +102,8 @@ public class NetUtil {
         Logger.trace("net\ttraining started...");
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         int count = nodes.size();
-        int dCount = count + (count / 10);
-        double decay;
         for (int i = 0; i < count; i++) {
-            decay = ((double) (dCount - i) / (double) dCount);
-            train(nodes.get(new Random().nextInt(count)), decay);
+            train(nodes.get(new Random().nextInt(count)));
         }
         Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
         verify(nodes);
