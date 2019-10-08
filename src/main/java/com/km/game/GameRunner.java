@@ -46,13 +46,17 @@ public class GameRunner {
             LogLevel level = Logger.getLevel();
             Logger.info(String.format("board\tbatch train : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
+            int avg = 0;
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
-                progress.add(Arrays.asList(runTrainingCycle(), runWars(EngineType.ANN, EngineType.RANDOM, TEST_LEN)));
+                int acc = runTrainingCycle();
+                int wins = runWars(EngineType.ANN, EngineType.RANDOM, TEST_LEN);
+                progress.add(Arrays.asList(acc, wins));
+                avg += wins;
                 notifyOnTrainProgress();
             }
             Logger.setLevel(level);
-            Logger.info("board\tbatch train finished");
+            Logger.info(String.format("board\tbatch train finished with avg : [%d]", avg / cycleCount));
             notifyOnUI();
             batchFinished = true;
         }).start();
