@@ -82,8 +82,13 @@ public class NetUtil {
     private static void train(Nodes n) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), ratio(n));
+        net.teach(translate(n.getBoard()), expected(n));
         trainCount++;
+    }
+
+    private static double expected(Nodes n) {
+        // TODO implement function to map [wins, loses] -> x from <-1;1>
+        return ratio(n);
     }
 
     private static boolean validate(Nodes n) {
@@ -111,26 +116,31 @@ public class NetUtil {
     }
 
     private static void verify(List<Nodes> nodes) {
-        int count = 0;
-        int result = 0;
+        int count = nodes.size();
+        int result25 = 0;
+        int result50 = 0;
         double actual, expected;
-        for (int i = 0; i < nodes.size(); i++) {
+        for (int i = 0; i < count; i++) {
             if (!validate(nodes.get(i)))
                 continue;
             actual = process(nodes.get(i).getBoard());
             expected = ratio(nodes.get(i));
-            if (inRange(expected, actual))
-                result++;
-            count++;
+            System.out.println(String.format("w = [%d] l = [%d] expected = [%.2f] actual = [%.2f]", nodes.get(i).getWins(), nodes.get(i).getLoses(), expected, actual));
+            if (inRange(expected, actual, 0.25))
+                result25++;
+            if (inRange(expected, actual, 0.5))
+                result50++;
         }
-        Logger.info(String.format("net\ttraining accuracy [%d %%]", (100 * result) / count));
+        Logger.info(String.format("net\ttraining accuracy : 0.25 -> [%d %%] : 0.50 -> [%d %%]", (100 * result25) / count, (100 * result50) / count));
     }
 
-    private static boolean inRange(double expected, double actual) {
+    private static boolean inRange(double expected, double actual, double precision) {
+        double down = 1 - precision;
+        double up = 1 + precision;
         if (expected > 0) {
-            return (0.75 * expected) < actual && (1.25 * expected) > actual;
+            return (down * expected) < actual && (up * expected) > actual;
         } else {
-            return (0.75 * expected) > actual && (1.25 * expected) < actual;
+            return (down * expected) > actual && (up * expected) < actual;
         }
     }
 
