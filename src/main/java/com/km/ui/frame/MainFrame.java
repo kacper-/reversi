@@ -17,8 +17,8 @@ import java.awt.*;
 public class MainFrame extends JFrame implements ScoreListener {
     private static final String TITLE = "Reversi 1.0";
     private Board board;
-    private JTextField score = new JTextField("no score yet");
-    private JTextField warScore = new JTextField("no score yet");
+    private JTextField score = new JTextField("no score : no score");
+    private JTextField warScore = new JTextField("no score : no score");
 
     public MainFrame() {
         super(TITLE);
@@ -53,7 +53,6 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.add(getButtonRow3());
         rightPanel.add(getButtonRow4());
         rightPanel.add(getButtonRow5());
-        rightPanel.add(getButtonRow6());
         rightPanel.add(getInfoPanel1());
         rightPanel.add(getInfoPanel2());
         return rightPanel;
@@ -166,17 +165,6 @@ public class MainFrame extends JFrame implements ScoreListener {
         p5.add(list);
         p5.add(level);
         return p5;
-    }
-
-    private JPanel getButtonRow6() {
-        JPanel p6 = new JPanel();
-        p6.setLayout(new FlowLayout());
-        JButton pre = new JButton("Train ANN");
-        pre.addActionListener(click -> {
-            board.startPredefined();
-        });
-        p6.add(pre);
-        return p6;
     }
 
     @Override

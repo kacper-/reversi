@@ -35,9 +35,4 @@ public class SuperEngine implements MoveEngine {
         Logger.trace(String.format("algo\tchoosing [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
         return best;
     }
-
-    @Override
-    public void afterGame() {
-        return;
-    }
 }

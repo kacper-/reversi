@@ -61,12 +61,7 @@ public class GameController {
         gameSaved = true;
     }
 
-    public void afterWarGame() {
-        controllerW.moveEngine.afterGame();
-        controllerB.moveEngine.afterGame();
-    }
-
-    public void makeWarMove() {
+    void makeWarMove() {
         if (controllerB.getGameBoard().getTurn() == Slot.WHITE) {
             controllerW.makeMove();
             gameBoard = controllerW.gameBoard;

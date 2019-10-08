@@ -12,8 +12,9 @@ import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 12;
-    static final boolean USE_DROPOUT = true;
-    public static final int CYCLE_COUNT = 50;
+    private static final boolean USE_DROPOUT = true;
+    static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
+    public static final int CYCLE_COUNT = 100;
     public static final int TRAIN_CYCLE_LEN = 1;
     public static final int TEST_CYCLE_LEN = 1000;
     private static String filePath;
@@ -26,15 +27,11 @@ public class NetUtil {
 
     public static void clear() {
         Logger.info(String.format("net\tclearing file [%s]", filePath));
-        net = createNet();
+        net = createNet(DEFAULT_NET_VER);
         save();
     }
 
-    public static Net createNet() {
-        return createInstance(NetVersion.NET3);
-    }
-
-    public static Net createNet(NetVersion version) {
+    static Net createNet(NetVersion version) {
         return createInstance(version);
     }
 
@@ -87,18 +84,17 @@ public class NetUtil {
     }
 
     private static double expected(Nodes n) {
-        // TODO implement function to map [wins, loses] -> x from <-1;1>
-        return ratio(n);
+        double wins = n.getWins();
+        double loses = n.getLoses();
+        if (loses > wins) {
+            return -(1d - (wins / loses));
+        } else {
+            return 1d - (loses / wins);
+        }
     }
 
     private static boolean validate(Nodes n) {
         return (n.getLoses() + n.getWins()) >= SIM_COUNT;
-    }
-
-    private static double ratio(Nodes n) {
-        double wins = n.getWins();
-        double loses = n.getLoses();
-        return wins / (wins + loses);
     }
 
     public static void runTraining() {
@@ -116,22 +112,25 @@ public class NetUtil {
     }
 
     private static void verify(List<Nodes> nodes) {
-        int count = nodes.size();
+        int count = 0;
+        int result10 = 0;
         int result25 = 0;
         int result50 = 0;
         double actual, expected;
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < nodes.size(); i++) {
             if (!validate(nodes.get(i)))
                 continue;
             actual = process(nodes.get(i).getBoard());
-            expected = ratio(nodes.get(i));
-            System.out.println(String.format("w = [%d] l = [%d] expected = [%.2f] actual = [%.2f]", nodes.get(i).getWins(), nodes.get(i).getLoses(), expected, actual));
+            expected = expected(nodes.get(i));
+            if (inRange(expected, actual, 0.1))
+                result10++;
             if (inRange(expected, actual, 0.25))
                 result25++;
             if (inRange(expected, actual, 0.5))
                 result50++;
+            count++;
         }
-        Logger.info(String.format("net\ttraining accuracy : 0.25 -> [%d %%] : 0.50 -> [%d %%]", (100 * result25) / count, (100 * result50) / count));
+        Logger.important(String.format("net\ttraining accuracy : 0.10 -> [%d %%] : 0.25 -> [%d %%] : 0.50 -> [%d %%]", (100 * result10) / count, (100 * result25) / count, (100 * result50) / count));
     }
 
     private static boolean inRange(double expected, double actual, double precision) {

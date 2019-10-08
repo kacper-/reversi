@@ -89,9 +89,4 @@ public class RuleEngine implements MoveEngine {
     private boolean isCorner(Move m) {
         return GameRules.getCorners().contains(GameRules.toSimpleMove(m));
     }
-
-    @Override
-    public void afterGame() {
-        return;
-    }
 }

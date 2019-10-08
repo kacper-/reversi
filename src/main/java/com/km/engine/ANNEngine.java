@@ -42,11 +42,4 @@ public class ANNEngine implements MoveEngine {
         String board = copy.getGameBoard().toDBString();
         return NetUtil.process(board);
     }
-
-    @Override
-    public void afterGame() {
-        return;
-    }
-
-
 }

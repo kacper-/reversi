@@ -93,12 +93,6 @@ public class Board extends Canvas implements MouseListener, UIListener {
         gameRunner.startWarGame(typeB, typeW, count);
     }
 
-    public void startPredefined() {
-        showAvailable = false;
-        gameRunner.predefinedTraining();
-    }
-
-
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         showAvailable = false;

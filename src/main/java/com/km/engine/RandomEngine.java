@@ -24,9 +24,4 @@ public class RandomEngine implements MoveEngine {
         Logger.trace(String.format("algo\tchoosing [%d, %d]", m.getI(), m.getJ()));
         return m;
     }
-
-    @Override
-    public void afterGame() {
-        return;
-    }
 }

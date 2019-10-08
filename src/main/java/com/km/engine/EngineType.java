@@ -5,6 +5,5 @@ public enum EngineType {
     ANN,
     RULE,
     RANDOM,
-    SUPER,
-    MCT
+    SUPER
 }

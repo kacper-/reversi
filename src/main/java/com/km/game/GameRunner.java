@@ -3,13 +3,12 @@ package com.km.game;
 import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
-import com.km.engine.TreeSearchEngine;
 import com.km.nn.NetUtil;
 
+import java.util.Random;
 import java.util.Set;
 
 public class GameRunner {
-    private static final int PRE_POWER = 1000;
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;
@@ -45,18 +44,6 @@ public class GameRunner {
         return GameRules.getAvailableMoves(getGameController().getGameBoard());
     }
 
-    public void predefinedTraining() {
-        predefinedFinished = false;
-        new Thread(() -> {
-            NetUtil.clear();
-            Logger.important("board\tpredefined train started");
-            TreeSearchEngine.setPower(PRE_POWER);
-            runWar(EngineType.MCT, EngineType.RANDOM);
-            Logger.important("board\tpredefined train finished");
-            predefinedFinished = true;
-        }).start();
-    }
-
     public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
         batchFinished = false;
         new Thread(() -> {
@@ -77,10 +64,10 @@ public class GameRunner {
     }
 
     private void runTrainingCycle(int i, int trainCycleLen) {
-        if ((i % 2) == 0)
-            runWars(EngineType.MCT, EngineType.RANDOM, trainCycleLen);
+        if (new Random().nextBoolean())
+            runWars(EngineType.MC, EngineType.RANDOM, trainCycleLen);
         else
-            runWars(EngineType.RANDOM, EngineType.MCT, trainCycleLen);
+            runWars(EngineType.RANDOM, EngineType.MC, trainCycleLen);
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
@@ -121,14 +108,15 @@ public class GameRunner {
         getGameController().startWarGame(typeB, typeW);
         while (!getGameController().isFinished()) {
             getGameController().makeWarMove();
-            if (typeB == EngineType.MCT || typeW == EngineType.MCT || typeB == EngineType.MC || typeW == EngineType.MC)
+            if (typeB == EngineType.MC || typeW == EngineType.MC)
                 notifyOnUI();
         }
         if (getGameController().getScore().getWinner() == Slot.BLACK)
             warScoreB++;
         else
             warScoreW++;
-        getGameController().afterWarGame();
+        if (typeB == EngineType.MC || typeW == EngineType.MC)
+            NetUtil.runTraining();
     }
 
     public void startNewGame(Slot s, EngineType type) {

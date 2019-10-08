@@ -30,16 +30,11 @@ public class TreeSearchEngine implements MoveEngine {
     private int simCount = 0;
     private int wins = 0;
     private int loses = 0;
-    private boolean train;
     private GameController controller;
 
     public static void setPower(long power) {
         simTime = power;
         Logger.debug(String.format("algo\tpower set to [%d] ms", power));
-    }
-
-    TreeSearchEngine(boolean train) {
-        this.train = train;
     }
 
     @Override
@@ -187,11 +182,4 @@ public class TreeSearchEngine implements MoveEngine {
         }
         return null;
     }
-
-    @Override
-    public void afterGame() {
-        if (!controller.isSimulation() && train)
-            NetUtil.runTraining();
-    }
-
 }

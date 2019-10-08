@@ -9,6 +9,4 @@ public interface MoveEngine {
     void setGameController(GameController controller);
 
     Move chooseMove(Set<Move> moves);
-
-    void afterGame();
 }
