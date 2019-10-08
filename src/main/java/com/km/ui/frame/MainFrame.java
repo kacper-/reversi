@@ -4,21 +4,26 @@ import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.engine.TreeSearchEngine;
+import com.km.entities.Pair;
 import com.km.game.GameRunner;
 import com.km.game.Score;
 import com.km.game.ScoreListener;
 import com.km.game.Slot;
 import com.km.nn.NetUtil;
 import com.km.ui.board.Board;
+import com.km.ui.draw.DrawArea;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class MainFrame extends JFrame implements ScoreListener {
     private static final String TITLE = "Reversi 1.0";
     private Board board;
     private JTextField score = new JTextField("no score : no score");
     private JTextField warScore = new JTextField("no score : no score");
+    private List<List<Integer>> list;
+    private DrawArea drawArea = new DrawArea(this);
 
     public MainFrame() {
         super(TITLE);
@@ -33,9 +38,15 @@ public class MainFrame extends JFrame implements ScoreListener {
 
     private JPanel createMainPanel() {
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-        mainPanel.add(createLeftPanel());
-        mainPanel.add(createRightPanel());
+        JPanel topPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        topPanel.add(createLeftPanel());
+        topPanel.add(createRightPanel());
+        bottomPanel.add(drawArea);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(topPanel);
+        mainPanel.add(bottomPanel);
         return mainPanel;
     }
 
@@ -122,15 +133,11 @@ public class MainFrame extends JFrame implements ScoreListener {
         p3.setLayout(new FlowLayout());
         JButton newGameBatch = new JButton("Batch");
         JTextField cycleCount = new JTextField(String.valueOf(NetUtil.CYCLE_COUNT));
-        JTextField trainCycleLen = new JTextField(String.valueOf(NetUtil.TRAIN_CYCLE_LEN));
-        JTextField testCycleLen = new JTextField(String.valueOf(NetUtil.TEST_CYCLE_LEN));
         newGameBatch.addActionListener(click -> {
-            board.startBatchTrain(Integer.parseInt(cycleCount.getText()), Integer.parseInt(trainCycleLen.getText()), Integer.parseInt(testCycleLen.getText()));
+            board.startBatchTrain(Integer.parseInt(cycleCount.getText()));
         });
         p3.add(newGameBatch);
         p3.add(cycleCount);
-        p3.add(trainCycleLen);
-        p3.add(testCycleLen);
         return p3;
     }
 
@@ -175,5 +182,16 @@ public class MainFrame extends JFrame implements ScoreListener {
     @Override
     public void setWarScore(int count, int black, int white) {
         this.warScore.setText(String.format("G:%d %d:%d", count, black, white));
+    }
+
+    @Override
+    public void setTrainProgress(List<List<Integer>> list) {
+        this.list = list;
+        drawArea.repaint();
+    }
+
+    @Override
+    public List<List<Integer>> getTrainProgress() {
+        return list;
     }
 }

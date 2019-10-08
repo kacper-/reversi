@@ -5,32 +5,18 @@ import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.nn.NetUtil;
 
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class GameRunner {
+    private static final int TEST_LEN = 100;
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;
     private int warScoreB = 0;
     private int warScoreW = 0;
-
-    public boolean isWarFinished() {
-        return warFinished;
-    }
-
-    public boolean isBatchFinished() {
-        return batchFinished;
-    }
-
+    private List<List<Integer>> progress;
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
-
-    public boolean isPredefinedFinished() {
-        return predefinedFinished;
-    }
-
-    private volatile boolean predefinedFinished = false;
 
     public GameController getGameController() {
         if (controller == null) {
@@ -40,21 +26,30 @@ public class GameRunner {
         return controller;
     }
 
+    public boolean isWarFinished() {
+        return warFinished;
+    }
+
+    public boolean isBatchFinished() {
+        return batchFinished;
+    }
+
     public Set<Move> getAvailableMoves() {
         return GameRules.getAvailableMoves(getGameController().getGameBoard());
     }
 
-    public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
+    public void startBatchTrain(int cycleCount) {
         batchFinished = false;
         new Thread(() -> {
+            progress = new ArrayList<>();
             NetUtil.clear();
             LogLevel level = Logger.getLevel();
-            Logger.info(String.format("board\tbatch train : cycles count [%d] : train cycle len [%d] : test cycle len [%d]", cycleCount, trainCycleLen, testCycleLen));
+            Logger.info(String.format("board\tbatch train : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
-                runTrainingCycle(i, trainCycleLen);
-                runWars(EngineType.ANN, EngineType.RANDOM, testCycleLen);
+                progress.add(Arrays.asList(runTrainingCycle(), runWars(EngineType.ANN, EngineType.RANDOM, TEST_LEN)));
+                notifyOnTrainProgress();
             }
             Logger.setLevel(level);
             Logger.info("board\tbatch train finished");
@@ -63,11 +58,11 @@ public class GameRunner {
         }).start();
     }
 
-    private void runTrainingCycle(int i, int trainCycleLen) {
+    private int runTrainingCycle() {
         if (new Random().nextBoolean())
-            runWars(EngineType.MC, EngineType.RANDOM, trainCycleLen);
+            return runWar(EngineType.MC, EngineType.RANDOM);
         else
-            runWars(EngineType.RANDOM, EngineType.MC, trainCycleLen);
+            return runWar(EngineType.RANDOM, EngineType.MC);
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
@@ -78,7 +73,7 @@ public class GameRunner {
         }).start();
     }
 
-    private void runWars(EngineType typeB, EngineType typeW, int count) {
+    private int runWars(EngineType typeB, EngineType typeW, int count) {
         warScoreW = 0;
         warScoreB = 0;
         for (int i = 0; i < count; i++) {
@@ -89,6 +84,7 @@ public class GameRunner {
         }
         Logger.important(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         warFinished = true;
+        return Math.max(warScoreB, warScoreW);
     }
 
     public void playerMove(Move move) {
@@ -104,7 +100,7 @@ public class GameRunner {
         }
     }
 
-    private void runWar(EngineType typeB, EngineType typeW) {
+    private int runWar(EngineType typeB, EngineType typeW) {
         getGameController().startWarGame(typeB, typeW);
         while (!getGameController().isFinished()) {
             getGameController().makeWarMove();
@@ -115,8 +111,10 @@ public class GameRunner {
             warScoreB++;
         else
             warScoreW++;
-        if (typeB == EngineType.MC || typeW == EngineType.MC)
-            NetUtil.runTraining();
+        if (typeB == EngineType.MC || typeW == EngineType.MC) {
+            return NetUtil.runTraining();
+        }
+        return 0;
     }
 
     public void startNewGame(Slot s, EngineType type) {
@@ -149,5 +147,7 @@ public class GameRunner {
             scoreListener.setWarScore(count, black, white);
     }
 
-
+    private void notifyOnTrainProgress() {
+        scoreListener.setTrainProgress(progress);
+    }
 }

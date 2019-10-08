@@ -83,9 +83,9 @@ public class Board extends Canvas implements MouseListener, UIListener {
         gameRunner.startNewGame(s, type);
     }
 
-    public void startBatchTrain(int cycleCount, int trainCycleLen, int testCycleLen) {
+    public void startBatchTrain(int cycleCount) {
         showAvailable = false;
-        gameRunner.startBatchTrain(cycleCount, trainCycleLen, testCycleLen);
+        gameRunner.startBatchTrain(cycleCount);
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {

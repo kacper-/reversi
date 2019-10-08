@@ -15,8 +15,6 @@ public class NetUtil {
     private static final boolean USE_DROPOUT = true;
     static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
     public static final int CYCLE_COUNT = 100;
-    public static final int TRAIN_CYCLE_LEN = 1;
-    public static final int TEST_CYCLE_LEN = 1000;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -97,7 +95,7 @@ public class NetUtil {
         return (n.getLoses() + n.getWins()) >= SIM_COUNT;
     }
 
-    public static void runTraining() {
+    public static int runTraining() {
         load();
         trainCount = 0;
         Logger.trace("net\ttraining started...");
@@ -107,15 +105,14 @@ public class NetUtil {
             train(nodes.get(new Random().nextInt(count)));
         }
         Logger.info(String.format("net\ttraining finished after [%d] iterations", trainCount));
-        verify(nodes);
+        int result = verify(nodes);
         save();
+        return result;
     }
 
-    private static void verify(List<Nodes> nodes) {
+    private static int verify(List<Nodes> nodes) {
         int count = 0;
-        int result10 = 0;
-        int result25 = 0;
-        int result50 = 0;
+        int result = 0;
         double actual, expected;
         for (int i = 0; i < nodes.size(); i++) {
             if (!validate(nodes.get(i)))
@@ -123,14 +120,12 @@ public class NetUtil {
             actual = process(nodes.get(i).getBoard());
             expected = expected(nodes.get(i));
             if (inRange(expected, actual, 0.1))
-                result10++;
-            if (inRange(expected, actual, 0.25))
-                result25++;
-            if (inRange(expected, actual, 0.5))
-                result50++;
+                result++;
             count++;
         }
-        Logger.important(String.format("net\ttraining accuracy : 0.10 -> [%d %%] : 0.25 -> [%d %%] : 0.50 -> [%d %%]", (100 * result10) / count, (100 * result25) / count, (100 * result50) / count));
+        result = (100 * result) / count;
+        Logger.important(String.format("net\ttraining accuracy : 0.10 -> [%d %%]", result));
+        return result;
     }
 
     private static boolean inRange(double expected, double actual, double precision) {
