@@ -9,12 +9,14 @@ import java.util.*;
 
 public class GameRunner {
     private static final int TEST_LEN = 100;
+    private static final int HIST_SIZE = 10;
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;
     private int warScoreB = 0;
     private int warScoreW = 0;
     private List<List<Integer>> progress;
+    private int[] histogram = new int[HIST_SIZE];
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
 
@@ -24,6 +26,11 @@ public class GameRunner {
             controller.getGameBoard().empty();
         }
         return controller;
+    }
+
+    private void clearHistogram() {
+        for (int i = 0; i < HIST_SIZE; i++)
+            histogram[i] = 0;
     }
 
     public boolean isWarFinished() {
@@ -42,24 +49,32 @@ public class GameRunner {
         batchFinished = false;
         new Thread(() -> {
             progress = new ArrayList<>();
+            clearHistogram();
             NetUtil.clear();
             LogLevel level = Logger.getLevel();
-            Logger.info(String.format("board\tbatch train : cycles count [%d]", cycleCount));
+            Logger.info(String.format("batch\tbatch train : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
             for (int i = 0; i < cycleCount; i++) {
-                Logger.important(String.format("board\tcycle [%d] of [%d]", i + 1, cycleCount));
+                Logger.important(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int acc = runTrainingCycle();
                 int wins = runWars(EngineType.ANN, EngineType.RANDOM, TEST_LEN);
                 progress.add(Arrays.asList(acc, wins));
                 avg += wins;
+                histogram[wins / 10]++;
                 notifyOnTrainProgress();
             }
             Logger.setLevel(level);
-            Logger.info(String.format("board\tbatch train finished with avg : [%d]", avg / cycleCount));
+            Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
+            printHistogram();
             notifyOnUI();
             batchFinished = true;
         }).start();
+    }
+
+    private void printHistogram() {
+        for (int i = 0; i < HIST_SIZE; i++)
+            Logger.info(String.format("batch\thistogram [%d] -> [%d]", i * HIST_SIZE, histogram[i]));
     }
 
     private int runTrainingCycle() {

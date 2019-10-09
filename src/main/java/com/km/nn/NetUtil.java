@@ -14,7 +14,7 @@ public class NetUtil {
     private static final int SIM_COUNT = 12;
     private static final boolean USE_DROPOUT = true;
     static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
-    public static final int CYCLE_COUNT = 100;
+    public static final int CYCLE_COUNT = 200;
     private static String filePath;
     private static Net net;
     private static int trainCount;
