@@ -11,12 +11,12 @@ class Net4 implements Serializable, Net {
     private Layer middle2;
     private Layer middle3;
 
-    Net4(boolean useDropout) {
-        front = new Layer(SIZE, SIZE, useDropout);
-        middle = new Layer(SIZE, SIZE, useDropout);
-        middle2 = new Layer(SIZE, SIZE, useDropout);
-        middle3 = new Layer(SIZE, SIZE, useDropout);
-        back = new Layer(1, SIZE, useDropout);
+    Net4() {
+        front = new Layer(SIZE, SIZE);
+        middle = new Layer(SIZE, SIZE);
+        middle2 = new Layer(SIZE, SIZE);
+        middle3 = new Layer(SIZE, SIZE);
+        back = new Layer(1, SIZE);
     }
 
     public double process(double[] signal) {

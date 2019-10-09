@@ -12,10 +12,8 @@ class Layer implements Serializable {
     private double[] inputs;
     private int neuronCount;
     private int weightCount;
-    private boolean useDropout;
 
-    Layer(int neuronCount, int weightCount, boolean useDropout) {
-        this.useDropout = useDropout;
+    Layer(int neuronCount, int weightCount) {
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;
         initWeights();
@@ -93,10 +91,7 @@ class Layer implements Serializable {
     void applyWeightDeltas() {
         for (int n = 0; n < neuronCount; n++) {
             for (int w = 0; w < weightCount; w++) {
-                if (useDropout)
-                    weights[n][w] -= weightDeltas[n][w] * new Random().nextDouble();
-                else
-                    weights[n][w] -= weightDeltas[n][w];
+                weights[n][w] -= weightDeltas[n][w] * new Random().nextDouble();
                 weightDeltas[n][w] = 0d;
             }
         }

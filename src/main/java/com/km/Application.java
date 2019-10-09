@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Application {
-    private final static int WIDTH = 900;
+    private final static int WIDTH = 950;
     private final static int HEIGHT = 1000;
 
     public static void main(String... args) {

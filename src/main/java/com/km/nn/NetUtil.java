@@ -12,9 +12,8 @@ import java.util.Random;
 
 public class NetUtil {
     private static final int SIM_COUNT = 12;
-    private static final boolean USE_DROPOUT = true;
     static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
-    public static final int CYCLE_COUNT = 200;
+    public static final int CYCLE_COUNT = 300;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -36,11 +35,11 @@ public class NetUtil {
     private static Net createInstance(NetVersion version) {
         switch (version) {
             case NET2:
-                return new Net2(USE_DROPOUT);
+                return new Net2();
             case NET3:
-                return new Net3(USE_DROPOUT);
+                return new Net3();
             case NET4:
-                return new Net4(USE_DROPOUT);
+                return new Net4();
         }
         return null;
     }

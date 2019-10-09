@@ -9,10 +9,10 @@ class Net2 implements Serializable, Net {
     private Layer back;
     private Layer middle;
 
-    Net2(boolean useDropout) {
-        front = new Layer(SIZE, SIZE, useDropout);
-        middle = new Layer(SIZE, SIZE, useDropout);
-        back = new Layer(1, SIZE, useDropout);
+    Net2() {
+        front = new Layer(SIZE, SIZE);
+        middle = new Layer(SIZE, SIZE);
+        back = new Layer(1, SIZE);
     }
 
     public double process(double[] signal) {
