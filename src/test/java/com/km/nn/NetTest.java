@@ -71,8 +71,9 @@ public class NetTest {
 
     @Test
     public void teach() {
+        Layer.setLearningFactor(0.01d);
         Net net = NetUtil.createNet(NetUtil.DEFAULT_NET_VER);
-        int count = 50000 * test.length;
+        int count = 5000 * test.length;
         int t;
         for (int i = 0; i < count; i++) {
             t = new Random().nextInt(test.length);
