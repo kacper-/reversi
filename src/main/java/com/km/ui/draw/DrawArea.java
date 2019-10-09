@@ -43,13 +43,17 @@ public class DrawArea extends JPanel {
             return;
         for (int j = 0; j < lines.get(0).size(); j++) {
             g.setColor(COLORS[j]);
-            for (int i = 1; i < lines.size(); i++) {
-                g.drawLine((i - 1) * MULTI,
-                        getHeight() - (lines.get(i - 1).get(j) * MULTI),
-                        i * MULTI,
+            for (int i = 0; i < lines.size(); i++) {
+                g.drawLine(i * MULTI,
+                        getHeight() - (lines.get(i).get(j) * MULTI),
+                        (i + 1) * MULTI,
                         getHeight() - (lines.get(i).get(j) * MULTI));
+                if (i > 0)
+                    g.drawLine(i * MULTI,
+                            getHeight() - (lines.get(i - 1).get(j) * MULTI),
+                            i * MULTI,
+                            getHeight() - (lines.get(i).get(j) * MULTI));
             }
         }
-
     }
 }
