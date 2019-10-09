@@ -170,14 +170,20 @@ public class MainFrame extends JFrame implements ScoreListener {
         JPanel p5 = new JPanel();
         p5.setLayout(new FlowLayout());
         JButton level = new JButton("Set level");
+        JCheckBox web = new JCheckBox("Web log");
         JComboBox<LogLevel> list = new JComboBox<>(LogLevel.values());
         list.setSelectedItem(Logger.getLevel());
         list.setEditable(false);
+        web.setSelected(Logger.isWebLog());
         level.addActionListener(click -> {
             Logger.setLevel(LogLevel.valueOf(list.getSelectedItem().toString()));
         });
+        web.addActionListener(click -> {
+            Logger.setWebLog(web.isSelected());
+        });
         p5.add(list);
         p5.add(level);
+        p5.add(web);
         return p5;
     }
 
