@@ -3,17 +3,16 @@ package com.km.engine;
 import com.km.Logger;
 import com.km.game.GameController;
 import com.km.game.Move;
+import com.km.nn.NetUtil;
 
 import java.util.Set;
 
 public class SuperEngine implements MoveEngine {
-    private GameController controller;
     private RuleEngine rule = new RuleEngine();
-    private ANNEngine ann = new ANNEngine();
+    private ANNEngine ann = new ANNEngine(NetUtil.NET_VERSION);
 
     @Override
     public void setGameController(GameController controller) {
-        this.controller = controller;
         rule.setGameController(controller);
         ann.setGameController(controller);
     }

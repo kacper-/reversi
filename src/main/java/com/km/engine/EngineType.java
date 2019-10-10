@@ -2,7 +2,9 @@ package com.km.engine;
 
 public enum EngineType {
     MC,
-    ANN,
+    ANN2,
+    ANN3,
+    ANN4,
     RULE,
     RANDOM,
     SUPER

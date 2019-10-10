@@ -4,12 +4,17 @@ import com.km.Logger;
 import com.km.game.GameController;
 import com.km.game.Move;
 import com.km.nn.NetUtil;
+import com.km.nn.NetVersion;
 
 import java.util.Set;
 
 public class ANNEngine implements MoveEngine {
     private GameController controller;
-    private NetUtil netUtil = new NetUtil(NetUtil.NET_VERSION);
+    private NetUtil netUtil;
+
+    ANNEngine(NetVersion version) {
+        netUtil = new NetUtil(version);
+    }
 
     @Override
     public void setGameController(GameController controller) {

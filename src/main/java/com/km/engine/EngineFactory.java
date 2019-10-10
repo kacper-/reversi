@@ -1,13 +1,20 @@
 package com.km.engine;
 
 import com.km.game.GameController;
+import com.km.nn.NetVersion;
 
 public class EngineFactory {
     public static MoveEngine createMoveEngine(GameController controller, EngineType type) {
         MoveEngine engine = null;
         switch (type) {
-            case ANN:
-                engine = new ANNEngine();
+            case ANN2:
+                engine = new ANNEngine(NetVersion.NET2);
+                break;
+            case ANN3:
+                engine = new ANNEngine(NetVersion.NET3);
+                break;
+            case ANN4:
+                engine = new ANNEngine(NetVersion.NET4);
                 break;
             case RULE:
                 engine = new RuleEngine();

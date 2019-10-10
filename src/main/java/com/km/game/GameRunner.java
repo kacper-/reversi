@@ -59,7 +59,7 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int acc = runTrainingCycle();
-                int wins = runWars(EngineType.ANN, EngineType.RANDOM, TEST_LEN);
+                int wins = runWars(EngineType.ANN3, EngineType.RANDOM, TEST_LEN);
                 progress.add(Arrays.asList(acc, wins));
                 avg += wins;
                 histogram[wins / 10]++;
