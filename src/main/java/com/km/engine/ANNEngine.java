@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class ANNEngine implements MoveEngine {
     private GameController controller;
+    private NetUtil netUtil = new NetUtil(NetUtil.NET_VERSION);
 
     @Override
     public void setGameController(GameController controller) {
@@ -40,6 +41,6 @@ public class ANNEngine implements MoveEngine {
         copy.nextTurn();
         Logger.setOn();
         String board = copy.getGameBoard().toDBString();
-        return NetUtil.process(board);
+        return netUtil.process(board);
     }
 }

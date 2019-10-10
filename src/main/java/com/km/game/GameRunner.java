@@ -17,6 +17,7 @@ public class GameRunner {
     private int warScoreW = 0;
     private List<List<Integer>> progress;
     private int[] histogram = new int[HIST_SIZE];
+    private NetUtil netUtil = new NetUtil(NetUtil.NET_VERSION);
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
 
@@ -47,10 +48,10 @@ public class GameRunner {
 
     public void startBatchTrain(int cycleCount) {
         batchFinished = false;
+        netUtil.clear();
         new Thread(() -> {
             progress = new ArrayList<>();
             clearHistogram();
-            NetUtil.clear();
             LogLevel level = Logger.getLevel();
             Logger.info(String.format("batch\tbatch train : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
@@ -131,7 +132,7 @@ public class GameRunner {
         else
             warScoreW++;
         if (typeB == EngineType.MC || typeW == EngineType.MC) {
-            return NetUtil.runTraining();
+            return netUtil.runTraining();
         }
         return 0;
     }

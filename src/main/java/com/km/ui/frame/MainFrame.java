@@ -147,7 +147,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JButton mcPower = new JButton("MC power");
         JTextField power = new JTextField(String.valueOf(TreeSearchEngine.SIM_TIME));
         clearANN.addActionListener(click -> {
-            NetUtil.clear();
+            new NetUtil(NetUtil.NET_VERSION).clear();
         });
         mcPower.addActionListener(click -> {
             TreeSearchEngine.setPower(Long.parseLong(power.getText()));

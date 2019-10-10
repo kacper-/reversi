@@ -71,7 +71,7 @@ public class NetTest {
 
     @Test
     public void teach() {
-        Net net = NetUtil.createNet(NetVersion.NET2);
+        Net net = new NetUtil(NetUtil.NET_VERSION).createInstance();
         int count = 5000 * test.length;
         int t;
         for (int i = 0; i < count; i++) {

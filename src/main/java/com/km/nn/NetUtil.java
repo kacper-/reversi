@@ -12,27 +12,28 @@ import java.util.Random;
 
 public class NetUtil {
     public static final int CYCLE_COUNT = 300;
-    static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
+    public static final NetVersion NET_VERSION = NetVersion.NET3;
     private static final int SIM_COUNT = 12;
     private static String filePath;
-    private static Net net;
-    private static int trainCount;
+    private Net net;
+    private NetVersion version;
+    private int trainCount;
+
+    public NetUtil(NetVersion version) {
+        this.version = version;
+    }
 
     public static void setFilePath(String filePath) {
         NetUtil.filePath = filePath;
     }
 
-    public static void clear() {
-        Logger.info(String.format("net\tclearing file [%s]", filePath));
-        net = createNet(DEFAULT_NET_VER);
+    public void clear() {
+        Logger.info(String.format("net\tclearing file [%s]", filePath + version.name()));
+        net = createInstance();
         save();
     }
 
-    static Net createNet(NetVersion version) {
-        return createInstance(version);
-    }
-
-    private static Net createInstance(NetVersion version) {
+    Net createInstance() {
         switch (version) {
             case NET2:
                 return new Net2();
@@ -44,10 +45,10 @@ public class NetUtil {
         return null;
     }
 
-    private static void save() {
-        Logger.trace(String.format("net\tsaving file [%s]", filePath));
+    private void save() {
+        Logger.trace(String.format("net\tsaving file [%s]", filePath + version.name()));
         try {
-            FileOutputStream fileOut = new FileOutputStream(filePath);
+            FileOutputStream fileOut = new FileOutputStream(filePath + version.name());
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(net);
             objectOut.close();
@@ -56,31 +57,31 @@ public class NetUtil {
         }
     }
 
-    private static void load() {
-        Logger.trace(String.format("net\tloading file [%s]", filePath));
-        if (!new File(filePath).exists()) {
-            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath));
+    private void load() {
+        Logger.trace(String.format("net\tloading file [%s]", filePath + version.name()));
+        if (!new File(filePath + version.name()).exists()) {
+            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath + version.name()));
             clear();
         } else {
             try {
-                FileInputStream fileIn = new FileInputStream(filePath);
+                FileInputStream fileIn = new FileInputStream(filePath + version.name());
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.error(String.format("net\terror loading file [%s]", filePath));
+                Logger.error(String.format("net\terror loading file [%s]", filePath + version.name()));
             }
         }
     }
 
-    private static void train(Nodes n) {
+    private void train(Nodes n) {
         if (!validate(n))
             return;
         net.teach(translate(n.getBoard()), expected(n));
         trainCount++;
     }
 
-    private static double expected(Nodes n) {
+    private double expected(Nodes n) {
         double wins = n.getWins();
         double loses = n.getLoses();
         if (loses > wins) {
@@ -90,11 +91,11 @@ public class NetUtil {
         }
     }
 
-    private static boolean validate(Nodes n) {
+    private boolean validate(Nodes n) {
         return (n.getLoses() + n.getWins()) >= SIM_COUNT;
     }
 
-    public static int runTraining() {
+    public int runTraining() {
         load();
         trainCount = 0;
         Logger.trace("net\ttraining started...");
@@ -109,7 +110,7 @@ public class NetUtil {
         return result;
     }
 
-    private static int verify(List<Nodes> nodes) {
+    private int verify(List<Nodes> nodes) {
         int count = 0;
         int result = 0;
         double actual, expected;
@@ -127,7 +128,7 @@ public class NetUtil {
         return result;
     }
 
-    private static boolean inRange(double expected, double actual, double precision) {
+    private boolean inRange(double expected, double actual, double precision) {
         double down = 1 - precision;
         double up = 1 + precision;
         if (expected > 0) {
@@ -137,14 +138,14 @@ public class NetUtil {
         }
     }
 
-    public static double process(String n) {
+    public double process(String n) {
         if (net == null)
             load();
         double[] input = translate(n);
         return net.process(input);
     }
 
-    private static double[] translate(String n) {
+    private double[] translate(String n) {
         double[] input = new double[net.getSize()];
         for (int i = 0; i < n.length(); i++) {
             DBSlot slot = DBSlot.fromSymbol(n.charAt(i));
