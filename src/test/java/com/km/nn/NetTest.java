@@ -71,8 +71,7 @@ public class NetTest {
 
     @Test
     public void teach() {
-        Layer.setLearningFactor(0.01d);
-        Net net = NetUtil.createNet(NetUtil.DEFAULT_NET_VER);
+        Net net = NetUtil.createNet(NetVersion.NET2);
         int count = 5000 * test.length;
         int t;
         for (int i = 0; i < count; i++) {

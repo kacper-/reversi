@@ -1,27 +1,20 @@
 package com.km.nn;
 
-import com.km.Logger;
-
 import java.io.Serializable;
 import java.util.Random;
 
 public class Layer implements Serializable {
     private final static double WEIGHT_INIT_LIMIT = 0.05d;
-    public final static double LEARNING_FACTOR = 0.001d;
     private double[][] weights;
     private double[][] weightDeltas;
     private double[] outputs;
     private double[] inputs;
     private int neuronCount;
     private int weightCount;
-    private static double learningFactor = LEARNING_FACTOR;
+    private double learningFactor;
 
-    public static void setLearningFactor(double factor) {
-        learningFactor = factor;
-        Logger.debug(String.format("net\tlearning factor set to [%f] ms", learningFactor));
-    }
-
-    Layer(int neuronCount, int weightCount) {
+    Layer(int neuronCount, int weightCount, double learningFactor) {
+        this.learningFactor = learningFactor;
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;
         initWeights();

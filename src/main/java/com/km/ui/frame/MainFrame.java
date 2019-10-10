@@ -8,7 +8,6 @@ import com.km.game.GameRunner;
 import com.km.game.Score;
 import com.km.game.ScoreListener;
 import com.km.game.Slot;
-import com.km.nn.Layer;
 import com.km.nn.NetUtil;
 import com.km.ui.board.Board;
 import com.km.ui.draw.DrawArea;
@@ -147,22 +146,15 @@ public class MainFrame extends JFrame implements ScoreListener {
         JButton clearANN = new JButton("Clear ANN");
         JButton mcPower = new JButton("MC power");
         JTextField power = new JTextField(String.valueOf(TreeSearchEngine.SIM_TIME));
-        JButton lf = new JButton("LF");
-        JTextField factor = new JTextField(String.valueOf(Layer.LEARNING_FACTOR));
         clearANN.addActionListener(click -> {
             NetUtil.clear();
         });
         mcPower.addActionListener(click -> {
             TreeSearchEngine.setPower(Long.parseLong(power.getText()));
         });
-        lf.addActionListener(click -> {
-            Layer.setLearningFactor(Double.parseDouble(factor.getText()));
-        });
         p4.add(clearANN);
         p4.add(mcPower);
         p4.add(power);
-        p4.add(lf);
-        p4.add(factor);
         return p4;
     }
 
@@ -198,13 +190,13 @@ public class MainFrame extends JFrame implements ScoreListener {
     }
 
     @Override
-    public void setTrainProgress(List<List<Integer>> list) {
-        this.list = list;
-        drawArea.repaint();
+    public List<List<Integer>> getTrainProgress() {
+        return list;
     }
 
     @Override
-    public List<List<Integer>> getTrainProgress() {
-        return list;
+    public void setTrainProgress(List<List<Integer>> list) {
+        this.list = list;
+        drawArea.repaint();
     }
 }

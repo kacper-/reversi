@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 class Net4 implements Serializable, Net {
-    static final int SIZE = 64;
+    private final static double LEARNING_FACTOR = 0.0009d;
+    private final static int SIZE = 64;
     private Layer front;
     private Layer back;
     private Layer middle;
@@ -12,11 +13,11 @@ class Net4 implements Serializable, Net {
     private Layer middle3;
 
     Net4() {
-        front = new Layer(SIZE, SIZE);
-        middle = new Layer(SIZE, SIZE);
-        middle2 = new Layer(SIZE, SIZE);
-        middle3 = new Layer(SIZE, SIZE);
-        back = new Layer(1, SIZE);
+        front = new Layer(SIZE, SIZE, LEARNING_FACTOR);
+        middle = new Layer(SIZE, SIZE, LEARNING_FACTOR);
+        middle2 = new Layer(SIZE, SIZE, LEARNING_FACTOR);
+        middle3 = new Layer(SIZE, SIZE, LEARNING_FACTOR);
+        back = new Layer(1, SIZE, LEARNING_FACTOR);
     }
 
     public double process(double[] signal) {
@@ -60,4 +61,10 @@ class Net4 implements Serializable, Net {
         }
         return result;
     }
+
+    @Override
+    public int getSize() {
+        return SIZE;
+    }
+
 }

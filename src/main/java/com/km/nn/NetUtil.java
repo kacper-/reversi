@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Random;
 
 public class NetUtil {
-    private static final int SIM_COUNT = 12;
-    static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
     public static final int CYCLE_COUNT = 300;
+    static final NetVersion DEFAULT_NET_VER = NetVersion.NET3;
+    private static final int SIM_COUNT = 12;
     private static String filePath;
     private static Net net;
     private static int trainCount;
@@ -145,7 +145,7 @@ public class NetUtil {
     }
 
     private static double[] translate(String n) {
-        double[] input = new double[Net4.SIZE];
+        double[] input = new double[net.getSize()];
         for (int i = 0; i < n.length(); i++) {
             DBSlot slot = DBSlot.fromSymbol(n.charAt(i));
             switch (slot) {
