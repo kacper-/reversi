@@ -9,6 +9,7 @@ import com.km.game.Score;
 import com.km.game.ScoreListener;
 import com.km.game.Slot;
 import com.km.nn.NetUtil;
+import com.km.nn.NetVersion;
 import com.km.ui.board.Board;
 import com.km.ui.draw.DrawArea;
 
@@ -146,13 +147,17 @@ public class MainFrame extends JFrame implements ScoreListener {
         JButton clearANN = new JButton("Clear ANN");
         JButton mcPower = new JButton("MC power");
         JTextField power = new JTextField(String.valueOf(TreeSearchEngine.SIM_TIME));
+        JComboBox<NetVersion> list = new JComboBox<>(NetVersion.values());
+        list.setSelectedItem(NetUtil.NET_VERSION);
+        list.setEditable(false);
         clearANN.addActionListener(click -> {
-            new NetUtil(NetUtil.NET_VERSION).clear();
+            new NetUtil(NetVersion.valueOf(list.getSelectedItem().toString())).clear();
         });
         mcPower.addActionListener(click -> {
             TreeSearchEngine.setPower(Long.parseLong(power.getText()));
         });
         p4.add(clearANN);
+        p4.add(list);
         p4.add(mcPower);
         p4.add(power);
         return p4;
