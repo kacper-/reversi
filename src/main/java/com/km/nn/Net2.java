@@ -23,9 +23,9 @@ class Net2 implements Serializable, Net {
         return back.getOutputs()[0];
     }
 
-    public void teach(double[] signal, double expected) {
+    public void teach(double[] signal, double[] expected) {
         double result = process(signal);
-        double[] backError = new double[]{result - expected};
+        double[] backError = new double[]{result - expected[0]};
         double[] middleError = calculateError(back.getWeights(), backError);
         double[] frontError = calculateError(middle.getWeights(), middleError);
         back.calculateWeightDeltas(backError);

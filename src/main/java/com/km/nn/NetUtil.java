@@ -77,7 +77,7 @@ public class NetUtil {
     private void train(Nodes n) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), expected(n));
+        net.teach(translate(n.getBoard()), new double[]{expected(n)});
         trainCount++;
     }
 
