@@ -45,9 +45,9 @@ public class GameService {
         }
     }
 
-    public static Map<Pair<String, Integer>, Pair<Integer, Integer>> findSimulations(HistoryItem item) {
+    public static Map<Pair<String, Integer>, Pair<Integer, Integer>> findSimulations(String board) {
         Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = new HashMap<>();
-        Nodes node = NodesRepo.findByBoard(item.getBoard());
+        Nodes node = NodesRepo.findByBoard(board);
         if (node != null) {
             List<Moves> moves = MovesRepo.findByParent(node.getId());
             if (moves != null) {
@@ -62,7 +62,7 @@ public class GameService {
                 Logger.debug(String.format("db\tno move for snode = [%d]", node.getId()));
             }
         } else {
-            Logger.debug(String.format("db\tno node for board = [%s]", item.getBoard()));
+            Logger.debug(String.format("db\tno node for board = [%s]", board));
         }
         return simulations;
     }

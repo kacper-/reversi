@@ -47,7 +47,7 @@ public class TreeSearchEngine implements MoveEngine {
         if (!controller.isSimulation())
             runSimulations();
         HistoryItem parent = HistoryItem.fromGB(controller.getGameBoard());
-        Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = GameService.findSimulations(parent);
+        Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = GameService.findSimulations(parent.getBoard());
         if (simulations.isEmpty()) {
             return chooseRandomMove(moves);
         } else {
