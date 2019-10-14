@@ -15,7 +15,7 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    public static final long SIM_TIME = 20000;
+    public static final long SIM_TIME = 1000;
     private static final int SIM_COUNT_L1 = 10000;
     private static final int SIM_COUNT_L2 = 2500;
     private static final int SIM_COUNT_L3 = 200;
@@ -24,8 +24,7 @@ public class TreeSearchEngine implements MoveEngine {
     private static final int SIM_L3 = 57;
     private static final int SIM_L4 = 60;
     private static final int SIM_HB = 100;
-    //private static final int CORES = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
-    private static final int CORES = 1;
+    private static final int CORES = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
     private static long simTime = SIM_TIME;
     private int simCount = 0;
     private int wins = 0;
