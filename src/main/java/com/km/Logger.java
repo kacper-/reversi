@@ -8,7 +8,7 @@ public class Logger {
     private static final String SERVER_MESSAGE_PATH = "http://wesolowo.pl:8080/msg-1.0-SNAPSHOT/api/message";
     private static boolean on = true;
     private static boolean webLog = false;
-    private static LogLevel level = LogLevel.INFO;
+    private static LogLevel level = LogLevel.DEBUG;
 
     public static boolean isWebLog() {
         return webLog;
