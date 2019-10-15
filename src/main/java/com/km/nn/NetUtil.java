@@ -60,16 +60,16 @@ public class NetUtil {
     public void load(String name) {
         Logger.trace(String.format("net\tloading file [%s]", filePath + name));
         if (!new File(filePath + version.name()).exists()) {
-            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath + version.name()));
+            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath + name));
             clear();
         } else {
             try {
-                FileInputStream fileIn = new FileInputStream(filePath + version.name());
+                FileInputStream fileIn = new FileInputStream(filePath + name);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.error(String.format("net\terror loading file [%s]", filePath + version.name()));
+                Logger.error(String.format("net\terror loading file [%s]", filePath + name));
             }
         }
     }
