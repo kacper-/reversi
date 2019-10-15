@@ -57,8 +57,8 @@ public class NetUtil {
         }
     }
 
-    private void load() {
-        Logger.trace(String.format("net\tloading file [%s]", filePath + version.name()));
+    public void load(String name) {
+        Logger.trace(String.format("net\tloading file [%s]", filePath + name));
         if (!new File(filePath + version.name()).exists()) {
             Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath + version.name()));
             clear();
@@ -72,6 +72,10 @@ public class NetUtil {
                 Logger.error(String.format("net\terror loading file [%s]", filePath + version.name()));
             }
         }
+    }
+
+    private void load() {
+        load(version.name());
     }
 
     private void train(Nodes n) {

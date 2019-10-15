@@ -16,6 +16,11 @@ public class ANNEngine implements MoveEngine {
         netUtil = new NetUtil(version);
     }
 
+    ANNEngine(NetVersion version, String name) {
+        this(version);
+        netUtil.load(name);
+    }
+
     @Override
     public void setGameController(GameController controller) {
         this.controller = controller;
