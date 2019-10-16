@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 class Net3 implements Serializable, Net {
-    private final static double LEARNING_FACTOR = 0.0009d;
+    private final static double LEARNING_FACTOR = 0.001d;
     private final static int SIZE = 64;
     private Layer front;
     private Layer back;
@@ -18,6 +18,7 @@ class Net3 implements Serializable, Net {
         back = new Layer(1, SIZE, LEARNING_FACTOR);
     }
 
+    @Override
     public double process(double[] signal) {
         front.process(signal);
         middle.process(front.getOutputs());
@@ -26,6 +27,7 @@ class Net3 implements Serializable, Net {
         return back.getOutputs()[0];
     }
 
+    @Override
     public void teach(double[] signal, double[] expected) {
         double result = process(signal);
         double[] backError = new double[]{result - expected[0]};
@@ -59,5 +61,16 @@ class Net3 implements Serializable, Net {
                 result[w] += weights[n][w] * error[n];
         }
         return result;
+    }
+
+    @Override
+    public double expected(double[] n) {
+        double wins = n[0];
+        double loses = n[1];
+        if (loses > wins) {
+            return -(1d - (wins / loses));
+        } else {
+            return 1d - (loses / wins);
+        }
     }
 }

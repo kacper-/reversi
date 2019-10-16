@@ -88,11 +88,7 @@ public class NetUtil {
     private double expected(Nodes n) {
         double wins = n.getWins();
         double loses = n.getLoses();
-        if (loses > wins) {
-            return -(1d - (wins / loses));
-        } else {
-            return 1d - (loses / wins);
-        }
+        return net.expected(new double[]{wins, loses});
     }
 
     private boolean validate(Nodes n) {

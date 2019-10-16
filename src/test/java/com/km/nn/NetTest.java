@@ -6,7 +6,9 @@ import org.junit.Test;
 import java.util.Random;
 
 public class NetTest {
-    private double[] tA = new double[]{
+    private static final int TRAIN_CYCLE = 5000;
+    private static final int TRAIN_ACCURACY = 10;
+    private static final double[] tA = new double[]{
             -1, -1, -1, 1, 1, -1, -1, -1,
             0, 0, 1, 0, 0, 1, 0, 0,
             0, 0, 1, 0, 0, 1, 0, 0,
@@ -16,7 +18,7 @@ public class NetTest {
             1, 0, 0, 0, 0, 0, 0, 1,
             1, -1, -1, -1, -1, -1, -1, 1
     };
-    private double[] tB = new double[]{
+    private static final double[] tB = new double[]{
             1, 1, 1, 1, 1, 0, 0, 0,
             1, -1, -1, -1, -1, 1, 0, 0,
             1, -1, -1, -1, -1, 1, 0, 0,
@@ -26,7 +28,7 @@ public class NetTest {
             1, -1, -1, -1, -1, -1, 1, 0,
             1, 1, 1, 1, 1, 1, 0, 0
     };
-    private double[] tC = new double[]{
+    private static final double[] tC = new double[]{
             -1, 1, 1, 1, 1, 1, -1, -1,
             1, 0, 0, 0, 0, 0, 1, -1,
             1, 0, 0, 0, 0, 0, 0, 0,
@@ -36,7 +38,7 @@ public class NetTest {
             1, 0, 0, 0, 0, 0, 1, -1,
             -1, 1, 1, 1, 1, 1, -1, -1
     };
-    private double[] tD = new double[]{
+    private static final double[] tD = new double[]{
             1, 1, 1, 1, 1, -1, -1, -1,
             1, 0, 0, 0, 0, 1, -1, -1,
             1, 0, 0, 0, 0, 0, 1, -1,
@@ -46,7 +48,7 @@ public class NetTest {
             1, 0, 0, 0, 0, 1, -1, -1,
             1, 1, 1, 1, 1, -1, -1, -1
     };
-    private double[] tE = new double[]{
+    private static final double[] tE = new double[]{
             1, 1, 1, 1, 1, 0, 0, 0,
             1, -1, -1, -1, -1, 0, 0, 0,
             1, -1, -1, -1, -1, 0, 0, 0,
@@ -56,7 +58,7 @@ public class NetTest {
             1, -1, -1, -1, -1, 0, 0, 0,
             1, 1, 1, 1, 1, 0, 0, 0
     };
-    private double[] tF = new double[]{
+    private static final double[] tF = new double[]{
             1, 1, 1, 1, 1, 0, 0, 0,
             1, -1, -1, -1, -1, 0, 0, 0,
             1, -1, -1, -1, -1, 0, 0, 0,
@@ -66,13 +68,12 @@ public class NetTest {
             1, -1, -1, -1, -1, 0, 0, 0,
             1, 0, 0, 0, 0, 0, 0, 0
     };
-
     private double[][] test = new double[][]{tA, tB, tC, tD, tE, tF};
 
     @Test
     public void teach() {
         Net net = new NetUtil(NetVersion.NET2).createInstance();
-        int count = 5000 * test.length;
+        int count = TRAIN_CYCLE * test.length;
         int t;
         for (int i = 0; i < count; i++) {
             t = new Random().nextInt(test.length);
@@ -82,7 +83,7 @@ public class NetTest {
             double expected = result(t);
             double actual = net.process(test[t]);
             System.out.println(t + ">" + expected + ">" + actual);
-            Assert.assertEquals(expected, actual, Math.abs(expected / 10));
+            Assert.assertEquals(expected, actual, Math.abs(expected / TRAIN_ACCURACY));
         }
     }
 

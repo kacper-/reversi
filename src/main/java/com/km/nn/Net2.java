@@ -16,6 +16,7 @@ class Net2 implements Serializable, Net {
         back = new Layer(1, SIZE, LEARNING_FACTOR);
     }
 
+    @Override
     public double process(double[] signal) {
         front.process(signal);
         middle.process(front.getOutputs());
@@ -23,6 +24,7 @@ class Net2 implements Serializable, Net {
         return back.getOutputs()[0];
     }
 
+    @Override
     public void teach(double[] signal, double[] expected) {
         double result = process(signal);
         double[] backError = new double[]{result - expected[0]};
@@ -55,4 +57,13 @@ class Net2 implements Serializable, Net {
         return SIZE;
     }
 
+    public double expected(double[] n) {
+        double wins = n[0];
+        double loses = n[1];
+        if (loses > wins) {
+            return -(1d - (wins / loses));
+        } else {
+            return 1d - (loses / wins);
+        }
+    }
 }
