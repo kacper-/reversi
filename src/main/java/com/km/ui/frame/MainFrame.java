@@ -148,7 +148,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JButton mcPower = new JButton("MC power");
         JTextField power = new JTextField(String.valueOf(TreeSearchEngine.SIM_TIME));
         JComboBox<NetVersion> list = new JComboBox<>(NetVersion.values());
-        list.setSelectedItem(NetUtil.NET_VERSION);
+        list.setSelectedItem(NetVersion.NET2);
         list.setEditable(false);
         clearANN.addActionListener(click -> {
             new NetUtil(NetVersion.valueOf(list.getSelectedItem().toString())).clear();

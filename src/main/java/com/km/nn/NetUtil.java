@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class NetUtil {
     public static final int CYCLE_COUNT = 300;
-    public static final NetVersion NET_VERSION = NetVersion.NET3;
     private static final int SIM_COUNT = 12;
     private static String filePath;
     private Net net;

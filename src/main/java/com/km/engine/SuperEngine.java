@@ -4,12 +4,13 @@ import com.km.Logger;
 import com.km.game.GameController;
 import com.km.game.Move;
 import com.km.nn.NetUtil;
+import com.km.nn.NetVersion;
 
 import java.util.Set;
 
 public class SuperEngine implements MoveEngine {
     private RuleEngine rule = new RuleEngine();
-    private ANNEngine ann = new ANNEngine(NetUtil.NET_VERSION);
+    private ANNEngine ann = new ANNEngine(NetVersion.NET3, EngineType.ANN3RC.name());
 
     @Override
     public void setGameController(GameController controller) {

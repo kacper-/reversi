@@ -4,6 +4,7 @@ import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.nn.NetUtil;
+import com.km.nn.NetVersion;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class GameRunner {
     private int warScoreW = 0;
     private List<List<Integer>> progress;
     private int[] histogram = new int[HIST_SIZE];
-    private NetUtil netUtil = new NetUtil(NetUtil.NET_VERSION);
+    private NetUtil netUtil;
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
 
@@ -48,6 +49,7 @@ public class GameRunner {
 
     public void startBatchTrain(int cycleCount) {
         batchFinished = false;
+        netUtil = new NetUtil(NetVersion.NET4);
         netUtil.clear();
         new Thread(() -> {
             progress = new ArrayList<>();
@@ -59,7 +61,7 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int acc = runTrainingCycle();
-                int wins = runWars(EngineType.ANN3, EngineType.RANDOM, TEST_LEN);
+                int wins = runWars(EngineType.ANN4, EngineType.RANDOM, TEST_LEN);
                 progress.add(Arrays.asList(acc, wins));
                 avg += wins;
                 histogram[wins / 10]++;
@@ -80,9 +82,10 @@ public class GameRunner {
 
     private int runTrainingCycle() {
         if (new Random().nextBoolean())
-            return runWar(EngineType.MC, EngineType.RANDOM);
+            runWar(EngineType.MC, EngineType.RANDOM);
         else
-            return runWar(EngineType.RANDOM, EngineType.MC);
+            runWar(EngineType.RANDOM, EngineType.MC);
+        return netUtil.runTraining();
     }
 
     public void startWarGame(EngineType typeB, EngineType typeW, int count) {
@@ -120,7 +123,7 @@ public class GameRunner {
         }
     }
 
-    private int runWar(EngineType typeB, EngineType typeW) {
+    private void runWar(EngineType typeB, EngineType typeW) {
         getGameController().startWarGame(typeB, typeW);
         while (!getGameController().isFinished()) {
             getGameController().makeWarMove();
@@ -131,10 +134,6 @@ public class GameRunner {
             warScoreB++;
         else
             warScoreW++;
-        if (typeB == EngineType.MC || typeW == EngineType.MC) {
-            return netUtil.runTraining();
-        }
-        return 0;
     }
 
     public void startNewGame(Slot s, EngineType type) {
