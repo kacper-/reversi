@@ -25,8 +25,11 @@ public class EngineFactory {
             case RULE:
                 engine = new RuleEngine();
                 break;
-            case SUPER:
-                engine = new SuperEngine();
+            case SUPER3:
+                engine = new SuperEngine(NetVersion.NET3);
+                break;
+            case SUPER4:
+                engine = new SuperEngine(NetVersion.NET4);
                 break;
             case MC:
                 engine = new TreeSearchEngine();

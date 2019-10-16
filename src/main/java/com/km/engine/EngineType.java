@@ -9,5 +9,6 @@ public enum EngineType {
     ANN4RC,
     RULE,
     RANDOM,
-    SUPER
+    SUPER3,
+    SUPER4
 }
