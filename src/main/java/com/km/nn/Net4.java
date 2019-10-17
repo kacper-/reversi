@@ -1,10 +1,11 @@
 package com.km.nn;
 
+import com.km.Config;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
 class Net4 implements Serializable, Net {
-    private final static double LEARNING_FACTOR = 0.001d;
     private final static int SIZE = 64;
     private Layer front;
     private Layer back;
@@ -13,11 +14,11 @@ class Net4 implements Serializable, Net {
     private Layer middle3;
 
     Net4() {
-        front = new Layer(SIZE, SIZE, LEARNING_FACTOR);
-        middle = new Layer(SIZE, SIZE, LEARNING_FACTOR);
-        middle2 = new Layer(SIZE, SIZE, LEARNING_FACTOR);
-        middle3 = new Layer(SIZE, SIZE, LEARNING_FACTOR);
-        back = new Layer(1, SIZE, LEARNING_FACTOR);
+        front = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
+        middle = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
+        middle2 = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
+        middle3 = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
+        back = new Layer(1, SIZE, Config.getNet4LearningFactor());
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.km.nn;
 
+import com.km.Config;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Properties;
 import java.util.Random;
 
 public class NetTest {
@@ -72,6 +74,7 @@ public class NetTest {
 
     @Test
     public void teach() {
+        Config.setProperties(new Properties());
         Net net = new NetUtil(NetVersion.NET2).createInstance();
         int count = TRAIN_CYCLE * test.length;
         int t;

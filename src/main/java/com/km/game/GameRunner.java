@@ -1,5 +1,6 @@
 package com.km.game;
 
+import com.km.Config;
 import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
@@ -9,8 +10,7 @@ import com.km.nn.NetVersion;
 import java.util.*;
 
 public class GameRunner {
-    private static final int TEST_LEN = 100;
-    private static final int HIST_SIZE = 10;
+    private static final int HIST_SIZE = 11;
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;
@@ -49,25 +49,24 @@ public class GameRunner {
 
     public void startBatchTrain(int cycleCount) {
         batchFinished = false;
-        netUtil = new NetUtil(NetVersion.NET4);
+        netUtil = new NetUtil(Config.getBatchNetVersion());
         netUtil.clear();
         new Thread(() -> {
             progress = new ArrayList<>();
             clearHistogram();
-            LogLevel level = Logger.getLevel();
             Logger.info(String.format("batch\tbatch train : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
             for (int i = 0; i < cycleCount; i++) {
                 Logger.important(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int acc = runTrainingCycle();
-                int wins = runWars(EngineType.ANN4, EngineType.RANDOM, TEST_LEN);
+                int wins = runWars(EngineType.ANN4, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc, wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
             }
-            Logger.setLevel(level);
+            Logger.setDefaultLevel();
             Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
             printHistogram();
             notifyOnUI();

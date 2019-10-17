@@ -1,5 +1,6 @@
 package com.km.engine;
 
+import com.km.Config;
 import com.km.Logger;
 import com.km.entities.Pair;
 import com.km.game.*;
@@ -15,31 +16,15 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    public static final long SIM_TIME = 1000;
-    private static final int SIM_COUNT_L1 = 10000;
-    private static final int SIM_COUNT_L2 = 2500;
-    private static final int SIM_COUNT_L3 = 200;
-    private static final int SIM_COUNT_L4 = 10;
-    private static final int SIM_L2 = 53;
-    private static final int SIM_L3 = 57;
-    private static final int SIM_L4 = 60;
-    private static final int SIM_HB = 100;
-    private static final int CORES = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
-    private static long simTime = SIM_TIME;
     private int simCount = 0;
     private int wins = 0;
     private int loses = 0;
     private GameController controller;
 
-    public static void setPower(long power) {
-        simTime = power;
-        Logger.debug(String.format("algo\tpower set to [%d] ms", power));
-    }
-
     @Override
     public void setGameController(GameController controller) {
         this.controller = controller;
-        Logger.debug(String.format("algo\tpreparing for [%d] cores", CORES));
+        Logger.debug(String.format("algo\tpreparing for [%d] cores", Config.getCores()));
     }
 
     public Move chooseMove(Set<Move> moves) {
@@ -73,8 +58,8 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private void startSimulationPool() {
-        ExecutorService executor = Executors.newFixedThreadPool(CORES);
-        int taskCount = CORES * SIM_HB;
+        ExecutorService executor = Executors.newFixedThreadPool(Config.getCores());
+        int taskCount = Config.getCores() * Config.getSimHb();
         for (int i = 0; i < taskCount; i++) {
             executor.execute(this::startSingleSimulation);
         }
@@ -101,15 +86,15 @@ public class TreeSearchEngine implements MoveEngine {
 
     private boolean continueSim(long start, int count) {
         long stop = new Date().getTime();
-        if (count > SIM_COUNT_L1 || (stop - start) > simTime)
+        if (count > Config.getSimCountL1() || (stop - start) > Config.getSimTime())
             return false;
         Score s = controller.getScore();
         int gameProgress = s.getBlack() + s.getWhite();
-        if (gameProgress > SIM_L2 && count > SIM_COUNT_L2)
+        if (gameProgress > Config.getSimL2() && count > Config.getSimCountL2())
             return false;
-        if (gameProgress > SIM_L3 && count > SIM_COUNT_L3)
+        if (gameProgress > Config.getSimL3() && count > Config.getSimCountL3())
             return false;
-        return !(gameProgress > SIM_L4 && count > SIM_COUNT_L4);
+        return !(gameProgress > Config.getSimL4() && count > Config.getSimCountL4());
     }
 
 

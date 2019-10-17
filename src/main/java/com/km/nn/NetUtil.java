@@ -1,5 +1,6 @@
 package com.km.nn;
 
+import com.km.Config;
 import com.km.Logger;
 import com.km.entities.Nodes;
 import com.km.game.DBSlot;
@@ -11,9 +12,6 @@ import java.util.List;
 import java.util.Random;
 
 public class NetUtil {
-    public static final int CYCLE_COUNT = 300;
-    private static final int SIM_COUNT = 12;
-    private static String filePath;
     private Net net;
     private NetVersion version;
     private int trainCount;
@@ -22,12 +20,8 @@ public class NetUtil {
         this.version = version;
     }
 
-    public static void setFilePath(String filePath) {
-        NetUtil.filePath = filePath;
-    }
-
     public void clear() {
-        Logger.info(String.format("net\tclearing file [%s]", filePath + version.name()));
+        Logger.info(String.format("net\tclearing file [%s]", Config.getFilePath() + version.name()));
         net = createInstance();
         save();
     }
@@ -45,9 +39,9 @@ public class NetUtil {
     }
 
     private void save() {
-        Logger.trace(String.format("net\tsaving file [%s]", filePath + version.name()));
+        Logger.trace(String.format("net\tsaving file [%s]", Config.getFilePath() + version.name()));
         try {
-            FileOutputStream fileOut = new FileOutputStream(filePath + version.name());
+            FileOutputStream fileOut = new FileOutputStream(Config.getFilePath() + version.name());
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(net);
             objectOut.close();
@@ -57,18 +51,18 @@ public class NetUtil {
     }
 
     public void load(String name) {
-        Logger.trace(String.format("net\tloading file [%s]", filePath + name));
-        if (!new File(filePath + version.name()).exists()) {
-            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", filePath + name));
+        Logger.trace(String.format("net\tloading file [%s]", Config.getFilePath() + name));
+        if (!new File(Config.getFilePath() + version.name()).exists()) {
+            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", Config.getFilePath() + name));
             clear();
         } else {
             try {
-                FileInputStream fileIn = new FileInputStream(filePath + name);
+                FileInputStream fileIn = new FileInputStream(Config.getFilePath() + name);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.error(String.format("net\terror loading file [%s]", filePath + name));
+                Logger.error(String.format("net\terror loading file [%s]", Config.getFilePath() + name));
             }
         }
     }
@@ -91,7 +85,7 @@ public class NetUtil {
     }
 
     private boolean validate(Nodes n) {
-        return (n.getLoses() + n.getWins()) >= SIM_COUNT;
+        return (n.getLoses() + n.getWins()) >= Config.getSimCount();
     }
 
     public int runTraining() {

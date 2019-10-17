@@ -1,7 +1,7 @@
 package com.km.ui.frame;
 
+import com.km.Config;
 import com.km.LogLevel;
-import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.engine.TreeSearchEngine;
 import com.km.game.GameRunner;
@@ -63,7 +63,6 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.add(getButtonRow2());
         rightPanel.add(getButtonRow3());
         rightPanel.add(getButtonRow4());
-        rightPanel.add(getButtonRow5());
         rightPanel.add(getInfoPanel1());
         rightPanel.add(getInfoPanel2());
         return rightPanel;
@@ -132,7 +131,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JPanel p3 = new JPanel();
         p3.setLayout(new FlowLayout());
         JButton newGameBatch = new JButton("Batch");
-        JTextField cycleCount = new JTextField(String.valueOf(NetUtil.CYCLE_COUNT));
+        JTextField cycleCount = new JTextField(String.valueOf(Config.getCycleCount()));
         newGameBatch.addActionListener(click -> {
             board.startBatchTrain(Integer.parseInt(cycleCount.getText()));
         });
@@ -145,43 +144,15 @@ public class MainFrame extends JFrame implements ScoreListener {
         JPanel p4 = new JPanel();
         p4.setLayout(new FlowLayout());
         JButton clearANN = new JButton("Clear ANN");
-        JButton mcPower = new JButton("MC power");
-        JTextField power = new JTextField(String.valueOf(TreeSearchEngine.SIM_TIME));
         JComboBox<NetVersion> list = new JComboBox<>(NetVersion.values());
         list.setSelectedItem(NetVersion.NET2);
         list.setEditable(false);
         clearANN.addActionListener(click -> {
             new NetUtil(NetVersion.valueOf(list.getSelectedItem().toString())).clear();
         });
-        mcPower.addActionListener(click -> {
-            TreeSearchEngine.setPower(Long.parseLong(power.getText()));
-        });
         p4.add(clearANN);
         p4.add(list);
-        p4.add(mcPower);
-        p4.add(power);
         return p4;
-    }
-
-    private JPanel getButtonRow5() {
-        JPanel p5 = new JPanel();
-        p5.setLayout(new FlowLayout());
-        JButton level = new JButton("Set level");
-        JCheckBox web = new JCheckBox("Web log");
-        JComboBox<LogLevel> list = new JComboBox<>(LogLevel.values());
-        list.setSelectedItem(Logger.getLevel());
-        list.setEditable(false);
-        web.setSelected(Logger.isWebLog());
-        level.addActionListener(click -> {
-            Logger.setLevel(LogLevel.valueOf(list.getSelectedItem().toString()));
-        });
-        web.addActionListener(click -> {
-            Logger.setWebLog(web.isSelected());
-        });
-        p5.add(list);
-        p5.add(level);
-        p5.add(web);
-        return p5;
     }
 
     @Override

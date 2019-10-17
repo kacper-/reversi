@@ -1,19 +1,20 @@
 package com.km.nn;
 
+import com.km.Config;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
 class Net2 implements Serializable, Net {
-    private final static double LEARNING_FACTOR = 0.01d;
     private final static int SIZE = 64;
     private Layer front;
     private Layer back;
     private Layer middle;
 
     Net2() {
-        front = new Layer(SIZE, SIZE, LEARNING_FACTOR);
-        middle = new Layer(SIZE, SIZE, LEARNING_FACTOR);
-        back = new Layer(1, SIZE, LEARNING_FACTOR);
+        front = new Layer(SIZE, SIZE, Config.getNet2LearningFactor());
+        middle = new Layer(SIZE, SIZE, Config.getNet2LearningFactor());
+        back = new Layer(1, SIZE, Config.getNet2LearningFactor());
     }
 
     @Override
