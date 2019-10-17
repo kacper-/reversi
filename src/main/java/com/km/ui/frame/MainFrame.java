@@ -62,7 +62,6 @@ public class MainFrame extends JFrame implements ScoreListener {
         rightPanel.add(getButtonRow1());
         rightPanel.add(getButtonRow2());
         rightPanel.add(getButtonRow3());
-        rightPanel.add(getButtonRow4());
         rightPanel.add(getInfoPanel1());
         rightPanel.add(getInfoPanel2());
         return rightPanel;
@@ -138,21 +137,6 @@ public class MainFrame extends JFrame implements ScoreListener {
         p3.add(newGameBatch);
         p3.add(cycleCount);
         return p3;
-    }
-
-    private JPanel getButtonRow4() {
-        JPanel p4 = new JPanel();
-        p4.setLayout(new FlowLayout());
-        JButton clearANN = new JButton("Clear ANN");
-        JComboBox<NetVersion> list = new JComboBox<>(NetVersion.values());
-        list.setSelectedItem(NetVersion.NET2);
-        list.setEditable(false);
-        clearANN.addActionListener(click -> {
-            new NetUtil(NetVersion.valueOf(list.getSelectedItem().toString())).clear();
-        });
-        p4.add(clearANN);
-        p4.add(list);
-        return p4;
     }
 
     @Override

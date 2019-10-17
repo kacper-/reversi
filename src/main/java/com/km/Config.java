@@ -18,6 +18,7 @@ public class Config {
     private static double net3LearningFactor = 0.001d;
     private static double net4LearningFactor = 0.001d;
     private static NetVersion batchNetVersion = NetVersion.NET4;
+    private static String batchNetFile = "BATCH";
     private static long simTime = 1000;
     private static int simCountL1 = 10000;
     private static int simCountL2 = 2500;
@@ -30,6 +31,47 @@ public class Config {
     private static int cores = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
     private static int width = 950;
     private static int height = 1000;
+    private static String engineANN2file = "NET2";
+    private static String engineANN3file = "NET3";
+    private static String engineANN4file = "NET4";
+    private static String engineANN3RCfile = "ANN3RC";
+    private static String engineANN4RCfile = "ANN4RC";
+
+    public static String getEngineANN2file() {
+        if (properties.contains("engine.ANN2.file"))
+            return properties.getProperty("engine.ANN2.file");
+        else
+            return engineANN2file;
+    }
+
+    public static String getEngineANN3file() {
+        if (properties.contains("engine.ANN3.file"))
+            return properties.getProperty("engine.ANN3.file");
+        else
+            return engineANN3file;
+    }
+
+    public static String getEngineANN4file() {
+        if (properties.contains("engine.ANN4.file"))
+            return properties.getProperty("engine.ANN4.file");
+        else
+            return engineANN4file;
+    }
+
+    public static String getEngineANN3RCfile() {
+        if (properties.contains("engine.ANN3RC.file"))
+            return properties.getProperty("engine.ANN3RC.file");
+        else
+            return engineANN3RCfile;
+    }
+
+    public static String getEngineANN4RCfile() {
+        if (properties.contains("engine.ANN4RC.file"))
+            return properties.getProperty("engine.ANN4RC.file");
+        else
+            return engineANN4RCfile;
+    }
+
     private static Properties properties;
 
     public static String getFileName() {
@@ -40,6 +82,7 @@ public class Config {
         return filePath;
     }
 
+    // TODO implement headless mode
     public static boolean isHeadless() {
         if (properties.contains("headless"))
             return properties.getProperty("headless").equalsIgnoreCase("true");
@@ -101,6 +144,13 @@ public class Config {
             return NetVersion.valueOf(properties.getProperty("batch.net.version").toUpperCase());
         else
             return batchNetVersion;
+    }
+
+    public static String getBatchNetFile() {
+        if (properties.contains("batch.net.file"))
+            return properties.getProperty("batch.net.file");
+        else
+            return batchNetFile;
     }
 
     public static long getSimTime() {

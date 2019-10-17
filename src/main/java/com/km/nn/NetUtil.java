@@ -15,13 +15,15 @@ public class NetUtil {
     private Net net;
     private NetVersion version;
     private int trainCount;
+    private String fileName;
 
-    public NetUtil(NetVersion version) {
+    public NetUtil(NetVersion version, String name) {
         this.version = version;
+        this.fileName = Config.getFilePath() + name;
     }
 
     public void clear() {
-        Logger.info(String.format("net\tclearing file [%s]", Config.getFilePath() + version.name()));
+        Logger.info(String.format("net\tclearing file [%s]", fileName));
         net = createInstance();
         save();
     }
@@ -39,9 +41,9 @@ public class NetUtil {
     }
 
     private void save() {
-        Logger.trace(String.format("net\tsaving file [%s]", Config.getFilePath() + version.name()));
+        Logger.trace(String.format("net\tsaving file [%s]", fileName));
         try {
-            FileOutputStream fileOut = new FileOutputStream(Config.getFilePath() + version.name());
+            FileOutputStream fileOut = new FileOutputStream(fileName);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(net);
             objectOut.close();
@@ -50,25 +52,21 @@ public class NetUtil {
         }
     }
 
-    public void load(String name) {
-        Logger.trace(String.format("net\tloading file [%s]", Config.getFilePath() + name));
-        if (!new File(Config.getFilePath() + version.name()).exists()) {
-            Logger.trace(String.format("net\tfile [%s] does not exist, creating new", Config.getFilePath() + name));
+    private void load() {
+        Logger.trace(String.format("net\tloading file [%s]", fileName));
+        if (!new File(fileName).exists()) {
+            Logger.important(String.format("net\tfile [%s] does not exist, creating new", fileName));
             clear();
         } else {
             try {
-                FileInputStream fileIn = new FileInputStream(Config.getFilePath() + name);
+                FileInputStream fileIn = new FileInputStream(fileName);
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.error(String.format("net\terror loading file [%s]", Config.getFilePath() + name));
+                Logger.error(String.format("net\terror loading file [%s]", fileName));
             }
         }
-    }
-
-    private void load() {
-        load(version.name());
     }
 
     private void train(Nodes n) {

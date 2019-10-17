@@ -49,7 +49,7 @@ public class GameRunner {
 
     public void startBatchTrain(int cycleCount) {
         batchFinished = false;
-        netUtil = new NetUtil(Config.getBatchNetVersion());
+        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile());
         netUtil.clear();
         new Thread(() -> {
             progress = new ArrayList<>();

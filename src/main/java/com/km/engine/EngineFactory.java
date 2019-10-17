@@ -1,5 +1,6 @@
 package com.km.engine;
 
+import com.km.Config;
 import com.km.game.GameController;
 import com.km.nn.NetVersion;
 
@@ -8,19 +9,19 @@ public class EngineFactory {
         MoveEngine engine = null;
         switch (type) {
             case ANN2:
-                engine = new ANNEngine(NetVersion.NET2);
+                engine = new ANNEngine(NetVersion.NET2, Config.getEngineANN2file());
                 break;
             case ANN3:
-                engine = new ANNEngine(NetVersion.NET3);
+                engine = new ANNEngine(NetVersion.NET3, Config.getEngineANN3file());
                 break;
             case ANN3RC:
-                engine = new ANNEngine(NetVersion.NET3, EngineType.ANN3RC.name());
+                engine = new ANNEngine(NetVersion.NET3, Config.getEngineANN3RCfile());
                 break;
             case ANN4:
-                engine = new ANNEngine(NetVersion.NET4);
+                engine = new ANNEngine(NetVersion.NET4, Config.getEngineANN4file());
                 break;
             case ANN4RC:
-                engine = new ANNEngine(NetVersion.NET4, EngineType.ANN4RC.name());
+                engine = new ANNEngine(NetVersion.NET4, Config.getEngineANN4RCfile());
                 break;
             case RULE:
                 engine = new RuleEngine();
