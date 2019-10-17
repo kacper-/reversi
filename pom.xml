@@ -5,7 +5,7 @@
 
     <groupId>com.km</groupId>
     <artifactId>reversi</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.9</version>
     <name>Reversi</name>
 
     <dependencies>
