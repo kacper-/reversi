@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class Config {
+    public static String VERSION = "0.9";
     private static String fileName = "reversi.conf";
     private static String filePath = Paths.get(".").toAbsolutePath().normalize().toString() + File.separator;
     private static boolean headless = false;

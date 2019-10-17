@@ -18,7 +18,7 @@ import java.awt.*;
 import java.util.List;
 
 public class MainFrame extends JFrame implements ScoreListener {
-    private static final String TITLE = "Reversi 1.0";
+    private static final String TITLE = "Reversi " + Config.VERSION;
     private Board board;
     private JTextField score = new JTextField("no score : no score");
     private JTextField warScore = new JTextField("no score : no score");
