@@ -39,35 +39,35 @@ public class Config {
     private static String engineANN4RCfile = "ANN4RC";
 
     public static String getEngineANN2file() {
-        if (properties.contains("engine.ANN2.file"))
+        if (properties.getProperty("engine.ANN2.file") != null)
             return properties.getProperty("engine.ANN2.file");
         else
             return engineANN2file;
     }
 
     public static String getEngineANN3file() {
-        if (properties.contains("engine.ANN3.file"))
+        if (properties.getProperty("engine.ANN3.file") != null)
             return properties.getProperty("engine.ANN3.file");
         else
             return engineANN3file;
     }
 
     public static String getEngineANN4file() {
-        if (properties.contains("engine.ANN4.file"))
+        if (properties.getProperty("engine.ANN4.file") != null)
             return properties.getProperty("engine.ANN4.file");
         else
             return engineANN4file;
     }
 
     public static String getEngineANN3RCfile() {
-        if (properties.contains("engine.ANN3RC.file"))
+        if (properties.getProperty("engine.ANN3RC.file") != null)
             return properties.getProperty("engine.ANN3RC.file");
         else
             return engineANN3RCfile;
     }
 
     public static String getEngineANN4RCfile() {
-        if (properties.contains("engine.ANN4RC.file"))
+        if (properties.getProperty("engine.ANN4RC.file") != null)
             return properties.getProperty("engine.ANN4RC.file");
         else
             return engineANN4RCfile;
@@ -83,156 +83,155 @@ public class Config {
         return filePath;
     }
 
-    // TODO implement headless mode
     public static boolean isHeadless() {
-        if (properties.contains("headless"))
+        if (properties.getProperty("headless") != null)
             return properties.getProperty("headless").equalsIgnoreCase("true");
         else
             return headless;
     }
 
     public static LogLevel getLevel() {
-        if (properties.contains("level"))
+        if (properties.getProperty("level") != null)
             return LogLevel.valueOf(properties.getProperty("level").toUpperCase());
         else
             return level;
     }
 
     public static int getTestLen() {
-        if (properties.contains("test.len"))
+        if (properties.getProperty("test.len") != null)
             return Integer.parseInt(properties.getProperty("test.len"));
         else
             return testLen;
     }
 
     public static int getCycleCount() {
-        if (properties.contains("cycle.count"))
+        if (properties.getProperty("cycle.count") != null)
             return Integer.parseInt(properties.getProperty("cycle.count"));
         else
             return cycleCount;
     }
 
     public static int getSimCount() {
-        if (properties.contains("sim.count"))
+        if (properties.getProperty("sim.count") != null)
             return Integer.parseInt(properties.getProperty("sim.count"));
         else
             return simCount;
     }
 
     public static double getNet2LearningFactor() {
-        if (properties.contains("net2.learningfactor"))
+        if (properties.getProperty("net2.learningfactor") != null)
             return Double.parseDouble(properties.getProperty("net2.learningfactor"));
         else
             return net2LearningFactor;
     }
 
     public static double getNet3LearningFactor() {
-        if (properties.contains("net3.learningfactor"))
+        if (properties.getProperty("net3.learningfactor") != null)
             return Double.parseDouble(properties.getProperty("net3.learningfactor"));
         else
             return net3LearningFactor;
     }
 
     public static double getNet4LearningFactor() {
-        if (properties.contains("net4.learningfactor"))
+        if (properties.getProperty("net4.learningfactor") != null)
             return Double.parseDouble(properties.getProperty("net4.learningfactor"));
         else
             return net4LearningFactor;
     }
 
     public static NetVersion getBatchNetVersion() {
-        if (properties.contains("batch.net.version"))
+        if (properties.getProperty("batch.net.version") != null)
             return NetVersion.valueOf(properties.getProperty("batch.net.version").toUpperCase());
         else
             return batchNetVersion;
     }
 
     public static String getBatchNetFile() {
-        if (properties.contains("batch.net.file"))
+        if (properties.getProperty("batch.net.file") != null)
             return properties.getProperty("batch.net.file");
         else
             return batchNetFile;
     }
 
     public static long getSimTime() {
-        if (properties.contains("sim.time"))
+        if (properties.getProperty("sim.time") != null)
             return Integer.parseInt(properties.getProperty("sim.time"));
         else
             return simTime;
     }
 
     public static int getSimCountL1() {
-        if (properties.contains("sim.count.l1"))
+        if (properties.getProperty("sim.count.l1") != null)
             return Integer.parseInt(properties.getProperty("sim.count.l1"));
         else
             return simCountL1;
     }
 
     public static int getSimCountL2() {
-        if (properties.contains("sim.count.l2"))
+        if (properties.getProperty("sim.count.l2") != null)
             return Integer.parseInt(properties.getProperty("sim.count.l2"));
         else
             return simCountL2;
     }
 
     public static int getSimCountL3() {
-        if (properties.contains("sim.count.l3"))
+        if (properties.getProperty("sim.count.l3") != null)
             return Integer.parseInt(properties.getProperty("sim.count.l3"));
         else
             return simCountL3;
     }
 
     public static int getSimCountL4() {
-        if (properties.contains("sim.count.l4"))
+        if (properties.getProperty("sim.count.l4") != null)
             return Integer.parseInt(properties.getProperty("sim.count.l4"));
         else
             return simCountL4;
     }
 
     public static int getSimL2() {
-        if (properties.contains("sim.l2"))
+        if (properties.getProperty("sim.l2") != null)
             return Integer.parseInt(properties.getProperty("sim.l2"));
         else
             return simL2;
     }
 
     public static int getSimL3() {
-        if (properties.contains("sim.l3"))
+        if (properties.getProperty("sim.l3") != null)
             return Integer.parseInt(properties.getProperty("sim.l3"));
         else
             return simL3;
     }
 
     public static int getSimL4() {
-        if (properties.contains("sim.l4"))
+        if (properties.getProperty("sim.l4") != null)
             return Integer.parseInt(properties.getProperty("sim.l4"));
         else
             return simL4;
     }
 
     public static int getSimHb() {
-        if (properties.contains("sim.hb"))
+        if (properties.getProperty("sim.hb") != null)
             return Integer.parseInt(properties.getProperty("sim.hb"));
         else
             return simHb;
     }
 
     public static int getCores() {
-        if (properties.contains("cores"))
+        if (properties.getProperty("cores") != null)
             return Integer.parseInt(properties.getProperty("cores"));
         else
             return cores;
     }
 
     public static int getWidth() {
-        if (properties.contains("width"))
+        if (properties.getProperty("width") != null)
             return Integer.parseInt(properties.getProperty("width"));
         else
             return width;
     }
 
     public static int getHeight() {
-        if (properties.contains("height"))
+        if (properties.getProperty("height") != null)
             return Integer.parseInt(properties.getProperty("height"));
         else
             return height;
@@ -240,5 +239,8 @@ public class Config {
 
     public static void setProperties(Properties properties) {
         Config.properties = properties;
+        for (Object o : properties.keySet()) {
+            Logger.important(String.format("app\tkey=[%s] value=[%s]", o.toString(), properties.getProperty(o.toString())));
+        }
     }
 }
