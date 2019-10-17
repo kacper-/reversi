@@ -166,6 +166,7 @@ public class GameRunner {
     }
 
     private void notifyOnTrainProgress() {
-        scoreListener.setTrainProgress(progress);
+        if (scoreListener != null)
+            scoreListener.setTrainProgress(progress);
     }
 }
