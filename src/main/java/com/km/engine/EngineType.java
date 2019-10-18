@@ -10,5 +10,6 @@ public enum EngineType {
     RULE,
     RANDOM,
     SUPER3,
-    SUPER4
+    SUPER4,
+    BATCH
 }

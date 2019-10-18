@@ -38,6 +38,9 @@ public class EngineFactory {
             case RANDOM:
                 engine = new RandomEngine();
                 break;
+            case BATCH:
+                engine = new ANNEngine(Config.getBatchNetVersion(), Config.getBatchNetFile());
+                break;
         }
         engine.setGameController(controller);
         return engine;
