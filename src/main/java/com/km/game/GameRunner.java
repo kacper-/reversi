@@ -76,7 +76,7 @@ public class GameRunner {
 
     private void printHistogram() {
         for (int i = 0; i < HIST_SIZE; i++)
-            Logger.info(String.format("batch\thistogram [%d] -> [%d]", i * HIST_SIZE, histogram[i]));
+            Logger.info(String.format("batch\thistogram [%d] -> [%d]", i * 10, histogram[i]));
     }
 
     private int runTrainingCycle() {
