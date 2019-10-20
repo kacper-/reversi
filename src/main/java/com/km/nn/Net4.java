@@ -71,13 +71,13 @@ class Net4 implements Serializable, Net {
     }
 
     @Override
-    public double expected(double[] n) {
+    public double[] expected(double[] n) {
         double wins = n[0];
         double loses = n[1];
         if (loses > wins) {
-            return -(1d - (wins / loses));
+            return new double[]{-(1d - (wins / loses))};
         } else {
-            return 1d - (loses / wins);
+            return new double[]{1d - (loses / wins)};
         }
     }
 }

@@ -72,11 +72,11 @@ public class NetUtil {
     private void train(Nodes n) {
         if (!validate(n))
             return;
-        net.teach(translate(n.getBoard()), new double[]{expected(n)});
+        net.teach(translate(n.getBoard()), expected(n));
         trainCount++;
     }
 
-    private double expected(Nodes n) {
+    private double[] expected(Nodes n) {
         double wins = n.getWins();
         double loses = n.getLoses();
         return net.expected(new double[]{wins, loses});
@@ -104,7 +104,8 @@ public class NetUtil {
     private int verify(List<Nodes> nodes) {
         int count = 0;
         int result = 0;
-        double actual, expected;
+        double actual;
+        double[] expected;
         for (int i = 0; i < nodes.size(); i++) {
             if (!validate(nodes.get(i)))
                 continue;
@@ -119,14 +120,18 @@ public class NetUtil {
         return result;
     }
 
-    private boolean inRange(double expected, double actual, double precision) {
+    private boolean inRange(double[] expected, double actual, double precision) {
         double down = 1 - precision;
         double up = 1 + precision;
-        if (expected > 0) {
-            return (down * expected) < actual && (up * expected) > actual;
-        } else {
-            return (down * expected) > actual && (up * expected) < actual;
+        boolean result = true;
+        for (double e : expected) {
+            if (e > 0) {
+                result = result && ((down * e) < actual && (up * e) > actual);
+            } else {
+                result = result && ((down * e) > actual && (up * e) < actual);
+            }
         }
+        return result;
     }
 
     public double process(String n) {
