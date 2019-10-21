@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NetUtil {
+    private static final double PRECISION = 0.1d;
     private Net net;
     private NetVersion version;
     private int trainCount;
@@ -96,7 +97,7 @@ public class NetUtil {
             train(nodes.get(new Random().nextInt(count)));
         }
         int result = verify(nodes);
-        Logger.important(String.format("net\ttraining accuracy : 0.10 -> [%d %%] after [%d] iterations", result, trainCount));
+        Logger.important(String.format("net\ttraining accuracy : [%.2f] -> [%d %%] after [%d] iterations", PRECISION, result, trainCount));
         save();
         return result;
     }
@@ -104,14 +105,14 @@ public class NetUtil {
     private int verify(List<Nodes> nodes) {
         int count = 0;
         int result = 0;
-        double actual;
+        double[] actual;
         double[] expected;
         for (int i = 0; i < nodes.size(); i++) {
             if (!validate(nodes.get(i)))
                 continue;
             actual = process(nodes.get(i).getBoard());
             expected = expected(nodes.get(i));
-            if (inRange(expected, actual, 0.1))
+            if (inRange(expected, actual))
                 result++;
             count++;
         }
@@ -119,21 +120,21 @@ public class NetUtil {
         return result;
     }
 
-    private boolean inRange(double[] expected, double actual, double precision) {
-        double down = 1 - precision;
-        double up = 1 + precision;
+    private boolean inRange(double[] expected, double[] actual) {
+        double down = 1 - PRECISION;
+        double up = 1 + PRECISION;
         boolean result = true;
-        for (double e : expected) {
-            if (e > 0) {
-                result = result && ((down * e) < actual && (up * e) > actual);
+        for (int i = 0; i < expected.length; i++) {
+            if (expected[i] > 0) {
+                result = result && ((down * expected[i]) < actual[i] && (up * expected[i]) > actual[i]);
             } else {
-                result = result && ((down * e) > actual && (up * e) < actual);
+                result = result && ((down * expected[i]) > actual[i] && (up * expected[i]) < actual[i]);
             }
         }
         return result;
     }
 
-    public double process(String n) {
+    public double[] process(String n) {
         if (net == null)
             load();
         double[] input = translate(n);

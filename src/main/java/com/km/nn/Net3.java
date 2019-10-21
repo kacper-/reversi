@@ -20,18 +20,18 @@ class Net3 implements Serializable, Net {
     }
 
     @Override
-    public double process(double[] signal) {
+    public double[] process(double[] signal) {
         front.process(signal);
         middle.process(front.getOutputs());
         middle2.process(middle.getOutputs());
         back.process(middle2.getOutputs());
-        return back.getOutputs()[0];
+        return back.getOutputs();
     }
 
     @Override
     public void teach(double[] signal, double[] expected) {
-        double result = process(signal);
-        double[] backError = new double[]{result - expected[0]};
+        double[] result = process(signal);
+        double[] backError = new double[]{result[0] - expected[0]};
         double[] middle2Error = calculateError(back.getWeights(), backError);
         double[] middleError = calculateError(middle2.getWeights(), middle2Error);
         double[] frontError = calculateError(middle.getWeights(), middleError);

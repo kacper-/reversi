@@ -84,7 +84,7 @@ public class NetTest {
         }
         for (t = 0; t < test.length; t++) {
             double expected = result(t);
-            double actual = net.process(test[t]);
+            double actual = net.process(test[t])[0];
             System.out.println(t + ">" + expected + ">" + actual);
             Assert.assertEquals(expected, actual, Math.abs(expected / TRAIN_ACCURACY));
         }

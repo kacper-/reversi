@@ -46,6 +46,15 @@ public class ANNEngine implements MoveEngine {
         copy.nextTurn();
         Logger.setOn();
         String board = copy.getGameBoard().toDBString();
-        return netUtil.process(board);
+        double[] out = netUtil.process(board);
+        if (out.length == 1) {
+            return out[0];
+        } else {
+            if (out[0] > out[1])
+                return out[0];
+            else
+                return -out[1];
+        }
+
     }
 }

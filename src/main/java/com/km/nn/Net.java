@@ -1,7 +1,7 @@
 package com.km.nn;
 
 public interface Net {
-    double process(double[] signal);
+    double[] process(double[] signal);
     void teach(double[] signal, double[] expected);
     int getSize();
     double[] expected(double[] n);
