@@ -77,10 +77,8 @@ public class NetUtil {
         trainCount++;
     }
 
-    private double[] expected(Nodes n) {
-        double wins = n.getWins();
-        double loses = n.getLoses();
-        return net.expected(new double[]{wins, loses});
+    private double expected(Nodes n) {
+        return net.expected(new double[]{n.getWins(), n.getLoses()});
     }
 
     private boolean validate(Nodes n) {
@@ -105,8 +103,8 @@ public class NetUtil {
     private int verify(List<Nodes> nodes) {
         int count = 0;
         int result = 0;
-        double[] actual;
-        double[] expected;
+        double actual;
+        double expected;
         for (int i = 0; i < nodes.size(); i++) {
             if (!validate(nodes.get(i)))
                 continue;
@@ -120,21 +118,17 @@ public class NetUtil {
         return result;
     }
 
-    private boolean inRange(double[] expected, double[] actual) {
+    private boolean inRange(double expected, double actual) {
         double down = 1 - PRECISION;
         double up = 1 + PRECISION;
-        boolean result = true;
-        for (int i = 0; i < expected.length; i++) {
-            if (expected[i] > 0) {
-                result = result && ((down * expected[i]) < actual[i] && (up * expected[i]) > actual[i]);
-            } else {
-                result = result && ((down * expected[i]) > actual[i] && (up * expected[i]) < actual[i]);
-            }
+        if (expected > 0) {
+            return  ((down * expected) < actual && (up * expected) > actual);
+        } else {
+            return  ((down * expected) > actual && (up * expected) < actual);
         }
-        return result;
     }
 
-    public double[] process(String n) {
+    public double process(String n) {
         if (net == null)
             load();
         double[] input = translate(n);

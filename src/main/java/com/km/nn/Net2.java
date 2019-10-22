@@ -18,17 +18,17 @@ class Net2 implements Serializable, Net {
     }
 
     @Override
-    public double[] process(double[] signal) {
+    public double process(double[] signal) {
         front.process(signal);
         middle.process(front.getOutputs());
         back.process(middle.getOutputs());
-        return back.getOutputs();
+        return back.getOutputs()[0];
     }
 
     @Override
-    public void teach(double[] signal, double[] expected) {
-        double[] result = process(signal);
-        double[] backError = new double[]{result[0] - expected[0]};
+    public void teach(double[] signal, double expected) {
+        double result = process(signal);
+        double[] backError = new double[]{result - expected};
         double[] middleError = calculateError(back.getWeights(), backError);
         double[] frontError = calculateError(middle.getWeights(), middleError);
         back.calculateWeightDeltas(backError);
@@ -56,15 +56,5 @@ class Net2 implements Serializable, Net {
     @Override
     public int getSize() {
         return SIZE;
-    }
-
-    public double[] expected(double[] n) {
-        double wins = n[0];
-        double loses = n[1];
-        if (loses > wins) {
-            return new double[]{-(1d - (wins / loses))};
-        } else {
-            return new double[]{1d - (loses / wins)};
-        }
     }
 }

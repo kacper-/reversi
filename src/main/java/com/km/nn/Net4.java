@@ -22,19 +22,19 @@ class Net4 implements Serializable, Net {
     }
 
     @Override
-    public double[] process(double[] signal) {
+    public double process(double[] signal) {
         front.process(signal);
         middle.process(front.getOutputs());
         middle2.process(middle.getOutputs());
         middle3.process(middle2.getOutputs());
         back.process(middle3.getOutputs());
-        return back.getOutputs();
+        return back.getOutputs()[0];
     }
 
     @Override
-    public void teach(double[] signal, double[] expected) {
-        double[] result = process(signal);
-        double[] backError = new double[]{result[0] - expected[0], result[1] - expected[1]};
+    public void teach(double[] signal, double expected) {
+        double result = process(signal);
+        double[] backError = new double[]{result - expected};
         double[] middle3Error = calculateError(back.getWeights(), backError);
         double[] middle2Error = calculateError(middle3.getWeights(), middle3Error);
         double[] middleError = calculateError(middle2.getWeights(), middle2Error);
@@ -68,13 +68,5 @@ class Net4 implements Serializable, Net {
     @Override
     public int getSize() {
         return SIZE;
-    }
-
-    @Override
-    public double[] expected(double[] n) {
-        double wins = n[0];
-        double loses = n[1];
-        double sum = wins + loses;
-        return new double[]{wins / sum, loses / sum};
     }
 }

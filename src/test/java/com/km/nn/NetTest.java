@@ -80,11 +80,11 @@ public class NetTest {
         int t;
         for (int i = 0; i < count; i++) {
             t = new Random().nextInt(test.length);
-            net.teach(test[t], new double[]{result(t)});
+            net.teach(test[t], result(t));
         }
         for (t = 0; t < test.length; t++) {
             double expected = result(t);
-            double actual = net.process(test[t])[0];
+            double actual = net.process(test[t]);
             System.out.println(t + ">" + expected + ">" + actual);
             Assert.assertEquals(expected, actual, Math.abs(expected / TRAIN_ACCURACY));
         }
