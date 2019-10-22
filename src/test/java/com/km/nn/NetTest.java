@@ -75,7 +75,7 @@ public class NetTest {
     @Test
     public void teach() {
         Config.setProperties(new Properties());
-        Net net = new NetUtil(NetVersion.NET2, Config.getEngineANN2file()).createInstance();
+        Net net = new NetUtil(NetVersion.NET2, NetVersion.NET2.name()).createInstance();
         int count = TRAIN_CYCLE * test.length;
         int t;
         for (int i = 0; i < count; i++) {

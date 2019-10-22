@@ -32,11 +32,10 @@ public class Application {
         Logger.important("\nUSAGE : \n");
         Logger.important("---");
         Logger.important("for war mode :");
-        Logger.important("\t\tWAR EngineType EngineType count");
+        Logger.important("\t\tWAR EngineType EngineType");
         Logger.important("for batch mode :");
-        Logger.important("\t\tBATCH count\n");
-        Logger.important("EngineType = [ MC | ANN2 | ANN3 | ANN3RC | ANN4 | ANN4RC | RULE | RANDOM | SUPER3 | SUPER4 ]");
-        Logger.important("count = number of repetitions");
+        Logger.important("\t\tBATCH\n");
+        Logger.important("EngineType = [ MC | ANN3RC | ANN4RC | RULE | RANDOM | SUPER3 | SUPER4 | BATCH ]");
         Logger.important("---\n");
     }
 

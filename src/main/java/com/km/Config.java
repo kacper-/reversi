@@ -32,32 +32,8 @@ public class Config {
     private static int cores = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
     private static int width = 950;
     private static int height = 1000;
-    private static String engineANN2file = "NET2";
-    private static String engineANN3file = "NET3";
-    private static String engineANN4file = "NET4";
     private static String engineANN3RCfile = "ANN3RC";
     private static String engineANN4RCfile = "ANN4RC";
-
-    public static String getEngineANN2file() {
-        if (properties.getProperty("engine.ANN2.file") != null)
-            return properties.getProperty("engine.ANN2.file");
-        else
-            return engineANN2file;
-    }
-
-    public static String getEngineANN3file() {
-        if (properties.getProperty("engine.ANN3.file") != null)
-            return properties.getProperty("engine.ANN3.file");
-        else
-            return engineANN3file;
-    }
-
-    public static String getEngineANN4file() {
-        if (properties.getProperty("engine.ANN4.file") != null)
-            return properties.getProperty("engine.ANN4.file");
-        else
-            return engineANN4file;
-    }
 
     public static String getEngineANN3RCfile() {
         if (properties.getProperty("engine.ANN3RC.file") != null)

@@ -20,21 +20,6 @@ public class ConfigTest {
     }
 
     @Test
-    public void getEngineANN2file() {
-        Assert.assertEquals("ANN2", Config.getEngineANN2file());
-    }
-
-    @Test
-    public void getEngineANN3file() {
-        Assert.assertEquals("ANN3", Config.getEngineANN3file());
-    }
-
-    @Test
-    public void getEngineANN4file() {
-        Assert.assertEquals("ANN4", Config.getEngineANN4file());
-    }
-
-    @Test
     public void getEngineANN3RCfile() {
         Assert.assertEquals("ANN3RC", Config.getEngineANN3RCfile());
     }

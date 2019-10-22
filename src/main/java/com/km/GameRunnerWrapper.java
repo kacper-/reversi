@@ -16,10 +16,10 @@ class GameRunnerWrapper {
                 case WAR:
                     warOpp1 = EngineType.valueOf(args[1].toUpperCase());
                     warOpp2 = EngineType.valueOf(args[2].toUpperCase());
-                    count = Integer.parseInt(args[3]);
+                    count = Config.getTestLen();
                     break;
                 case BATCH:
-                    count = Integer.parseInt(args[1]);
+                    count = Config.getCycleCount();
                     break;
             }
             return true;
