@@ -18,7 +18,7 @@ class Net4 implements Serializable, Net {
         middle = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
         middle2 = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
         middle3 = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
-        back = new Layer(2, SIZE, Config.getNet4LearningFactor());
+        back = new Layer(1, SIZE, Config.getNet4LearningFactor());
     }
 
     @Override
