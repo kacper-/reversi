@@ -58,13 +58,14 @@ public class GameRunner {
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
             for (int i = 0; i < cycleCount; i++) {
-                Logger.important(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
+                Logger.info(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int acc = runTrainingCycle();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc, wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
+                Logger.important(String.format("%d,%d,%d", i + 1, wins, acc));
             }
             Logger.setDefaultLevel();
             Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
@@ -104,7 +105,7 @@ public class GameRunner {
             notifyOnWarScore(i + 1, warScoreB, warScoreW);
             Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }
-        Logger.important(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+        Logger.info(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         warFinished = true;
         return Math.max(warScoreB, warScoreW);
     }

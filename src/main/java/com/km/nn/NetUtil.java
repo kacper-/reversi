@@ -95,7 +95,7 @@ public class NetUtil {
             train(nodes.get(new Random().nextInt(count)));
         }
         int result = verify(nodes);
-        Logger.important(String.format("net\ttraining accuracy : [%.2f] -> [%d %%] after [%d] iterations", PRECISION, result, trainCount));
+        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%] after [%d] iterations", PRECISION, result, trainCount));
         save();
         return result;
     }
