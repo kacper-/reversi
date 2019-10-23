@@ -216,7 +216,7 @@ public class Config {
     public static void setProperties(Properties properties) {
         Config.properties = properties;
         for (Object o : properties.keySet()) {
-            Logger.important(String.format("app\tkey=[%s] value=[%s]", o.toString(), properties.getProperty(o.toString())));
+            Logger.trace(String.format("app\tkey=[%s] value=[%s]", o.toString(), properties.getProperty(o.toString())));
         }
     }
 }

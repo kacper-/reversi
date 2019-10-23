@@ -57,6 +57,6 @@ public class Application {
             System.exit(0);
         }
         Config.setProperties(properties);
-        Logger.important(String.format("app\tconfig loaded from [%s]", configFile));
+        Logger.trace(String.format("app\tconfig loaded from [%s]", configFile));
     }
 }
