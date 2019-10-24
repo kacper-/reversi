@@ -58,6 +58,7 @@ public class GameRunner {
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
             for (int i = 0; i < cycleCount; i++) {
+                long start = new Date().getTime();
                 Logger.info(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int acc = runTrainingCycle();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
@@ -65,7 +66,8 @@ public class GameRunner {
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
-                Logger.important(String.format("%d,%d,%d", i + 1, wins, acc));
+                long stop = new Date().getTime();
+                Logger.important(String.format("%d,%d,%d,%d", i + 1, wins, acc, (stop - start) / 1000));
             }
             Logger.setDefaultLevel();
             Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
