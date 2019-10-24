@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 class NodesRepo {
-    private static int id = -1;
-    private static Map<String, Nodes> map = new HashMap<>();
-    private static List<Nodes> list = new ArrayList<>();
+    private static volatile int id = -1;
+    private static volatile Map<String, Nodes> map = new HashMap<>();
+    private static volatile List<Nodes> list = new ArrayList<>();
 
     static List<Nodes> getNodes() {
         return list;

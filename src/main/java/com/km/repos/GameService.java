@@ -9,8 +9,6 @@ import com.km.game.HistoryItem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.Consumer;
 
 public class GameService {
 
@@ -39,7 +37,7 @@ public class GameService {
         Logger.trace("db\thistoryBlack saved");
     }
 
-    private static synchronized void updateHistory(List<HistoryItem> history, int wins, int loses) {
+    private static void updateHistory(List<HistoryItem> history, int wins, int loses) {
         for (HistoryItem historyItem : history) {
             addGameNode(historyItem, wins, loses);
         }

@@ -2,13 +2,12 @@ package com.km;
 
 import com.km.nn.NetVersion;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
 public class ConfigTest {
 
@@ -80,11 +79,6 @@ public class ConfigTest {
     }
 
     @Test
-    public void getSimTime() {
-        Assert.assertEquals(Config.getSimTime(), 60);
-    }
-
-    @Test
     public void getSimCountL1() {
         Assert.assertEquals(Config.getSimCountL1(), 21);
     }
@@ -117,16 +111,6 @@ public class ConfigTest {
     @Test
     public void getSimL4() {
         Assert.assertEquals(Config.getSimL4(), 14);
-    }
-
-    @Test
-    public void getSimHb() {
-        Assert.assertEquals(Config.getSimHb(), 44);
-    }
-
-    @Test
-    public void getCores() {
-        Assert.assertEquals(Config.getCores(), 6);
     }
 
     @Test

@@ -20,7 +20,6 @@ public class Config {
     private static double net4LearningFactor = 0.001d;
     private static NetVersion batchNetVersion = NetVersion.NET4;
     private static String batchNetFile = "BATCH";
-    private static long simTime = 1000;
     private static int simCountL1 = 10000;
     private static int simCountL2 = 2500;
     private static int simCountL3 = 200;
@@ -28,8 +27,6 @@ public class Config {
     private static int simL2 = 53;
     private static int simL3 = 57;
     private static int simL4 = 60;
-    private static int simHb = 100;
-    private static int cores = Runtime.getRuntime().availableProcessors() < 3 ? 1 : Runtime.getRuntime().availableProcessors() - 2;
     private static int width = 950;
     private static int height = 1000;
     private static String engineANN3RCfile = "ANN3RC";
@@ -129,13 +126,6 @@ public class Config {
             return batchNetFile;
     }
 
-    public static long getSimTime() {
-        if (properties.getProperty("sim.time") != null)
-            return Integer.parseInt(properties.getProperty("sim.time"));
-        else
-            return simTime;
-    }
-
     public static int getSimCountL1() {
         if (properties.getProperty("sim.count.l1") != null)
             return Integer.parseInt(properties.getProperty("sim.count.l1"));
@@ -183,20 +173,6 @@ public class Config {
             return Integer.parseInt(properties.getProperty("sim.l4"));
         else
             return simL4;
-    }
-
-    public static int getSimHb() {
-        if (properties.getProperty("sim.hb") != null)
-            return Integer.parseInt(properties.getProperty("sim.hb"));
-        else
-            return simHb;
-    }
-
-    public static int getCores() {
-        if (properties.getProperty("cores") != null)
-            return Integer.parseInt(properties.getProperty("cores"));
-        else
-            return cores;
     }
 
     public static int getWidth() {

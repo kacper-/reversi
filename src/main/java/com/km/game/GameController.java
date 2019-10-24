@@ -165,14 +165,18 @@ public class GameController {
         boolean finished = GameRules.isGameFinished(gameBoard);
         if (finished && !gameSaved) {
             gameSaved = true;
-            Score score = getScore();
-            GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
-            printStats(score);
+            printStats();
         }
         return finished;
     }
 
-    private void printStats(Score score) {
+    public void updateRepos() {
+        Score score = getScore();
+        GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
+    }
+
+    private void printStats() {
+        Score score = getScore();
         Logger.info(String.format("game\tfinished BLACK = [%d] WHITE = [%d]", score.getBlack(), score.getWhite()));
         GameService.printStats();
     }

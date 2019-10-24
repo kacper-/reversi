@@ -9,7 +9,6 @@ import com.km.repos.GameService;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
@@ -92,7 +91,7 @@ public class NetUtil {
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         int count = nodes.size();
         for (int i = 0; i < count; i++) {
-            train(nodes.get(new Random().nextInt(count)));
+            train(nodes.get(i));
         }
         int result = verify(nodes);
         Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%] after [%d] iterations", PRECISION, result, trainCount));
@@ -122,9 +121,9 @@ public class NetUtil {
         double down = 1 - PRECISION;
         double up = 1 + PRECISION;
         if (expected > 0) {
-            return  ((down * expected) < actual && (up * expected) > actual);
+            return ((down * expected) < actual && (up * expected) > actual);
         } else {
-            return  ((down * expected) > actual && (up * expected) < actual);
+            return ((down * expected) > actual && (up * expected) < actual);
         }
     }
 

@@ -20,11 +20,11 @@ public class TreeSearchEngine implements MoveEngine {
     private int wins = 0;
     private int loses = 0;
     private GameController controller;
+    private GameController[] sims;
 
     @Override
     public void setGameController(GameController controller) {
         this.controller = controller;
-        Logger.debug(String.format("algo\tpreparing for [%d] cores", Config.getCores()));
     }
 
     public Move chooseMove(Set<Move> moves) {
@@ -48,55 +48,60 @@ public class TreeSearchEngine implements MoveEngine {
         simCount = 1;
         wins = 0;
         loses = 0;
-        long start = new Date().getTime();
-        while (continueSim(start, simCount)) {
-            Logger.setOff();
+        Logger.setOff();
+        try {
             startSimulationPool();
-            Logger.setOn();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        for (GameController c : sims)
+            c.updateRepos();
+        Logger.setOn();
         Logger.trace(String.format("algo\t[%d] simulations with result = [%d, %d] success ratio = [%.2f]", simCount - 1, wins, loses, ((float) wins) / (float) (loses + wins)));
     }
 
-    private void startSimulationPool() {
-        ExecutorService executor = Executors.newFixedThreadPool(Config.getCores());
-        int taskCount = Config.getCores() * Config.getSimHb();
+    private void startSimulationPool() throws InterruptedException {
+        ExecutorService executor = Executors.newWorkStealingPool();
+        int taskCount = getTaskCount();
+        sims = new GameController[taskCount];
         for (int i = 0; i < taskCount; i++) {
-            executor.execute(this::startSingleSimulation);
+            GameController simController = new GameController();
+            sims[i] = simController;
+            executor.execute(() -> startSingleSimulation(simController));
         }
         executor.shutdown();
-        while (!executor.isTerminated()) ;
+        while (!executor.isTerminated())
+            Thread.sleep(50);
     }
 
-    private void startSingleSimulation() {
-        GameController simController = new GameController();
+    private int getTaskCount() {
+        Score s = controller.getScore();
+        int gameProgress = s.getBlack() + s.getWhite();
+        if (gameProgress > Config.getSimL4())
+            return Config.getSimCountL4();
+        if (gameProgress > Config.getSimL3())
+            return Config.getSimCountL3();
+        if (gameProgress > Config.getSimL2())
+            return Config.getSimCountL2();
+        return Config.getSimCountL1();
+    }
+
+    private void startSingleSimulation(GameController simController) {
         simController.prepareSimulationGame(controller, EngineType.MC);
         while (!simController.isFinished()) {
             simController.makeMove();
         }
-        updateSimResults(simController.getScore());
+        updateSimResults(simController);
     }
 
-    private void updateSimResults(Score s) {
+    private void updateSimResults(GameController simController) {
+        Score s = simController.getScore();
         if (s.getWinner() == controller.getGameBoard().getTurn())
             wins++;
         else
             loses++;
         simCount++;
     }
-
-    private boolean continueSim(long start, int count) {
-        long stop = new Date().getTime();
-        if (count > Config.getSimCountL1() || (stop - start) > Config.getSimTime())
-            return false;
-        Score s = controller.getScore();
-        int gameProgress = s.getBlack() + s.getWhite();
-        if (gameProgress > Config.getSimL2() && count > Config.getSimCountL2())
-            return false;
-        if (gameProgress > Config.getSimL3() && count > Config.getSimCountL3())
-            return false;
-        return !(gameProgress > Config.getSimL4() && count > Config.getSimCountL4());
-    }
-
 
     private Move evaluateSimulations(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {
         Pair<Move, Integer> best = simulations.keySet().iterator().next();
