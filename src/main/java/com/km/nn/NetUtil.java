@@ -92,7 +92,7 @@ public class NetUtil {
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         int count = nodes.size();
         for (int i = 0; i < count; i++) {
-            train(nodes.get(new Random().nextInt(count)));
+            train(nodes.get(i));
         }
         int result = verify(nodes);
         Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%] after [%d] iterations", PRECISION, result, trainCount));
