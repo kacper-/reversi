@@ -15,6 +15,7 @@ public class Config {
     private static int testLen = 100;
     private static int cycleCount = 300;
     private static int simCount = 12;
+    private static int simDiff = 1;
     private static double net2LearningFactor = 0.01d;
     private static double net3LearningFactor = 0.001d;
     private static double net4LearningFactor = 0.001d;
@@ -31,6 +32,7 @@ public class Config {
     private static int height = 1000;
     private static String engineANN3RCfile = "ANN3RC";
     private static String engineANN4RCfile = "ANN4RC";
+    private static Properties properties;
 
     public static String getEngineANN3RCfile() {
         if (properties.getProperty("engine.ANN3RC.file") != null)
@@ -45,8 +47,6 @@ public class Config {
         else
             return engineANN4RCfile;
     }
-
-    private static Properties properties;
 
     public static String getFileName() {
         return fileName;
@@ -89,6 +89,13 @@ public class Config {
             return Integer.parseInt(properties.getProperty("sim.count"));
         else
             return simCount;
+    }
+
+    public static int getSimDiff() {
+        if (properties.getProperty("sim.diff") != null)
+            return Integer.parseInt(properties.getProperty("sim.diff"));
+        else
+            return simDiff;
     }
 
     public static double getNet2LearningFactor() {

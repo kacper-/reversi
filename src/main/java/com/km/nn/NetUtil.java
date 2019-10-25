@@ -9,7 +9,6 @@ import com.km.repos.GameService;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
@@ -82,7 +81,7 @@ public class NetUtil {
     }
 
     private boolean validate(Nodes n) {
-        return (n.getLoses() + n.getWins()) >= Config.getSimCount();
+        return (n.getLoses() + n.getWins()) >= Config.getSimCount() && Math.abs(n.getLoses() - n.getWins()) > Config.getSimDiff();
     }
 
     public int runTraining() {

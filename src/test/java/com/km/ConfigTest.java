@@ -54,6 +54,11 @@ public class ConfigTest {
     }
 
     @Test
+    public void getSimDiff() {
+        Assert.assertEquals(Config.getSimDiff(), 1);
+    }
+
+    @Test
     public void getNet2LearningFactor() {
         Assert.assertEquals(Config.getNet2LearningFactor(), 0.02, 0.001);
     }
