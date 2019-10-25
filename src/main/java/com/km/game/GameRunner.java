@@ -84,9 +84,9 @@ public class GameRunner {
 
     private int runTrainingCycle() {
         if (new Random().nextBoolean())
-            runWar(EngineType.MC, EngineType.RANDOM);
+            runWar(EngineType.MC, EngineType.BATCH);
         else
-            runWar(EngineType.RANDOM, EngineType.MC);
+            runWar(EngineType.BATCH, EngineType.MC);
         return netUtil.runTraining();
     }
 
