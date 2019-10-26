@@ -1,5 +1,6 @@
 package com.km;
 
+import com.km.engine.EngineType;
 import com.km.nn.NetVersion;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -14,7 +15,7 @@ public class ConfigTest {
     @BeforeClass
     public static void setUp() throws Exception {
         Properties properties = new Properties();
-        properties.load(ConfigTest.class.getClassLoader().getResourceAsStream(Config.getFileName()));
+        properties.load(ConfigTest.class.getClassLoader().getResourceAsStream(Config.FILE_NAME));
         Config.setProperties(properties);
     }
 
@@ -35,17 +36,17 @@ public class ConfigTest {
 
     @Test
     public void getLevel() {
-        assertSame(Config.getLevel(), LogLevel.ERROR);
+        assertSame(Config.getLevel(), LogLevel.INFO);
     }
 
     @Test
     public void getTestLen() {
-        Assert.assertEquals(Config.getTestLen(), 111);
+        Assert.assertEquals(Config.getTestLen(), 100);
     }
 
     @Test
     public void getCycleCount() {
-        Assert.assertEquals(Config.getCycleCount(), 222);
+        Assert.assertEquals(Config.getCycleCount(), 1000);
     }
 
     @Test
@@ -55,22 +56,22 @@ public class ConfigTest {
 
     @Test
     public void getSimDiff() {
-        Assert.assertEquals(Config.getSimDiff(), 1);
+        Assert.assertEquals(Config.getSimDiff(), 0);
     }
 
     @Test
     public void getNet2LearningFactor() {
-        Assert.assertEquals(Config.getNet2LearningFactor(), 0.02, 0.001);
+        Assert.assertEquals(Config.getNet2LearningFactor(), 0.01, 0.001);
     }
 
     @Test
     public void getNet3LearningFactor() {
-        Assert.assertEquals(Config.getNet3LearningFactor(), 0.03, 0.001);
+        Assert.assertEquals(Config.getNet3LearningFactor(), 0.001, 0.0001);
     }
 
     @Test
     public void getNet4LearningFactor() {
-        Assert.assertEquals(Config.getNet4LearningFactor(), 0.04, 0.001);
+        Assert.assertEquals(Config.getNet4LearningFactor(), 0.0007, 0.0001);
     }
 
     @Test
@@ -79,8 +80,16 @@ public class ConfigTest {
     }
 
     @Test
+    public void getBatchTrainEngines() {
+        EngineType[] engineTypes = Config.getBatchTrainEngines();
+        Assert.assertEquals(2, engineTypes.length);
+        Assert.assertEquals(EngineType.RANDOM, engineTypes[0]);
+        Assert.assertEquals(EngineType.BATCH, engineTypes[1]);
+    }
+
+    @Test
     public void getBatchNetFile() {
-        Assert.assertEquals(Config.getBatchNetFile(), "BF");
+        Assert.assertEquals(Config.getBatchNetFile(), "BATCH");
     }
 
     @Test
@@ -89,47 +98,47 @@ public class ConfigTest {
     }
 
     @Test
+    public void getSimCountL0() {
+        Assert.assertEquals(Config.getSimCountL0(), 200);
+    }
+
+    @Test
     public void getSimCountL1() {
-        Assert.assertEquals(Config.getSimCountL1(), 21);
+        Assert.assertEquals(Config.getSimCountL1(), 300);
     }
 
     @Test
     public void getSimCountL2() {
-        Assert.assertEquals(Config.getSimCountL2(), 22);
+        Assert.assertEquals(Config.getSimCountL2(), 400);
     }
 
     @Test
     public void getSimCountL3() {
-        Assert.assertEquals(Config.getSimCountL3(), 23);
+        Assert.assertEquals(Config.getSimCountL3(), 600);
     }
 
     @Test
     public void getSimCountL4() {
-        Assert.assertEquals(Config.getSimCountL4(), 24);
+        Assert.assertEquals(Config.getSimCountL4(), 600);
     }
 
     @Test
-    public void getSimL2() {
-        Assert.assertEquals(Config.getSimL2(), 12);
+    public void getSimCountL5() {
+        Assert.assertEquals(Config.getSimCountL5(), 400);
     }
 
     @Test
-    public void getSimL3() {
-        Assert.assertEquals(Config.getSimL3(), 13);
-    }
-
-    @Test
-    public void getSimL4() {
-        Assert.assertEquals(Config.getSimL4(), 14);
+    public void getSimCountL6() {
+        Assert.assertEquals(Config.getSimCountL6(), 15);
     }
 
     @Test
     public void getWidth() {
-        Assert.assertEquals(Config.getWidth(), 10);
+        Assert.assertEquals(Config.getWidth(), 950);
     }
 
     @Test
     public void getHeight() {
-        Assert.assertEquals(Config.getHeight(), 20);
+        Assert.assertEquals(Config.getHeight(), 1000);
     }
 }

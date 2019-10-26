@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class Application {
     public static void main(String... args) {
-        String configFile = Config.getFilePath() + Config.getFileName();
+        String configFile = Config.FILE_PATH + Config.FILE_NAME;
         loadConfig(configFile);
         if (Config.isHeadless())
             runHeadless(args);

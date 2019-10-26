@@ -28,8 +28,19 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     public Move chooseMove(Set<Move> moves) {
-        if (!controller.isSimulation())
+        if (!controller.isSimulation()) {
+            long start = new Date().getTime();
             runSimulations();
+            Move m = moveLogic(moves);
+            long stop = new Date().getTime();
+            Score s = controller.getScore();
+            Logger.info(String.format("algo\tprogress = [%d], task count = [%d], sim time = [%d] ms", s.getBlack() + s.getWhite(), getTaskCount(), stop - start));
+            return m;
+        }
+        return moveLogic(moves);
+    }
+
+    private Move moveLogic(Set<Move> moves) {
         HistoryItem parent = HistoryItem.fromGB(controller.getGameBoard());
         Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = GameService.findSimulations(parent.getBoard());
         if (simulations.isEmpty()) {
@@ -76,14 +87,24 @@ public class TreeSearchEngine implements MoveEngine {
 
     private int getTaskCount() {
         Score s = controller.getScore();
-        int gameProgress = s.getBlack() + s.getWhite();
-        if (gameProgress > Config.getSimL4())
-            return Config.getSimCountL4();
-        if (gameProgress > Config.getSimL3())
-            return Config.getSimCountL3();
-        if (gameProgress > Config.getSimL2())
-            return Config.getSimCountL2();
-        return Config.getSimCountL1();
+        int gameProgress = (s.getBlack() + s.getWhite()) / 10;
+        switch (gameProgress) {
+            case 0:
+                return Config.getSimCountL0();
+            case 1:
+                return Config.getSimCountL1();
+            case 2:
+                return Config.getSimCountL2();
+            case 3:
+                return Config.getSimCountL3();
+            case 4:
+                return Config.getSimCountL4();
+            case 5:
+                return Config.getSimCountL5();
+            case 6:
+                return Config.getSimCountL6();
+        }
+        return 0;
     }
 
     private void startSingleSimulation(GameController simController) {

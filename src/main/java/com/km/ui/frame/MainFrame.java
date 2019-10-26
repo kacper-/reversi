@@ -1,15 +1,11 @@
 package com.km.ui.frame;
 
 import com.km.Config;
-import com.km.LogLevel;
 import com.km.engine.EngineType;
-import com.km.engine.TreeSearchEngine;
 import com.km.game.GameRunner;
 import com.km.game.Score;
 import com.km.game.ScoreListener;
 import com.km.game.Slot;
-import com.km.nn.NetUtil;
-import com.km.nn.NetVersion;
 import com.km.ui.board.Board;
 import com.km.ui.draw.DrawArea;
 
@@ -115,7 +111,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
         typeB.setSelectedItem(EngineType.ANN3RC);
         typeB.setEditable(false);
-        JTextField count = new JTextField("1000");
+        JTextField count = new JTextField(String.valueOf(Config.getTestLen()));
         newGameWar.addActionListener(click -> {
             board.startWarGame(EngineType.valueOf(typeB.getSelectedItem().toString()), EngineType.valueOf(typeW.getSelectedItem().toString()), Integer.parseInt(count.getText()));
         });

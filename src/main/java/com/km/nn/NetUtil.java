@@ -19,7 +19,7 @@ public class NetUtil {
 
     public NetUtil(NetVersion version, String name) {
         this.version = version;
-        this.fileName = Config.getFilePath() + name;
+        this.fileName = Config.FILE_PATH + name;
     }
 
     public void clear() {

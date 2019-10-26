@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar target/reversi-1.0-SNAPSHOT.jar "/home/kacper/repo/reversi/"
+nohup java -Xmx2G -jar target/reversi-0.9.jar batch > result.log &

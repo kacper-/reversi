@@ -1,7 +1,9 @@
 package com.km.nn;
 
 import com.km.Config;
+import com.km.ConfigTest;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -72,9 +74,15 @@ public class NetTest {
     };
     private double[][] test = new double[][]{tA, tB, tC, tD, tE, tF};
 
+    @BeforeClass
+    public static void setUp() throws Exception {
+        Properties properties = new Properties();
+        properties.load(NetTest.class.getClassLoader().getResourceAsStream(Config.FILE_NAME));
+        Config.setProperties(properties);
+    }
+
     @Test
     public void teach() {
-        Config.setProperties(new Properties());
         Net net = new NetUtil(NetVersion.NET2, NetVersion.NET2.name()).createInstance();
         int count = TRAIN_CYCLE * test.length;
         int t;

@@ -83,20 +83,12 @@ public class GameRunner {
     }
 
     private int runTrainingCycle() {
-        switch (new Random().nextInt(4)) {
-            case 0:
-                runWar(EngineType.MC, EngineType.BATCH);
-                break;
-            case 1:
-                runWar(EngineType.BATCH, EngineType.MC);
-                break;
-            case 2:
-                runWar(EngineType.MC, EngineType.RANDOM);
-                break;
-            case 3:
-                runWar(EngineType.RANDOM, EngineType.MC);
-                break;
-        }
+        EngineType[] engineTypes = Config.getBatchTrainEngines();
+        EngineType opp = engineTypes[new Random().nextInt(engineTypes.length)];
+        if (new Random().nextBoolean())
+            runWar(EngineType.MC, opp);
+        else
+            runWar(opp, EngineType.MC);
         return netUtil.runTraining();
     }
 
