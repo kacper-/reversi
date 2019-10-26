@@ -21,6 +21,7 @@ public class Config {
     private static double net4LearningFactor = 0.001d;
     private static NetVersion batchNetVersion = NetVersion.NET4;
     private static String batchNetFile = "BATCH";
+    private static boolean clear = false;
     private static int simCountL1 = 10000;
     private static int simCountL2 = 2500;
     private static int simCountL3 = 200;
@@ -131,6 +132,13 @@ public class Config {
             return properties.getProperty("batch.net.file");
         else
             return batchNetFile;
+    }
+
+    public static boolean isBatchClear() {
+        if (properties.getProperty("batch.clear") != null)
+            return Boolean.parseBoolean(properties.getProperty("batch.clear"));
+        else
+            return clear;
     }
 
     public static int getSimCountL1() {

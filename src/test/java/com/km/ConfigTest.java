@@ -84,6 +84,11 @@ public class ConfigTest {
     }
 
     @Test
+    public void isBatchClear() {
+        Assert.assertFalse(Config.isBatchClear());
+    }
+
+    @Test
     public void getSimCountL1() {
         Assert.assertEquals(Config.getSimCountL1(), 21);
     }

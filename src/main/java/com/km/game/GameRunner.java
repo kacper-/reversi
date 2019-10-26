@@ -5,7 +5,6 @@ import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.nn.NetUtil;
-import com.km.nn.NetVersion;
 
 import java.util.*;
 
@@ -50,7 +49,8 @@ public class GameRunner {
     public void startBatchTrain(int cycleCount) {
         batchFinished = false;
         netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile());
-        netUtil.clear();
+        if (Config.isBatchClear())
+            netUtil.clear();
         new Thread(() -> {
             progress = new ArrayList<>();
             clearHistogram();
