@@ -2,6 +2,7 @@ package com.km.nn;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Layer implements Serializable {
     private final static double WEIGHT_INIT_LIMIT = 0.05d;
@@ -84,7 +85,10 @@ public class Layer implements Serializable {
         for (int n = 0; n < neuronCount; n++) {
             f1Val = f1(combinedSignal(n));
             for (int w = 0; w < weightCount; w++) {
-                weightDeltas[n][w] = learningFactor * outputDiff[n] * f1Val * inputs[w];
+                if (ThreadLocalRandom.current().nextBoolean())
+                    weightDeltas[n][w] = learningFactor * outputDiff[n] * f1Val * inputs[w];
+                else
+                    weightDeltas[n][w] = 0d;
             }
         }
     }
@@ -92,7 +96,7 @@ public class Layer implements Serializable {
     void applyWeightDeltas() {
         for (int n = 0; n < neuronCount; n++) {
             for (int w = 0; w < weightCount; w++) {
-                weights[n][w] -= weightDeltas[n][w] * new Random().nextDouble();
+                weights[n][w] -= weightDeltas[n][w];
                 weightDeltas[n][w] = 0d;
             }
         }
