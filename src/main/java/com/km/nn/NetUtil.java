@@ -83,7 +83,10 @@ public class NetUtil {
     }
 
     private boolean validate(Nodes n) {
-        return (n.getLoses() + n.getWins()) >= Config.getSimCount() && Math.abs(n.getLoses() - n.getWins()) > Config.getSimDiff();
+        int sum = n.getLoses() + n.getWins();
+        if (sum == net.getSize())
+            return false;
+        return sum >= Config.getSimCount() && Math.abs(n.getLoses() - n.getWins()) > Config.getSimDiff();
     }
 
     public int runTraining() {

@@ -8,7 +8,7 @@ public class Net3M implements Serializable, Net {
     private Net3[] net = new Net3[SIZE + 1];
 
     Net3M() {
-        for (int i = 0; i < SIZE; i++)
+        for (int i = 0; i <= SIZE; i++)
             net[i] = new Net3();
     }
 
