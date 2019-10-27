@@ -34,6 +34,8 @@ public class NetUtil {
                 return new Net2();
             case NET3:
                 return new Net3();
+            case NET3M:
+                return new Net3M();
             case NET4:
                 return new Net4();
         }
