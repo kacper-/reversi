@@ -21,7 +21,7 @@ public class GameRunnerTest {
     @Test
     public void startWarGame() {
         GameRunner runner = new GameRunner();
-        runner.startWarGame(EngineType.RANDOM, EngineType.RULE, 100);
+        runner.startWarGame(EngineType.RANDOM, EngineType.RULE, 10);
         while (!runner.isWarFinished());
     }
 }
