@@ -3,7 +3,7 @@ package com.km.engine;
 import com.km.Config;
 import com.km.game.GameController;
 import com.km.nn.NetVersion;
-
+// TODO add SUPER3M with NET3M net and ANN3MRC with NET3M
 public class EngineFactory {
     public static MoveEngine createMoveEngine(GameController controller, EngineType type) {
         MoveEngine engine = null;
