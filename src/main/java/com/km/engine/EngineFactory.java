@@ -23,6 +23,9 @@ public class EngineFactory {
             case SUPER3:
                 engine = new SuperEngine(NetVersion.NET3);
                 break;
+            case SUPER3M:
+                engine = new SuperEngine(NetVersion.NET3M);
+                break;
             case SUPER4:
                 engine = new SuperEngine(NetVersion.NET4);
                 break;
