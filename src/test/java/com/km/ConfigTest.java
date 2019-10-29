@@ -20,6 +20,11 @@ public class ConfigTest {
     }
 
     @Test
+    public void getEngineANN3MRCfile() {
+        Assert.assertEquals("ANN3MRC", Config.getEngineANN3MRCfile());
+    }
+
+    @Test
     public void getEngineANN3RCfile() {
         Assert.assertEquals("ANN3RC", Config.getEngineANN3RCfile());
     }

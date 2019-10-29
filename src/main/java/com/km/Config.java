@@ -6,7 +6,7 @@ import com.km.nn.NetVersion;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Properties;
-// TODO add support for ANN3MRC
+
 public class Config {
     public static final String VERSION = "0.9";
     public static final String FILE_NAME = "reversi.conf";
@@ -16,6 +16,13 @@ public class Config {
     public static String getEngineANN3RCfile() {
         if (properties.getProperty("engine.ANN3RC.file") != null)
             return properties.getProperty("engine.ANN3RC.file");
+        else
+            throw new IllegalArgumentException();
+    }
+
+    public static String getEngineANN3MRCfile() {
+        if (properties.getProperty("engine.ANN3MRC.file") != null)
+            return properties.getProperty("engine.ANN3MRC.file");
         else
             throw new IllegalArgumentException();
     }
