@@ -1,5 +1,9 @@
 package com.km.nn;
 
+import com.km.nn.ac.AC;
+import com.km.nn.ac.ACFactory;
+import com.km.nn.ac.ACType;
+
 import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,8 +17,10 @@ public class Layer implements Serializable {
     private int neuronCount;
     private int weightCount;
     private double learningFactor;
+    private AC ac;
 
     Layer(int neuronCount, int weightCount, double learningFactor) {
+        ac = ACFactory.createInstance(ACType.SOFT_SIGN);
         this.learningFactor = learningFactor;
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;
@@ -56,7 +62,7 @@ public class Layer implements Serializable {
         saveInputs(signal);
         for (int n = 0; n < neuronCount; n++) {
             outputs[n] = 0;
-            outputs[n] = f(combinedSignal(n));
+            outputs[n] = ac.f(combinedSignal(n));
         }
     }
 
@@ -72,18 +78,10 @@ public class Layer implements Serializable {
         System.arraycopy(signal, 0, inputs, 0, weightCount);
     }
 
-    private double f(double x) {
-        return x / (1 + Math.abs(x));
-    }
-
-    private double f1(double x) {
-        return 1 / Math.pow(1 + Math.abs(x), 2);
-    }
-
     void calculateWeightDeltas(double[] outputDiff) {
         double f1Val;
         for (int n = 0; n < neuronCount; n++) {
-            f1Val = f1(combinedSignal(n));
+            f1Val = ac.f1(combinedSignal(n));
             for (int w = 0; w < weightCount; w++) {
                 if (ThreadLocalRandom.current().nextBoolean())
                     weightDeltas[n][w] = learningFactor * outputDiff[n] * f1Val * inputs[w];
