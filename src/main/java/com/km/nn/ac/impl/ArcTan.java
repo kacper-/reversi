@@ -2,12 +2,13 @@ package com.km.nn.ac.impl;
 
 import com.km.nn.ac.AC;
 
-public class SoftSign implements AC {
+public class ArcTan implements AC {
     public double f(double x) {
-        return x / (1d + Math.abs(x));
+        return Math.atan(x);
     }
 
     public double f1(double x) {
-        return 1d / Math.pow(1d + Math.abs(x), 2);
+        return 1d / ((x * x) + 1d);
     }
+
 }
