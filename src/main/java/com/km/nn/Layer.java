@@ -2,13 +2,12 @@ package com.km.nn;
 
 import com.km.nn.ac.AC;
 import com.km.nn.ac.ACFactory;
-import com.km.nn.ac.ACType;
 
 import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Layer implements Serializable {
+class Layer implements Serializable {
     private final static double WEIGHT_INIT_LIMIT = 0.05d;
     private double[][] weights;
     private double[][] weightDeltas;
@@ -20,7 +19,7 @@ public class Layer implements Serializable {
     private AC ac;
 
     Layer(int neuronCount, int weightCount, double learningFactor) {
-        ac = ACFactory.createInstance(ACType.SOFT_SIGN);
+        ac = ACFactory.createInstance();
         this.learningFactor = learningFactor;
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;

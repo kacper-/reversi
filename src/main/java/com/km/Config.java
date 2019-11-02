@@ -2,6 +2,7 @@ package com.km;
 
 import com.km.engine.EngineType;
 import com.km.nn.NetVersion;
+import com.km.nn.ac.ACType;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -93,6 +94,13 @@ public class Config {
     public static double getNet4LearningFactor() {
         if (properties.getProperty("net4.learningfactor") != null)
             return Double.parseDouble(properties.getProperty("net4.learningfactor"));
+        else
+            throw new IllegalArgumentException();
+    }
+
+    public static ACType getNetActivationFunction() {
+        if (properties.getProperty("net.activation") != null)
+            return ACType.valueOf(properties.getProperty("net.activation"));
         else
             throw new IllegalArgumentException();
     }

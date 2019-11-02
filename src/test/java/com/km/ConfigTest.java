@@ -2,6 +2,7 @@ package com.km;
 
 import com.km.engine.EngineType;
 import com.km.nn.NetVersion;
+import com.km.nn.ac.ACType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,6 +18,11 @@ public class ConfigTest {
         Properties properties = new Properties();
         properties.load(ConfigTest.class.getClassLoader().getResourceAsStream(Config.FILE_NAME));
         Config.setProperties(properties);
+    }
+
+    @Test
+    public void getNetActivationFunction() {
+        Assert.assertEquals(ACType.SOFT_SIGN, Config.getNetActivationFunction());
     }
 
     @Test
