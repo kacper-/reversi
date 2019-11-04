@@ -2,10 +2,11 @@ package com.km.nn;
 
 import com.km.nn.ac.AC;
 import com.km.nn.ac.ACFactory;
+import com.km.nn.dropout.DropOut;
+import com.km.nn.dropout.DropOutFactory;
 
 import java.io.Serializable;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 class Layer implements Serializable {
     private final static double WEIGHT_INIT_LIMIT = 0.05d;
@@ -17,9 +18,11 @@ class Layer implements Serializable {
     private int weightCount;
     private double learningFactor;
     private AC ac;
+    private DropOut dropOut;
 
     Layer(int neuronCount, int weightCount, double learningFactor) {
         ac = ACFactory.createInstance();
+        dropOut = DropOutFactory.createInstance();
         this.learningFactor = learningFactor;
         this.neuronCount = neuronCount;
         this.weightCount = weightCount;
@@ -82,10 +85,7 @@ class Layer implements Serializable {
         for (int n = 0; n < neuronCount; n++) {
             f1Val = ac.f1(combinedSignal(n));
             for (int w = 0; w < weightCount; w++) {
-                if (ThreadLocalRandom.current().nextBoolean())
-                    weightDeltas[n][w] = learningFactor * outputDiff[n] * f1Val * inputs[w];
-                else
-                    weightDeltas[n][w] = 0d;
+                weightDeltas[n][w] = dropOut.apply(learningFactor * outputDiff[n] * f1Val * inputs[w]);
             }
         }
     }
