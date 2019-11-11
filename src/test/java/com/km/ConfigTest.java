@@ -3,6 +3,7 @@ package com.km;
 import com.km.engine.EngineType;
 import com.km.nn.NetVersion;
 import com.km.nn.ac.ACType;
+import com.km.nn.dropout.DOType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,6 +24,11 @@ public class ConfigTest {
     @Test
     public void getNetActivationFunction() {
         Assert.assertEquals(ACType.SOFT_SIGN, Config.getNetActivationFunction());
+    }
+
+    @Test
+    public void getDropOutFunction() {
+        Assert.assertEquals(DOType.BOOLEAN, Config.getDropOutFunction());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.km;
 import com.km.engine.EngineType;
 import com.km.nn.NetVersion;
 import com.km.nn.ac.ACType;
+import com.km.nn.dropout.DOType;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -101,6 +102,13 @@ public class Config {
     public static ACType getNetActivationFunction() {
         if (properties.getProperty("net.activation") != null)
             return ACType.valueOf(properties.getProperty("net.activation"));
+        else
+            throw new IllegalArgumentException();
+    }
+
+    public static DOType getDropOutFunction() {
+        if (properties.getProperty("dropout.function") != null)
+            return DOType.valueOf(properties.getProperty("dropout.function"));
         else
             throw new IllegalArgumentException();
     }
