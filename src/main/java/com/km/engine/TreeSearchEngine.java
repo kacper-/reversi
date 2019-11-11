@@ -72,7 +72,7 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private void startSimulationPool() throws InterruptedException {
-        ExecutorService executor = Executors.newWorkStealingPool();
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         int taskCount = getTaskCount();
         sims = new GameController[taskCount];
         for (int i = 0; i < taskCount; i++) {
