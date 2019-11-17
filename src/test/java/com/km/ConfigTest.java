@@ -23,7 +23,7 @@ public class ConfigTest {
 
     @Test
     public void getNetActivationFunction() {
-        Assert.assertEquals(ACType.SOFT_SIGN, Config.getNetActivationFunction());
+        Assert.assertEquals(ACType.ISRU, Config.getNetActivationFunction());
     }
 
     @Test
