@@ -1,10 +1,7 @@
 package com.km.nn.ac;
 
 import com.km.Config;
-import com.km.nn.ac.impl.ArcTan;
-import com.km.nn.ac.impl.Logistic;
-import com.km.nn.ac.impl.Sinusoid;
-import com.km.nn.ac.impl.SoftSign;
+import com.km.nn.ac.impl.*;
 
 public class ACFactory {
     public static AC createInstance() {
@@ -17,6 +14,8 @@ public class ACFactory {
                 return new ArcTan();
             case LOGISTIC:
                 return new Logistic();
+            case ISRU:
+                return new Isru();
         }
         return null;
     }

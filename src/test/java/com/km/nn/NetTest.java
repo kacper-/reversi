@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.Random;
 
 public class NetTest {
-    private static final int TRAIN_CYCLE = 3600;
+    private static final int TRAIN_CYCLE = 2000;
     private static final int TRAIN_ACCURACY = 10;
     private static final double[] tA = new double[]{
             -1, -1, -1, 1, 1, -1, -1, -1,
