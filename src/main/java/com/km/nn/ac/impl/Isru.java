@@ -3,7 +3,7 @@ package com.km.nn.ac.impl;
 import com.km.nn.ac.AC;
 
 public class Isru implements AC {
-    private final static double ALPHA = 0.25;
+    private final static double ALPHA = 0.5;
 
     public double f(double x) {
         return x / Math.sqrt(1d + (ALPHA * x * x));
