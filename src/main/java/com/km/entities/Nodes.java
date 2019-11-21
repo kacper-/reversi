@@ -1,5 +1,7 @@
 package com.km.entities;
 
+import com.km.game.DBSlot;
+
 public class Nodes {
     private int id;
     private String board;
@@ -64,5 +66,14 @@ public class Nodes {
 
     public int getId() {
         return id;
+    }
+
+    public int getCount(DBSlot s) {
+        int count = 0;
+        for (int i = 0; i < board.length(); i++) {
+            if (board.charAt(i) == s.getSymbol())
+                count++;
+        }
+        return count;
     }
 }
