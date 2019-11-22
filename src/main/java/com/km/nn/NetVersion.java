@@ -4,5 +4,6 @@ public enum NetVersion {
     NET2,
     NET3,
     NET4,
-    NET3M
+    NET3M,
+    NET4M
 }

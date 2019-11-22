@@ -60,29 +60,36 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
                 Logger.info(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
-                int acc = runTrainingCycle();
+                int[] acc = runTrainingCycle();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
-                progress.add(Arrays.asList(acc, wins));
+                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 long stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d", i + 1, wins, acc, (stop - start) / 1000));
+                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
             Logger.setDefaultLevel();
             Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
-            printHistogram();
+            report();
             notifyOnUI();
             batchFinished = true;
         }).start();
     }
 
+    private void report() {
+        printHistogram();
+        Logger.info("NET report : ");
+        Logger.info(netUtil.report());
+    }
+
     private void printHistogram() {
+        Logger.info("Histogram : ");
         for (int i = 0; i < HIST_SIZE; i++)
             Logger.info(String.format("batch\thistogram [%d] -> [%d]", i * 10, histogram[i]));
     }
 
-    private int runTrainingCycle() {
+    private int[] runTrainingCycle() {
         EngineType[] engineTypes = Config.getBatchTrainEngines();
         EngineType opp = engineTypes[new Random().nextInt(engineTypes.length)];
         if (new Random().nextBoolean())

@@ -72,7 +72,7 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private void startSimulationPool() throws InterruptedException {
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ExecutorService executor = Executors.newWorkStealingPool();
         int taskCount = getTaskCount();
         sims = new GameController[taskCount];
         for (int i = 0; i < taskCount; i++) {
@@ -87,7 +87,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     private int getTaskCount() {
         Score s = controller.getScore();
-        int gameProgress = (s.getBlack() + s.getWhite()) / 10;
+        int gameProgress = (s.getBlack() + s.getWhite()) / 8;
         switch (gameProgress) {
             case 0:
                 return Config.getSimCountL0();
@@ -103,6 +103,8 @@ public class TreeSearchEngine implements MoveEngine {
                 return Config.getSimCountL5();
             case 6:
                 return Config.getSimCountL6();
+            case 7:
+                return Config.getSimCountL7();
         }
         return 0;
     }

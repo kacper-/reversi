@@ -36,6 +36,13 @@ public class Config {
             throw new IllegalArgumentException();
     }
 
+    public static String getEngineANN4MRCfile() {
+        if (properties.getProperty("engine.ANN4MRC.file") != null)
+            return properties.getProperty("engine.ANN4MRC.file");
+        else
+            throw new IllegalArgumentException();
+    }
+
     public static boolean isHeadless() {
         if (properties.getProperty("headless") != null)
             return properties.getProperty("headless").equalsIgnoreCase("true");
@@ -193,6 +200,13 @@ public class Config {
     public static int getSimCountL6() {
         if (properties.getProperty("sim.count.l6") != null)
             return Integer.parseInt(properties.getProperty("sim.count.l6"));
+        else
+            throw new IllegalArgumentException();
+    }
+
+    public static int getSimCountL7() {
+        if (properties.getProperty("sim.count.l7") != null)
+            return Integer.parseInt(properties.getProperty("sim.count.l7"));
         else
             throw new IllegalArgumentException();
     }

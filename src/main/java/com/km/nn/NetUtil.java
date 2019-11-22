@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
+    private static final int SEGMENTS = 8;
     private Net net;
     private NetVersion version;
     private int trainCount;
@@ -36,9 +37,11 @@ public class NetUtil {
             case NET3:
                 return new Net3();
             case NET3M:
-                return new Net3M();
+                return new NetM(NetVersion.NET3);
             case NET4:
                 return new Net4();
+            case NET4M:
+                return new NetM(NetVersion.NET4);
         }
         return null;
     }
@@ -85,12 +88,12 @@ public class NetUtil {
 
     private boolean validate(Nodes n) {
         int sum = n.getLoses() + n.getWins();
-        if (sum == net.getSize())
+        if (n.getCount(DBSlot.EMPTY) == 0)
             return false;
         return sum >= Config.getSimCount() && Math.abs(n.getLoses() - n.getWins()) > Config.getSimDiff();
     }
 
-    public int runTraining() {
+    public int[] runTraining() {
         load();
         trainCount = 0;
         Logger.trace("net\ttraining started...");
@@ -99,15 +102,15 @@ public class NetUtil {
         for (int i = 0; i < count; i++) {
             train(nodes.get(ThreadLocalRandom.current().nextInt(count)));
         }
-        int result = verify(nodes);
-        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%] after [%d] iterations", PRECISION, result, trainCount));
+        int[] result = verify(nodes);
+        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%,] after [%d] iterations", PRECISION, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], trainCount));
         save();
         return result;
     }
 
-    private int verify(List<Nodes> nodes) {
+    private int[] verify(List<Nodes> nodes) {
         int count = 0;
-        int result = 0;
+        int[] result = new int[SEGMENTS];
         double actual;
         double expected;
         for (int i = 0; i < nodes.size(); i++) {
@@ -116,10 +119,11 @@ public class NetUtil {
             actual = process(nodes.get(i).getBoard());
             expected = expected(nodes.get(i));
             if (inRange(expected, actual))
-                result++;
+                result[(net.getSize() - nodes.get(i).getCount(DBSlot.EMPTY)) / SEGMENTS]++;
             count++;
         }
-        result = (100 * result) / count;
+        for (int i = 0; i < SEGMENTS; i++)
+            result[i] = (100 * result[i]) / count;
         return result;
     }
 
@@ -157,5 +161,9 @@ public class NetUtil {
             }
         }
         return input;
+    }
+
+    public String report() {
+        return net.report();
     }
 }

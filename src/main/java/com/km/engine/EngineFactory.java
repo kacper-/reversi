@@ -17,6 +17,9 @@ public class EngineFactory {
             case ANN4RC:
                 engine = new ANNEngine(NetVersion.NET4, Config.getEngineANN4RCfile());
                 break;
+            case ANN4MRC:
+                engine = new ANNEngine(NetVersion.NET4M, Config.getEngineANN4MRCfile());
+                break;
             case RULE:
                 engine = new RuleEngine();
                 break;

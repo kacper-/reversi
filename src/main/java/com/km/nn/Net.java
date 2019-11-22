@@ -7,6 +7,10 @@ public interface Net {
 
     int getSize();
 
+    default String report() {
+        return "";
+    }
+
     default double expected(double[] n) {
         double wins = n[0];
         double loses = n[1];

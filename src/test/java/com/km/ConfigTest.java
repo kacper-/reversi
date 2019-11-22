@@ -47,6 +47,11 @@ public class ConfigTest {
     }
 
     @Test
+    public void getEngineANN4MRCfile() {
+        Assert.assertEquals("ANN4MRC", Config.getEngineANN4MRCfile());
+    }
+
+    @Test
     public void isHeadless() {
         Assert.assertTrue(Config.isHeadless());
     }
@@ -146,7 +151,12 @@ public class ConfigTest {
 
     @Test
     public void getSimCountL6() {
-        Assert.assertEquals(Config.getSimCountL6(), 15);
+        Assert.assertEquals(Config.getSimCountL6(), 300);
+    }
+
+    @Test
+    public void getSimCountL7() {
+        Assert.assertEquals(Config.getSimCountL7(), 200);
     }
 
     @Test

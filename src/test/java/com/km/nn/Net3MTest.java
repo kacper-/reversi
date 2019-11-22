@@ -18,7 +18,7 @@ public class Net3MTest {
 
     @Test
     public void index() {
-        Net3M net3M = new Net3M();
+        NetM net3M = new NetM(NetVersion.NET3);
         double[] signal = new double[net3M.getSize()];
         for (int i = 0; i < net3M.getSize(); i++)
             signal[i] = 0d;

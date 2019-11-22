@@ -5,6 +5,7 @@ public enum EngineType {
     ANN3RC,
     ANN3MRC,
     ANN4RC,
+    ANN4MRC,
     RULE,
     RANDOM,
     SUPER3,
