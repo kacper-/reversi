@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
-    private static final int SEGMENTS = 8;
+    public static final int SEGMENTS = 8;
     private Net net;
     private NetVersion version;
     private int trainCount;
@@ -166,7 +166,7 @@ public class NetUtil {
         return input;
     }
 
-    public String report() {
+    public int[] report() {
         return net.report();
     }
 }

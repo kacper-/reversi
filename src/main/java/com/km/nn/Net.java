@@ -7,8 +7,8 @@ public interface Net {
 
     int getSize();
 
-    default String report() {
-        return "";
+    default int[] report() {
+        return new int[8];
     }
 
     default double expected(double[] n) {

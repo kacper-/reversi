@@ -1,5 +1,7 @@
 package com.km.nn;
 
+import com.km.Logger;
+
 import java.io.Serializable;
 
 public class NetM implements Serializable, Net {
@@ -24,11 +26,8 @@ public class NetM implements Serializable, Net {
     }
 
     @Override
-    public String report() {
-        String r = "";
-        for (int i = 0; i < SIZE; i++)
-            r += String.format("[%d] -> [%d]\n", i, trainCounter[i]);
-        return r;
+    public int[] report() {
+        return trainCounter;
     }
 
     int index(double[] signal) {
