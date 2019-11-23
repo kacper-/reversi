@@ -123,8 +123,10 @@ public class NetUtil {
                 result[idx]++;
             count[idx]++;
         }
-        for (int i = 0; i < SEGMENTS; i++)
-            result[i] = (100 * result[i]) / count[i];
+        for (int i = 0; i < SEGMENTS; i++) {
+            if (count[i] > 0)
+                result[i] = (100 * result[i]) / count[i];
+        }
         return result;
     }
 
