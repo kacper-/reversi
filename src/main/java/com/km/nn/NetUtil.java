@@ -112,16 +112,16 @@ public class NetUtil {
         int[] count = new int[SEGMENTS];
         int[] result = new int[SEGMENTS];
         double actual, expected;
+        int idx;
         for (int i = 0; i < nodes.size(); i++) {
             if (!validate(nodes.get(i)))
                 continue;
             actual = process(nodes.get(i).getBoard());
             expected = expected(nodes.get(i));
-            if (inRange(expected, actual)) {
-                int idx = (net.getSize() - nodes.get(i).getCount(DBSlot.EMPTY)) / SEGMENTS;
+            idx = (net.getSize() - nodes.get(i).getCount(DBSlot.EMPTY)) / SEGMENTS;
+            if (inRange(expected, actual))
                 result[idx]++;
-                count[idx]++;
-            }
+            count[idx]++;
         }
         for (int i = 0; i < SEGMENTS; i++)
             result[i] = (100 * result[i]) / count[i];
