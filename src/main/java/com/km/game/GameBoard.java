@@ -2,7 +2,8 @@ package com.km.game;
 
 public class GameBoard {
     public static final int SIZE = 8;
-    private Slot[][] board = new Slot[SIZE][SIZE];
+    private static final int S2 = 64;
+    private Slot[] board = new Slot[S2];
     private Slot turn;
 
     public Slot getTurn() {
@@ -14,21 +15,16 @@ public class GameBoard {
     }
 
     void empty() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                board[i][j] = Slot.EMPTY;
-            }
-        }
+        for (int i = 0; i < S2; i++)
+            board[i] = Slot.EMPTY;
         turn = Slot.EMPTY;
     }
 
     int count(Slot s) {
         int c = 0;
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (board[i][j] == s)
-                    c++;
-            }
+        for (int i = 0; i < S2; i++) {
+            if (board[i] == s)
+                c++;
         }
         return c;
     }
@@ -41,13 +37,14 @@ public class GameBoard {
     }
 
     public String toDBString() {
-        char[] flat = new char[SIZE * SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                flat[(j * SIZE) + i] = translate(board[i][j]).getSymbol();
-            }
-        }
+        char[] flat = new char[S2];
+        for (int i = 0; i < S2; i++)
+            flat[i] = translate(board[i]).getSymbol();
         return String.valueOf(flat);
+    }
+
+    private int index(int i, int j) {
+        return (j << 3) | i;
     }
 
     private DBSlot translate(Slot s) {
@@ -63,11 +60,11 @@ public class GameBoard {
     }
 
     void setValue(Slot s, int i, int j) {
-        board[i][j] = s;
+        board[index(i, j)] = s;
     }
 
     public Slot getValue(int i, int j) {
-        return board[i][j];
+        return board[index(i, j)];
     }
 
     GameBoard copy() {
@@ -77,11 +74,9 @@ public class GameBoard {
         return g;
     }
 
-    private Slot[][] copyBoard() {
-        Slot[][] b = new Slot[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            System.arraycopy(board[i], 0, b[i], 0, SIZE);
-        }
+    private Slot[] copyBoard() {
+        Slot[] b = new Slot[S2];
+        System.arraycopy(board, 0, b, 0, S2);
         return b;
     }
 }
