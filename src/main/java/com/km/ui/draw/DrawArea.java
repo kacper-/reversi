@@ -9,8 +9,8 @@ import java.util.List;
 public class DrawArea extends JPanel {
     private static final int MULTI = 3;
     private static final int SIZE = 100;
-    private ScoreListener scoreListener;
     private static final Color[] COLORS = new Color[]{Color.MAGENTA, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN};
+    private ScoreListener scoreListener;
 
     public DrawArea(ScoreListener scoreListener) {
         setPreferredSize(new Dimension((3 * SIZE * MULTI) + 1, (SIZE * MULTI) + 1));

@@ -7,7 +7,7 @@ public interface ScoreListener {
 
     void setWarScore(int count, int black, int white);
 
-    void setTrainProgress(List<List<Integer>> list);
-
     List<List<Integer>> getTrainProgress();
+
+    void setTrainProgress(List<List<Integer>> list);
 }

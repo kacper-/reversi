@@ -1,7 +1,5 @@
 package com.km.nn;
 
-import com.km.Logger;
-
 import java.io.Serializable;
 
 public class NetM implements Serializable, Net {

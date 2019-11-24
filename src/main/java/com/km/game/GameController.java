@@ -37,7 +37,7 @@ public class GameController {
         return simulation;
     }
 
-    public void startNewGame(Slot human, EngineType type) {
+    void startNewGame(Slot human, EngineType type) {
         simulation = false;
         warMode = false;
         Logger.info(String.format("game\t[%s] plays [%s]", type.name(), human.opposite().name()));
@@ -51,7 +51,7 @@ public class GameController {
         gameSaved = false;
     }
 
-    public void startWarGame(EngineType typeB, EngineType typeW) {
+    void startWarGame(EngineType typeB, EngineType typeW) {
         warMode = true;
         controllerB = new GameController();
         controllerB.startNewGame(Slot.WHITE, typeB);
@@ -111,7 +111,7 @@ public class GameController {
         historyBlack.add(HistoryItem.fromGB(gameBoard));
     }
 
-    public boolean makePlayerMove(Move move) {
+    boolean makePlayerMove(Move move) {
         Set<Move> directions = GameRules.isMoveAvailable(move, gameBoard);
         if (directions.isEmpty()) {
             return false;

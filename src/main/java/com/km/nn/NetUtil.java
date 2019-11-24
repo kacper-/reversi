@@ -9,11 +9,10 @@ import com.km.repos.GameService;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class NetUtil {
-    private static final double PRECISION = 0.1d;
     public static final int SEGMENTS = 8;
+    private static final double PRECISION = 0.1d;
     private Net net;
     private NetVersion version;
     private int trainCount;
