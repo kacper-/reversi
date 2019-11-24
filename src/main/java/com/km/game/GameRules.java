@@ -21,9 +21,11 @@ public class GameRules {
         Set<Move> moves = new HashSet<>();
         for (int i = 0; i < GameBoard.SIZE; i++) {
             for (int j = 0; j < GameBoard.SIZE; j++) {
-                Move move = new Move(i, j, gameBoard.getTurn());
-                if (!isMoveAvailable(move, gameBoard).isEmpty()) {
-                    moves.add(move);
+                if (gameBoard.getValue(i, j) == Slot.EMPTY) {
+                    Move move = new Move(i, j, gameBoard.getTurn());
+                    if (!isMoveAvailable(move, gameBoard).isEmpty()) {
+                        moves.add(move);
+                    }
                 }
             }
         }
