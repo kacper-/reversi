@@ -199,7 +199,7 @@ public class GameController {
 
     private Score createScore(int white, int black) {
         Slot s = null;
-        if (isFinished()) {
+        if (GameRules.isGameFinished(gameBoard)) {
             if (white == black) {
                 s = Slot.EMPTY;
             } else {

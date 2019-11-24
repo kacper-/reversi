@@ -86,6 +86,8 @@ public class GameRules {
     }
 
     static boolean isGameFinished(GameBoard gameBoard) {
+        if (gameBoard.count(Slot.EMPTY) == 0)
+            return true;
         GameBoard g1 = gameBoard.copy();
         int moves = getAvailableMoves(g1).size();
         g1.setTurn(g1.getTurn().opposite());
