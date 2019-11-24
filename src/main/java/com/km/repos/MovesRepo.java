@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 class MovesRepo {
-    private static volatile Map<Integer, List<Moves>> map = new HashMap<>();
+    private static Map<Integer, List<Moves>> map = new HashMap<>();
 
     static List<Moves> findByParent(int snodeId) {
         return map.get(snodeId);

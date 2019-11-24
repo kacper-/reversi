@@ -50,8 +50,8 @@ public class GameService {
             List<Moves> moves = MovesRepo.findByParent(node.getId());
             if (moves != null) {
                 Logger.debug(String.format("db\tfound simulation at node id = [%d]", node.getId()));
-                for (int i = 0; i < moves.size(); i++) {
-                    Nodes n = NodesRepo.findById(moves.get(i).getEnode());
+                for (Moves move : moves) {
+                    Nodes n = NodesRepo.findById(move.getEnode());
                     Logger.debug(String.format("db\tfound end node id = [%d] wins = [%d] loses = [%d]", n.getId(), n.getWins(), n.getLoses()));
                     simulations.put(Pair.of(n.getBoard(), n.getId()), Pair.of(n.getWins(), n.getLoses()));
                 }
