@@ -98,10 +98,8 @@ public class NetUtil {
         trainCount = 0;
         Logger.trace("net\ttraining started...");
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
-        int count = nodes.size();
-        for (int i = 0; i < count; i++) {
-            train(nodes.get(ThreadLocalRandom.current().nextInt(count)));
-        }
+        for (int i = 0; i < nodes.size(); i++)
+            train(nodes.get(i));
         int[] result = verify(nodes);
         Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%,] after [%d] iterations", PRECISION, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], trainCount));
         save();
