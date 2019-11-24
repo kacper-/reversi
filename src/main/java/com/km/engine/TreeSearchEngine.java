@@ -21,6 +21,11 @@ public class TreeSearchEngine implements MoveEngine {
     private int loses = 0;
     private GameController controller;
     private GameController[] sims;
+    private int[] tCount = new int[8];
+
+    TreeSearchEngine() {
+        loadConfig();
+    }
 
     @Override
     public void setGameController(GameController controller) {
@@ -87,26 +92,18 @@ public class TreeSearchEngine implements MoveEngine {
 
     private int getTaskCount() {
         Score s = controller.getScore();
-        int gameProgress = (s.getBlack() + s.getWhite()) / 8;
-        switch (gameProgress) {
-            case 0:
-                return Config.getSimCountL0();
-            case 1:
-                return Config.getSimCountL1();
-            case 2:
-                return Config.getSimCountL2();
-            case 3:
-                return Config.getSimCountL3();
-            case 4:
-                return Config.getSimCountL4();
-            case 5:
-                return Config.getSimCountL5();
-            case 6:
-                return Config.getSimCountL6();
-            case 7:
-                return Config.getSimCountL7();
-        }
-        return 0;
+        return tCount[(s.getBlack() + s.getWhite()) / 8];
+    }
+
+    private void loadConfig() {
+        tCount[0] = Config.getSimCountL0();
+        tCount[1] = Config.getSimCountL1();
+        tCount[2] = Config.getSimCountL2();
+        tCount[3] = Config.getSimCountL3();
+        tCount[4] = Config.getSimCountL4();
+        tCount[5] = Config.getSimCountL5();
+        tCount[6] = Config.getSimCountL6();
+        tCount[7] = Config.getSimCountL7();
     }
 
     private void startSingleSimulation(GameController simController) {
