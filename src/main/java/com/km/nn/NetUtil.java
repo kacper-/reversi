@@ -31,18 +31,13 @@ public class NetUtil {
 
     Net createInstance() {
         switch (version) {
-            case NET2:
-                return new Net2();
-            case NET3:
-                return new Net3();
             case NET3M:
                 return new NetM(NetVersion.NET3);
-            case NET4:
-                return new Net4();
             case NET4M:
                 return new NetM(NetVersion.NET4);
+            default:
+                throw new IllegalArgumentException();
         }
-        return null;
     }
 
     private void save() {

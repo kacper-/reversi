@@ -83,7 +83,7 @@ public class NetTest {
 
     @Test
     public void teach() {
-        Net net = new NetUtil(NetVersion.NET2, NetVersion.NET2.name()).createInstance();
+        Net net = new Net2();
         int count = TRAIN_CYCLE * test.length;
         int t;
         for (int i = 0; i < count; i++) {
