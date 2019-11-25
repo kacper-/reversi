@@ -20,4 +20,8 @@ public interface Net {
             return 1d - (loses / wins);
         }
     }
+
+    default int getSegments() {
+        return 1;
+    }
 }

@@ -80,9 +80,8 @@ public class GameRunner {
     private void report() {
         printHistogram();
         Logger.info("NET report : ");
-        int[] r = netUtil.report();
-        for (int i = 0; i < NetUtil.SEGMENTS; i++)
-            Logger.info(String.format("[%d] -> [%d]", i, r[i]));
+        netUtil.report();
+        Logger.info("Logger report : ");
         Logger.printStats();
     }
 

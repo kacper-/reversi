@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NetUtil {
-    public static final int SEGMENTS = 8;
     private static final double PRECISION = 0.1d;
     private Net net;
     private NetVersion version;
@@ -29,7 +28,7 @@ public class NetUtil {
         save();
     }
 
-    Net createInstance() {
+    private Net createInstance() {
         switch (version) {
             case NET3M:
                 return new NetM(NetVersion.NET3);
@@ -100,8 +99,8 @@ public class NetUtil {
     }
 
     private int[] verify(List<Nodes> nodes) {
-        int[] count = new int[SEGMENTS];
-        int[] result = new int[SEGMENTS];
+        int[] count = new int[net.getSegments()];
+        int[] result = new int[net.getSegments()];
         double actual, expected;
         int idx;
         for (Nodes node : nodes) {
@@ -109,12 +108,12 @@ public class NetUtil {
                 continue;
             actual = process(node.getBoard());
             expected = expected(node);
-            idx = (net.getSize() - node.getCount(DBSlot.EMPTY)) / SEGMENTS;
+            idx = (net.getSize() - node.getCount(DBSlot.EMPTY)) / net.getSegments();
             if (inRange(expected, actual))
                 result[idx]++;
             count[idx]++;
         }
-        for (int i = 0; i < SEGMENTS; i++) {
+        for (int i = 0; i < net.getSegments(); i++) {
             if (count[i] > 0)
                 result[i] = (100 * result[i]) / count[i];
         }
@@ -157,7 +156,9 @@ public class NetUtil {
         return input;
     }
 
-    public int[] report() {
-        return net.report();
+    public void report() {
+        int[] r = net.report();
+        for (int i = 0; i < net.getSegments(); i++)
+            Logger.info(String.format("[%d] -> [%d]", i, r[i]));
     }
 }
