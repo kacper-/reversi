@@ -2,6 +2,10 @@ package com.km;
 
 import com.km.engine.EngineType;
 import com.km.game.GameRunner;
+import com.km.ui.frame.MainFrame;
+
+import javax.swing.*;
+import java.awt.*;
 
 class GameRunnerWrapper {
     private Command command;
@@ -39,11 +43,24 @@ class GameRunnerWrapper {
                 runner.startBatchTrain(count);
                 while (!runner.isBatchFinished()) ;
                 break;
+            case UI:
+                runFrame();
+                break;
         }
+    }
+
+    private void runFrame() {
+        MainFrame frame = new MainFrame();
+        frame.createComponents();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(frame.getExtendedState());
+        frame.setVisible(true);
+        frame.setSize(new Dimension(Config.getWidth(), Config.getHeight()));
     }
 
     enum Command {
         WAR,
-        BATCH
+        BATCH,
+        UI
     }
 }

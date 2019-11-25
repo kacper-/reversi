@@ -109,7 +109,7 @@ public class MainFrame extends JFrame implements ScoreListener {
         typeW.setSelectedItem(EngineType.RANDOM);
         typeW.setEditable(false);
         JComboBox<EngineType> typeB = new JComboBox<>(EngineType.values());
-        typeB.setSelectedItem(EngineType.ANN3RC);
+        typeB.setSelectedItem(EngineType.ANN4MRC);
         typeB.setEditable(false);
         JTextField count = new JTextField(String.valueOf(Config.getTestLen()));
         newGameWar.addActionListener(click -> {

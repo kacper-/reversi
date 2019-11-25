@@ -11,13 +11,10 @@ public class Application {
     public static void main(String... args) {
         String configFile = Config.FILE_PATH + Config.FILE_NAME;
         loadConfig(configFile);
-        if (Config.isHeadless())
-            runHeadless(args);
-        else
-            runFrame();
+        runWrapper(args);
     }
 
-    private static void runHeadless(String[] args) {
+    private static void runWrapper(String[] args) {
         GameRunnerWrapper wrapper = new GameRunnerWrapper();
         if (wrapper.parseArgs(args)) {
             wrapper.run();
@@ -31,21 +28,14 @@ public class Application {
     private static void printUsage() {
         Logger.important("\nUSAGE : \n");
         Logger.important("---");
+        Logger.important("for ui mode :");
+        Logger.important("\t\tui");
         Logger.important("for war mode :");
-        Logger.important("\t\tWAR EngineType EngineType");
+        Logger.important("\t\twar EngineType EngineType");
         Logger.important("for batch mode :");
-        Logger.important("\t\tBATCH\n");
-        Logger.important("EngineType = [ MC | ANN3RC | ANN3MRC | ANN4RC | ANN4MRC | RULE | RANDOM | SUPER3 | SUPER3M | SUPER4 | BATCH ]");
+        Logger.important("\t\tbatch\n");
+        Logger.important("EngineType = [ MC | ANN3MRC | ANN4MRC | RULE | RANDOM | SUPER3M | SUPER4M | BATCH ]");
         Logger.important("---\n");
-    }
-
-    private static void runFrame() {
-        MainFrame frame = new MainFrame();
-        frame.createComponents();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(frame.getExtendedState());
-        frame.setVisible(true);
-        frame.setSize(new Dimension(Config.getWidth(), Config.getHeight()));
     }
 
     private static void loadConfig(String configFile) {

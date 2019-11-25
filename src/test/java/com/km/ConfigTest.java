@@ -37,23 +37,8 @@ public class ConfigTest {
     }
 
     @Test
-    public void getEngineANN3RCfile() {
-        Assert.assertEquals("ANN3RC", Config.getEngineANN3RCfile());
-    }
-
-    @Test
-    public void getEngineANN4RCfile() {
-        Assert.assertEquals("ANN4RC", Config.getEngineANN4RCfile());
-    }
-
-    @Test
     public void getEngineANN4MRCfile() {
         Assert.assertEquals("ANN4MRC", Config.getEngineANN4MRCfile());
-    }
-
-    @Test
-    public void isHeadless() {
-        Assert.assertTrue(Config.isHeadless());
     }
 
     @Test
@@ -98,7 +83,7 @@ public class ConfigTest {
 
     @Test
     public void getBatchNetVersion() {
-        assertSame(Config.getBatchNetVersion(), NetVersion.NET3);
+        assertSame(Config.getBatchNetVersion(), NetVersion.NET4M);
     }
 
     @Test

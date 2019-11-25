@@ -13,16 +13,11 @@ public class SuperEngine implements MoveEngine {
 
     SuperEngine(NetVersion version) {
         switch (version) {
-            case NET2:
-                throw new IllegalArgumentException();
-            case NET3:
-                ann = new ANNEngine(NetVersion.NET3, EngineType.ANN3RC.name());
-                break;
             case NET3M:
                 ann = new ANNEngine(NetVersion.NET3M, EngineType.ANN3MRC.name());
                 break;
-            case NET4:
-                ann = new ANNEngine(NetVersion.NET4, EngineType.ANN4RC.name());
+            case NET4M:
+                ann = new ANNEngine(NetVersion.NET4M, EngineType.ANN4MRC.name());
                 break;
         }
     }
