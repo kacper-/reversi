@@ -76,7 +76,7 @@ public class Board extends Canvas implements MouseListener, UIListener {
     private Move positionToMove(int x, int y) {
         int i = (x - BOARD_OFFSET) / SQUARE_SIZE;
         int j = (y - BOARD_OFFSET) / SQUARE_SIZE;
-        return new Move(Math.min(i, GameBoard.SIZE - 1), Math.min(j, GameBoard.SIZE - 1), gameRunner.getGameController().getGameBoard().getTurn());
+        return new Move(Math.min(i, GameBoard.SIZE - 1), Math.min(j, GameBoard.SIZE - 1));
     }
 
     public void startNewGame(Slot s, EngineType type) {

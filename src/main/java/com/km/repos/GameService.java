@@ -32,9 +32,9 @@ public class GameService {
 
     public static void updateScores(List<HistoryItem> historyWhite, List<HistoryItem> historyBlack, int winsWhite, int losesWhite, int winsBlack, int losesBlack) {
         updateHistory(historyWhite, winsWhite, losesWhite);
-        Logger.trace("db\thistoryWhite saved");
+        //Logger.trace("db\thistoryWhite saved");
         updateHistory(historyBlack, winsBlack, losesBlack);
-        Logger.trace("db\thistoryBlack saved");
+        //Logger.trace("db\thistoryBlack saved");
     }
 
     private static void updateHistory(List<HistoryItem> history, int wins, int loses) {
@@ -49,18 +49,18 @@ public class GameService {
         if (node != null) {
             List<Moves> moves = MovesRepo.findByParent(node.getId());
             if (moves != null) {
-                Logger.debug(String.format("db\tfound simulation at node id = [%d]", node.getId()));
+                //Logger.debug(String.format("db\tfound simulation at node id = [%d]", node.getId()));
                 for (Moves move : moves) {
                     Nodes n = NodesRepo.findById(move.getEnode());
-                    Logger.debug(String.format("db\tfound end node id = [%d] wins = [%d] loses = [%d]", n.getId(), n.getWins(), n.getLoses()));
+                    //Logger.debug(String.format("db\tfound end node id = [%d] wins = [%d] loses = [%d]", n.getId(), n.getWins(), n.getLoses()));
                     simulations.put(Pair.of(n.getBoard(), n.getId()), Pair.of(n.getWins(), n.getLoses()));
                 }
                 return simulations;
             } else {
-                Logger.debug(String.format("db\tno move for snode = [%d]", node.getId()));
+                //Logger.debug(String.format("db\tno move for snode = [%d]", node.getId()));
             }
         } else {
-            Logger.debug(String.format("db\tno node for board = [%s]", board));
+            //Logger.debug(String.format("db\tno node for board = [%s]", board));
         }
         return simulations;
     }
@@ -75,8 +75,8 @@ public class GameService {
     }
 
     public static void printStats() {
-        Logger.trace("db\tstatistics:");
-        NodesRepo.printStats();
-        MovesRepo.printStats();
+        //Logger.trace("db\tstatistics:");
+        //NodesRepo.printStats();
+        //MovesRepo.printStats();
     }
 }

@@ -35,7 +35,7 @@ public class Application {
         Logger.important("\t\tWAR EngineType EngineType");
         Logger.important("for batch mode :");
         Logger.important("\t\tBATCH\n");
-        Logger.important("EngineType = [ MC | ANN3RC | ANN4RC | RULE | RANDOM | SUPER3 | SUPER4 | BATCH ]");
+        Logger.important("EngineType = [ MC | ANN3RC | ANN3MRC | ANN4RC | ANN4MRC | RULE | RANDOM | SUPER3 | SUPER3M | SUPER4 | BATCH ]");
         Logger.important("---\n");
     }
 

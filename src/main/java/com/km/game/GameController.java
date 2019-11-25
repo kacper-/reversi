@@ -17,10 +17,15 @@ public class GameController {
     private List<HistoryItem> historyBlack;
     private List<HistoryItem> historyWhite;
     private MoveEngine moveEngine;
+    private MoveEngine randomEngine;
     private boolean simulation;
     private boolean warMode = false;
     private GameController controllerB;
     private GameController controllerW;
+
+    public GameController() {
+        randomEngine = EngineFactory.createMoveEngine(this, EngineType.RANDOM);
+    }
 
     public GameController copy() {
         GameController controller = new GameController();
@@ -29,6 +34,7 @@ public class GameController {
         controller.historyBlack = historyBlack.stream().map(HistoryItem::copy).collect(Collectors.toList());
         controller.historyWhite = historyWhite.stream().map(HistoryItem::copy).collect(Collectors.toList());
         controller.moveEngine = moveEngine;
+        controller.randomEngine = randomEngine;
         controller.simulation = simulation;
         return controller;
     }
@@ -132,14 +138,14 @@ public class GameController {
 
     public void updateBoard(Move move) {
         HistoryItem parent = HistoryItem.fromGB(gameBoard);
-        Logger.trace(String.format("turn\t[%s] move = [%d, %d]", gameBoard.getTurn().name(), move.getI(), move.getJ()));
+        //Logger.trace(String.format("turn\t[%s] move = [%d, %d]", gameBoard.getTurn().name(), move.getI(), move.getJ()));
         GameRules.updateBoard(move, gameBoard);
         if (gameBoard.getTurn() == Slot.BLACK) {
             historyBlack.add(HistoryItem.fromGBWithParent(gameBoard, parent));
         } else {
             historyWhite.add(HistoryItem.fromGBWithParent(gameBoard, parent));
         }
-        Logger.trace(String.format("score\t[%d, %d]", getScore().getBlack(), getScore().getWhite()));
+        //Logger.trace(String.format("score\t[%d, %d]", getScore().getBlack(), getScore().getWhite()));
         nextTurn();
     }
 
@@ -148,15 +154,21 @@ public class GameController {
     }
 
     public void makeMove() {
+        makeMoveInternal(moveEngine);
+    }
+
+    private void makeMoveInternal(MoveEngine engine) {
         Set<Move> moves = GameRules.getAvailableMoves(gameBoard);
         if (!moves.isEmpty()) {
-            Move move = moveEngine.chooseMove(moves);
+            Move move = engine.chooseMove(moves);
             updateBoard(move);
-            if (GameRules.getAvailableMoves(gameBoard).isEmpty()) {
-                nextTurn();
-                makeMove();
-            }
+        } else {
+            nextTurn();
         }
+    }
+
+    public void makeRandomMove() {
+        makeMoveInternal(randomEngine);
     }
 
     public boolean isFinished() {
@@ -177,8 +189,8 @@ public class GameController {
 
     private void printStats() {
         Score score = getScore();
-        Logger.info(String.format("game\tfinished BLACK = [%d] WHITE = [%d]", score.getBlack(), score.getWhite()));
-        GameService.printStats();
+        //Logger.info(String.format("game\tfinished BLACK = [%d] WHITE = [%d]", score.getBlack(), score.getWhite()));
+        //GameService.printStats();
     }
 
     private int getWins(Score score, Slot s) {

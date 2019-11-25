@@ -3,12 +3,10 @@ package com.km.game;
 public class Move {
     private int i;
     private int j;
-    private Slot s;
 
-    public Move(int i, int j, Slot s) {
+    public Move(int i, int j) {
         this.i = i;
         this.j = j;
-        this.s = s;
     }
 
     public int getI() {
@@ -19,44 +17,34 @@ public class Move {
         return j;
     }
 
-    Slot getS() {
-        return s;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Move)) return false;
 
         Move move = (Move) o;
 
-        if (i != move.i) return false;
-        if (j != move.j) return false;
-        return s == move.s;
+        if (getI() != move.getI()) return false;
+        return getJ() == move.getJ();
     }
 
     @Override
     public int hashCode() {
-        int result = i;
-        result = 31 * result + j;
-        result = 31 * result + (s != null ? s.hashCode() : 0);
+        int result = getI();
+        result = 31 * result + getJ();
         return result;
     }
 
     @Override
     public String toString() {
-        if (s == null) {
-            return "NULL_" + i + "_" + j;
-        } else {
-            return s.getSymbol() + "_" + i + "_" + j;
-        }
+        return i + "_" + j;
     }
 
     Move add(Move v) {
-        return new Move(i + v.i, j + v.j, s);
+        return new Move(i + v.i, j + v.j);
     }
 
     Move vector(Move m) {
-        return new Move(m.i - i, m.j - j, m.s);
+        return new Move(m.i - i, m.j - j);
     }
 }

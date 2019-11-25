@@ -7,25 +7,23 @@ import java.util.Set;
 
 public class GameRules {
     private static Move[] vectors = new Move[]{
-            new Move(-1, -1, null),
-            new Move(-1, 1, null),
-            new Move(-1, 0, null),
-            new Move(0, -1, null),
-            new Move(0, 1, null),
-            new Move(1, -1, null),
-            new Move(1, 1, null),
-            new Move(1, 0, null)
+            new Move(-1, -1),
+            new Move(-1, 1),
+            new Move(-1, 0),
+            new Move(0, -1),
+            new Move(0, 1),
+            new Move(1, -1),
+            new Move(1, 1),
+            new Move(1, 0)
     };
 
     public static Set<Move> getAvailableMoves(GameBoard gameBoard) {
         Set<Move> moves = new HashSet<>();
-        for (int i = 0; i < GameBoard.SIZE; i++) {
-            for (int j = 0; j < GameBoard.SIZE; j++) {
-                if (gameBoard.getValue(i, j) == Slot.EMPTY) {
-                    Move move = new Move(i, j, gameBoard.getTurn());
-                    if (!isMoveAvailable(move, gameBoard).isEmpty()) {
-                        moves.add(move);
-                    }
+        for (int i = 0; i < GameBoard.S2; i++) {
+            if (gameBoard.getValue(i) == Slot.EMPTY) {
+                Move move = new Move(GameBoard.getI(i), GameBoard.getJ(i));
+                if (!isMoveAvailable(move, gameBoard).isEmpty()) {
+                    moves.add(move);
                 }
             }
         }
@@ -109,26 +107,26 @@ public class GameRules {
 
     public static List<Move> getCorners() {
         Move[] moves = new Move[]{
-                new Move(0, 0, null),
-                new Move(0, 7, null),
-                new Move(7, 0, null),
-                new Move(7, 7, null)
+                new Move(0, 0),
+                new Move(0, 7),
+                new Move(7, 0),
+                new Move(7, 7)
         };
         return Arrays.asList(moves);
     }
 
     public static List<Move> getSemiCorners() {
         Move[] moves = new Move[]{
-                new Move(1, 1, null),
-                new Move(1, 6, null),
-                new Move(6, 1, null),
-                new Move(6, 6, null)
+                new Move(1, 1),
+                new Move(1, 6),
+                new Move(6, 1),
+                new Move(6, 6)
         };
         return Arrays.asList(moves);
     }
 
     public static Move toSimpleMove(Move m) {
-        return new Move(m.getI(), m.getJ(), null);
+        return new Move(m.getI(), m.getJ());
     }
 
     static void initGameBoard(GameBoard gameBoard) {

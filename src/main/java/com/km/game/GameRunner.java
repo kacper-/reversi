@@ -83,6 +83,7 @@ public class GameRunner {
         int[] r = netUtil.report();
         for (int i = 0; i < NetUtil.SEGMENTS; i++)
             Logger.info(String.format("[%d] -> [%d]", i, r[i]));
+        Logger.printStats();
     }
 
     private void printHistogram() {
@@ -113,12 +114,12 @@ public class GameRunner {
         warScoreW = 0;
         warScoreB = 0;
         for (int i = 0; i < count; i++) {
-            Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
+            //Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
             runWar(typeB, typeW);
             notifyOnWarScore(i + 1, warScoreB, warScoreW);
-            Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+            //Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }
-        Logger.info(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
+        //Logger.info(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         warFinished = true;
         return Math.max(warScoreB, warScoreW);
     }

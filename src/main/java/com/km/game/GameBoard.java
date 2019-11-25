@@ -2,9 +2,21 @@ package com.km.game;
 
 public class GameBoard {
     public static final int SIZE = 8;
-    private static final int S2 = 64;
+    public static final int S2 = 64;
     private Slot[] board = new Slot[S2];
     private Slot turn;
+
+    private static int index(int i, int j) {
+        return (j << 3) | i;
+    }
+
+    public static int getI(int i) {
+        return i & 7;
+    }
+
+    public static int getJ(int i) {
+        return i >> 3;
+    }
 
     public Slot getTurn() {
         return turn;
@@ -43,10 +55,6 @@ public class GameBoard {
         return String.valueOf(flat);
     }
 
-    private int index(int i, int j) {
-        return (j << 3) | i;
-    }
-
     private DBSlot translate(Slot s) {
         if (s == Slot.EMPTY) {
             return DBSlot.EMPTY;
@@ -65,6 +73,10 @@ public class GameBoard {
 
     public Slot getValue(int i, int j) {
         return board[index(i, j)];
+    }
+
+    Slot getValue(int i) {
+        return board[i];
     }
 
     GameBoard copy() {

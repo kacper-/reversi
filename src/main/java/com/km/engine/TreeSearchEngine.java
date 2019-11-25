@@ -11,8 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TreeSearchEngine implements MoveEngine {
-    private static final double MC_FACTOR_SIM = 1.7d;
-    private static final double MC_FACTOR_GAME = 0.8d;
+    private static final double MC_FACTOR = 1.4d;
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
@@ -110,6 +109,7 @@ public class TreeSearchEngine implements MoveEngine {
         simController.prepareSimulationGame(controller, EngineType.MC);
         while (!simController.isFinished()) {
             simController.makeMove();
+            simController.makeRandomMove();
         }
         updateSimResults(simController);
     }
@@ -127,12 +127,12 @@ public class TreeSearchEngine implements MoveEngine {
         Pair<Move, Integer> best = simulations.keySet().iterator().next();
         double score = MC_DEFAULT_SCORE;
         int bigN = getBigN(simulations);
-        Logger.trace(String.format("algo\tmoves [%d] simulations [%d]", moves.size(), simulations.size()));
+        //Logger.trace(String.format("algo\tmoves [%d] simulations [%d]", moves.size(), simulations.size()));
         int good = 0;
         for (Pair<Move, Integer> m : simulations.keySet()) {
             Pair<Integer, Integer> p = simulations.get(m);
             double mcValue = getMCvalue(bigN, p.getFirst(), p.getSecond());
-            Logger.debug(String.format("algo\toption from simulation node id = [%d] mcval = [%f]", m.getSecond(), mcValue));
+            //Logger.debug(String.format("algo\toption from simulation node id = [%d] mcval = [%f]", m.getSecond(), mcValue));
             if (mcValue > score) {
                 best = m;
                 score = mcValue;
@@ -143,7 +143,7 @@ public class TreeSearchEngine implements MoveEngine {
         if (controller.isSimulation() && (good < MIN_GOOD) && (moves.size() > simulations.size())) {
             return expand(simulations, moves);
         } else {
-            Logger.trace(String.format("algo\tchoosing from simulation node id = [%d]", best.getSecond()));
+            //Logger.trace(String.format("algo\tchoosing from simulation node id = [%d]", best.getSecond()));
             return best.getFirst();
         }
     }
@@ -158,35 +158,34 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private Move chooseRandomMove(Set<Move> moves) {
-        Logger.debug(String.format("algo\t[%d] random options", moves.size()));
-        for (Move m : moves) {
-            Logger.debug(String.format("algo\toption move = [%d, %d]", m.getI(), m.getJ()));
-        }
+//        Logger.debug(String.format("algo\t[%d] random options", moves.size()));
+//        for (Move m : moves) {
+//            Logger.debug(String.format("algo\toption move = [%d, %d]", m.getI(), m.getJ()));
+//        }
         Move move = new ArrayList<>(moves).get(new Random().nextInt(moves.size()));
-        Logger.trace(String.format("algo\tchoosing random move = [%d, %d] from [%d] options", move.getI(), move.getJ(), moves.size()));
+//        Logger.trace(String.format("algo\tchoosing random move = [%d, %d] from [%d] options", move.getI(), move.getJ(), moves.size()));
         return move;
     }
 
     private double getMCvalue(int bigN, int wins, int loses) {
-        int n = wins + loses;
-        double ar = ((double) wins) / ((double) n);
-        double factor = controller.isSimulation() ? MC_FACTOR_SIM : MC_FACTOR_GAME;
-        double br = factor * Math.sqrt(Math.log(bigN) / ((double) n));
+        double n = wins + loses;
+        double ar = ((double) wins) / n;
+        double br = MC_FACTOR * Math.sqrt(Math.log(bigN) / n);
         return ar + br;
     }
 
     private int getBigN(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations) {
         int n = 0;
-        for (Pair<Integer, Integer> p : simulations.values()) {
+        for (Pair<Integer, Integer> p : simulations.values())
             n += p.getFirst() + p.getSecond();
-        }
         return n;
     }
 
     private Move boardDiff(String newBoard, String board) {
-        for (int i = 0; i < newBoard.length(); i++) {
-            if (newBoard.charAt(i) != DBSlot.EMPTY.getSymbol() && board.charAt(i) == DBSlot.EMPTY.getSymbol()) {
-                return new Move(i % GameBoard.SIZE, i / GameBoard.SIZE, controller.getGameBoard().getTurn());
+        Character e = DBSlot.EMPTY.getSymbol();
+        for (int i = 0; i < GameBoard.S2; i++) {
+            if (newBoard.charAt(i) != e && board.charAt(i) == e) {
+                return new Move(GameBoard.getI(i), GameBoard.getJ(i));
             }
         }
         return null;
