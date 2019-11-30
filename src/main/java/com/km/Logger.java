@@ -1,5 +1,7 @@
 package com.km;
 
+// TODO logging refactor needed
+
 public class Logger {
     private static boolean on = true;
     private static boolean override = false;
