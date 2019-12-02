@@ -34,6 +34,8 @@ public class NetUtil {
                 return new NetM(NetVersion.NET3);
             case NET4M:
                 return new NetM(NetVersion.NET4);
+            case NETMM:
+                return new NetM(NetVersion.NETMM);
             default:
                 throw new IllegalArgumentException();
         }

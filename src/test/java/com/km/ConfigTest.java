@@ -42,6 +42,11 @@ public class ConfigTest {
     }
 
     @Test
+    public void getEngineANNMMRCfile() {
+        Assert.assertEquals("ANNMMRC", Config.getEngineANNMMRCfile());
+    }
+
+    @Test
     public void getLevel() {
         assertSame(Config.getLevel(), LogLevel.INFO);
     }

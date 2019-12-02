@@ -29,6 +29,13 @@ public class Config {
             throw new IllegalArgumentException();
     }
 
+    public static String getEngineANNMMRCfile() {
+        if (properties.getProperty("engine.ANNMMRC.file") != null)
+            return properties.getProperty("engine.ANNMMRC.file");
+        else
+            throw new IllegalArgumentException();
+    }
+
     public static LogLevel getLevel() {
         if (properties.getProperty("level") != null)
             return LogLevel.valueOf(properties.getProperty("level").toUpperCase());

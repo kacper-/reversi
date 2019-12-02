@@ -22,6 +22,9 @@ public class NetM implements Serializable, Net {
                 case NET4:
                     net[i] = new Net4();
                     break;
+                case NETMM:
+                    net[i] = new Net3B();
+                    break;
                 default:
                     throw new IllegalArgumentException();
             }
