@@ -5,18 +5,19 @@ import com.km.Config;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class Net3B implements Net, Serializable {
+public class NetB implements Net, Serializable {
     private final static int SIZE = 64;
+    private final static int BSIZE = 128;
     private Layer front;
     private Layer back;
     private Layer middle;
     private Layer middle2;
 
-    Net3B() {
-        front = new Layer(SIZE, SIZE, Config.getNet3LearningFactor());
-        middle = new Layer(SIZE, SIZE, Config.getNet3LearningFactor());
-        middle2 = new Layer(SIZE, SIZE, Config.getNet3LearningFactor());
-        back = new Layer(1, SIZE, Config.getNet3LearningFactor());
+    NetB() {
+        front = new Layer(BSIZE, SIZE, Config.getNet3LearningFactor());
+        middle = new Layer(BSIZE, BSIZE, Config.getNet3LearningFactor());
+        middle2 = new Layer(BSIZE, BSIZE, Config.getNet3LearningFactor());
+        back = new Layer(1, BSIZE, Config.getNet3LearningFactor());
     }
 
     @Override
