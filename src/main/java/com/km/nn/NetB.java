@@ -12,12 +12,14 @@ public class NetB implements Net, Serializable {
     private Layer back;
     private Layer middle;
     private Layer middle2;
+    private Layer middle3;
 
     NetB() {
-        front = new Layer(BSIZE, SIZE, Config.getNet3LearningFactor());
-        middle = new Layer(BSIZE, BSIZE, Config.getNet3LearningFactor());
-        middle2 = new Layer(BSIZE, BSIZE, Config.getNet3LearningFactor());
-        back = new Layer(1, BSIZE, Config.getNet3LearningFactor());
+        front = new Layer(BSIZE, SIZE, Config.getNet4LearningFactor());
+        middle = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
+        middle2 = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
+        middle3 = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
+        back = new Layer(1, BSIZE, Config.getNet4LearningFactor());
     }
 
     @Override
@@ -25,7 +27,8 @@ public class NetB implements Net, Serializable {
         front.process(signal);
         middle.process(front.getOutputs());
         middle2.process(middle.getOutputs());
-        back.process(middle2.getOutputs());
+        middle3.process(middle2.getOutputs());
+        back.process(middle3.getOutputs());
         return back.getOutputs()[0];
     }
 
@@ -33,25 +36,23 @@ public class NetB implements Net, Serializable {
     public void teach(double[] signal, double expected) {
         double result = process(signal);
         double[] backError = new double[]{result - expected};
-        double[] middle2Error = calculateError(back.getWeights(), backError);
+        double[] middle3Error = calculateError(back.getWeights(), backError);
+        double[] middle2Error = calculateError(middle3.getWeights(), middle3Error);
         double[] middleError = calculateError(middle2.getWeights(), middle2Error);
         double[] frontError = calculateError(middle.getWeights(), middleError);
         back.calculateWeightDeltas(backError);
+        middle3.calculateWeightDeltas(middle3Error);
         middle2.calculateWeightDeltas(middle2Error);
         middle.calculateWeightDeltas(middleError);
         front.calculateWeightDeltas(frontError);
         apply();
     }
 
-    @Override
-    public int getSize() {
-        return SIZE;
-    }
-
     private void apply() {
         front.applyWeightDeltas();
         middle.applyWeightDeltas();
         middle2.applyWeightDeltas();
+        middle3.applyWeightDeltas();
         back.applyWeightDeltas();
     }
 
@@ -63,5 +64,10 @@ public class NetB implements Net, Serializable {
                 result[w] += weights[n][w] * error[n];
         }
         return result;
+    }
+
+    @Override
+    public int getSize() {
+        return SIZE;
     }
 }
