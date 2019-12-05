@@ -108,7 +108,7 @@ public class NetUtil {
         load();
         trainCount = 0;
         Logger.trace("net\ttraining started...");
-        List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
+        List<Nodes> nodes = repo.getNodesList();
         int from = (nodes.size() * cycle) / count;
         int to = (nodes.size() * (cycle + 1)) / count;
         for (int i = from; i < to; i++) train(nodes.get(i));
@@ -212,7 +212,10 @@ public class NetUtil {
     }
 
     public void updateRepo() {
-        repo.addNodesList(GameService.getNodes());
+        for (Nodes n : GameService.getNodes()) {
+            if (validate(n))
+                repo.addNodesList(n);
+        }
     }
 
     public void clearRepo() {

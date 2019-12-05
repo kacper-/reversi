@@ -2,7 +2,9 @@ package com.km.entities;
 
 import com.km.game.DBSlot;
 
-public class Nodes {
+import java.io.Serializable;
+
+public class Nodes implements Serializable {
     private int id;
     private String board;
     private int wins;

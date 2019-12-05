@@ -74,7 +74,6 @@ public class GameRunner {
             netUtil.saveRepo();
             Logger.setDefaultLevel();
             Logger.info("data\tdata mode finished");
-            report();
             dataFinished = true;
         }).start();
     }

@@ -23,6 +23,8 @@ class GameRunnerWrapper {
                     count = Config.getTestLen();
                     break;
                 case BATCH:
+                case TRAIN:
+                case DATA:
                     count = Config.getCycleCount();
                     break;
             }
@@ -53,6 +55,7 @@ class GameRunnerWrapper {
             case TRAIN:
                 runner.startTraining(count);
                 while (!runner.isTrainFinished()) ;
+                System.out.println("wrapper end");
                 break;
         }
     }

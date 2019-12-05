@@ -9,8 +9,8 @@ import java.util.List;
 public class Repo implements Serializable {
     private List<Nodes> nodesList = new ArrayList<>();
 
-    public void addNodesList(List<Nodes> nodes) {
-        nodesList.addAll(nodes);
+    public void addNodesList(Nodes node) {
+        nodesList.add(node);
     }
 
     public List<Nodes> getNodesList() {
