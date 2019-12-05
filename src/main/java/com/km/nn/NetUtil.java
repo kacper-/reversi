@@ -77,9 +77,14 @@ public class NetUtil {
     private void train(Nodes n) {
         if (!validate(n))
             return;
+        trainNoValidate(n);
+    }
+
+    private void trainNoValidate(Nodes n) {
         net.teach(translate(n.getBoard()), expected(n));
         trainCount++;
     }
+
 
     private double expected(Nodes n) {
         return net.expected(new double[]{n.getWins(), n.getLoses()});
@@ -111,7 +116,7 @@ public class NetUtil {
         List<Nodes> nodes = repo.getNodesList();
         int from = (nodes.size() * cycle) / count;
         int to = (nodes.size() * (cycle + 1)) / count;
-        for (int i = from; i < to; i++) train(nodes.get(i));
+        for (int i = from; i < to; i++) trainNoValidate(nodes.get(i));
         int[] result = verify(nodes);
         Logger.important(String.format("net\ttraining segment from [%d] to [%d]", from, to));
         save();
