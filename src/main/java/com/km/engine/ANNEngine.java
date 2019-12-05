@@ -12,8 +12,8 @@ public class ANNEngine implements MoveEngine {
     private GameController controller;
     private NetUtil netUtil;
 
-    ANNEngine(NetVersion version, String name) {
-        netUtil = new NetUtil(version, name);
+    ANNEngine(NetVersion version, String name, String dataFile) {
+        netUtil = new NetUtil(version, name, dataFile);
     }
 
     @Override

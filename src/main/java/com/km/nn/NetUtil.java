@@ -5,6 +5,7 @@ import com.km.Logger;
 import com.km.entities.Nodes;
 import com.km.game.DBSlot;
 import com.km.repos.GameService;
+import com.km.repos.Repo;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,10 +17,13 @@ public class NetUtil {
     private NetVersion version;
     private int trainCount;
     private String fileName;
+    private String repoFileName;
+    private Repo repo;
 
-    public NetUtil(NetVersion version, String name) {
+    public NetUtil(NetVersion version, String name, String repoFileName) {
         this.version = version;
         this.fileName = Config.FILE_PATH + name;
+        this.repoFileName = Config.FILE_PATH + repoFileName;
     }
 
     public void clear() {
@@ -109,7 +113,7 @@ public class NetUtil {
         int to = (nodes.size() * (cycle + 1)) / count;
         for (int i = from; i < to; i++) train(nodes.get(i));
         int[] result = verify(nodes);
-        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%,] after [%d] iterations", PRECISION, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], trainCount));
+        Logger.important(String.format("net\ttraining segment from [%d] to [%d]", from, to));
         save();
         return result;
     }
@@ -176,5 +180,42 @@ public class NetUtil {
         int[] r = net.report();
         for (int i = 0; i < net.getSegments(); i++)
             Logger.info(String.format("[%d] -> [%d]", i, r[i]));
+    }
+
+    public void saveRepo() {
+        Logger.trace(String.format("net\tsaving data file [%s]", repoFileName));
+        try {
+            FileOutputStream fileOut = new FileOutputStream(repoFileName);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(repo);
+            objectOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadRepo() {
+        Logger.trace(String.format("net\tloading data file [%s]", repoFileName));
+        if (!new File(repoFileName).exists()) {
+            Logger.important(String.format("net\tdata file [%s] does not exist, creating new", repoFileName));
+            clear();
+        } else {
+            try {
+                FileInputStream fileIn = new FileInputStream(repoFileName);
+                ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                repo = (Repo) objectIn.readObject();
+                objectIn.close();
+            } catch (Exception e) {
+                Logger.error(String.format("net\terror loading data file [%s]", repoFileName));
+            }
+        }
+    }
+
+    public void updateRepo() {
+        repo.addNodesList(GameService.getNodes());
+    }
+
+    public void clearRepo() {
+        repo = new Repo();
     }
 }

@@ -58,6 +58,8 @@ public class GameRunner {
 
     public void startData(int cycleCount) {
         dataFinished = false;
+        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile(), Config.getDataFile());
+        netUtil.clearRepo();
         new Thread(() -> {
             progress = new ArrayList<>();
             Logger.info(String.format("data\tdata mode : cycles count [%d]", cycleCount));
@@ -65,9 +67,11 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
                 runDataCycle();
+                netUtil.updateRepo();
                 long stop = new Date().getTime();
                 Logger.important(String.format("%d,%d", i + 1, (stop - start) / 1000));
             }
+            netUtil.saveRepo();
             Logger.setDefaultLevel();
             Logger.info("data\tdata mode finished");
             report();
@@ -86,9 +90,8 @@ public class GameRunner {
 
     public void startTraining(int cycleCount) {
         trainFinished = false;
-        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile());
-        if (Config.isBatchClear())
-            netUtil.clear();
+        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile(), Config.getDataFile());
+        netUtil.loadRepo();
         new Thread(() -> {
             progress = new ArrayList<>();
             clearHistogram();
@@ -120,7 +123,7 @@ public class GameRunner {
 
     public void startBatchTrain(int cycleCount) {
         batchFinished = false;
-        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile());
+        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile(), Config.getDataFile());
         if (Config.isBatchClear())
             netUtil.clear();
         new Thread(() -> {

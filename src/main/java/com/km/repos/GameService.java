@@ -78,13 +78,4 @@ public class GameService {
         //NodesRepo.printStats();
         //MovesRepo.printStats();
     }
-
-    public Repo getRepo() {
-        // TODO implement
-        return null;
-    }
-
-    public void setRepo(Repo repo) {
-        // TODO implement
-    }
 }

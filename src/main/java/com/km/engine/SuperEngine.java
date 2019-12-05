@@ -11,13 +11,13 @@ public class SuperEngine implements MoveEngine {
     private RuleEngine rule = new RuleEngine();
     private ANNEngine ann;
 
-    SuperEngine(NetVersion version) {
+    SuperEngine(NetVersion version, String dataFile) {
         switch (version) {
             case NET3M:
-                ann = new ANNEngine(NetVersion.NET3M, EngineType.ANN3MRC.name());
+                ann = new ANNEngine(NetVersion.NET3M, EngineType.ANN3MRC.name(), dataFile);
                 break;
             case NET4M:
-                ann = new ANNEngine(NetVersion.NET4M, EngineType.ANN4MRC.name());
+                ann = new ANNEngine(NetVersion.NET4M, EngineType.ANN4MRC.name(), dataFile);
                 break;
         }
     }
