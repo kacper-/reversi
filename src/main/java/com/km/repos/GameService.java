@@ -1,6 +1,5 @@
 package com.km.repos;
 
-import com.km.Logger;
 import com.km.entities.Moves;
 import com.km.entities.Nodes;
 import com.km.entities.Pair;
@@ -78,5 +77,14 @@ public class GameService {
         //Logger.trace("db\tstatistics:");
         //NodesRepo.printStats();
         //MovesRepo.printStats();
+    }
+
+    public Repo getRepo() {
+        // TODO implement
+        return null;
+    }
+
+    public void setRepo(Repo repo) {
+        // TODO implement
     }
 }

@@ -22,6 +22,11 @@ public class ConfigTest {
     }
 
     @Test
+    public void getDataFile() {
+        Assert.assertEquals("DATA", Config.getDataFile());
+    }
+
+    @Test
     public void getNetActivationFunction() {
         Assert.assertEquals(ACType.ISRU, Config.getNetActivationFunction());
     }

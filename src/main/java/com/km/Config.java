@@ -15,6 +15,13 @@ public class Config {
     public static final String FILE_PATH = Paths.get(".").toAbsolutePath().normalize().toString() + File.separator;
     private static Properties properties;
 
+    public static String getDataFile() {
+        if (properties.getProperty("data.file") != null)
+            return properties.getProperty("data.file");
+        else
+            throw new IllegalArgumentException();
+    }
+
     public static String getEngineANN3MRCfile() {
         if (properties.getProperty("engine.ANN3MRC.file") != null)
             return properties.getProperty("engine.ANN3MRC.file");

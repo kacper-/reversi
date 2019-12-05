@@ -20,6 +20,8 @@ public class GameRunner {
     private NetUtil netUtil;
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
+    private volatile boolean dataFinished = false;
+    private volatile boolean trainFinished = false;
 
     public GameController getGameController() {
         if (controller == null) {
@@ -42,8 +44,78 @@ public class GameRunner {
         return batchFinished;
     }
 
+    public boolean isDataFinished() {
+        return dataFinished;
+    }
+
+    public boolean isTrainFinished() {
+        return trainFinished;
+    }
+
     public Set<Move> getAvailableMoves() {
         return GameRules.getAvailableMoves(getGameController().getGameBoard());
+    }
+
+    public void startData(int cycleCount) {
+        dataFinished = false;
+        new Thread(() -> {
+            progress = new ArrayList<>();
+            Logger.info(String.format("data\tdata mode : cycles count [%d]", cycleCount));
+            Logger.setLevel(LogLevel.IMPORTANT);
+            for (int i = 0; i < cycleCount; i++) {
+                long start = new Date().getTime();
+                runDataCycle();
+                long stop = new Date().getTime();
+                Logger.important(String.format("%d,%d", i + 1, (stop - start) / 1000));
+            }
+            Logger.setDefaultLevel();
+            Logger.info("data\tdata mode finished");
+            report();
+            dataFinished = true;
+        }).start();
+    }
+
+    private void runDataCycle() {
+        EngineType[] engineTypes = Config.getBatchTrainEngines();
+        EngineType opp = engineTypes[new Random().nextInt(engineTypes.length)];
+        if (new Random().nextBoolean())
+            runWar(EngineType.MC, opp);
+        else
+            runWar(opp, EngineType.MC);
+    }
+
+    public void startTraining(int cycleCount) {
+        trainFinished = false;
+        netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile());
+        if (Config.isBatchClear())
+            netUtil.clear();
+        new Thread(() -> {
+            progress = new ArrayList<>();
+            clearHistogram();
+            Logger.info(String.format("train\ttrain mode : cycles count [%d]", cycleCount));
+            Logger.setLevel(LogLevel.IMPORTANT);
+            int avg = 0;
+            for (int i = 0; i < cycleCount; i++) {
+                long start = new Date().getTime();
+                Logger.info(String.format("train\tcycle [%d] of [%d]", i + 1, cycleCount));
+                int[] acc = runTrainingOnlyCycle(i, cycleCount);
+                int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
+                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
+                avg += wins;
+                histogram[wins / 10]++;
+                notifyOnTrainProgress();
+                long stop = new Date().getTime();
+                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
+            }
+            Logger.setDefaultLevel();
+            Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
+            report();
+            trainFinished = true;
+        }).start();
+    }
+
+    private int[] runTrainingOnlyCycle(int cycle, int count) {
+        return netUtil.runTraining(cycle, count);
     }
 
     public void startBatchTrain(int cycleCount) {

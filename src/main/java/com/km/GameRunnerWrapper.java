@@ -46,6 +46,14 @@ class GameRunnerWrapper {
             case UI:
                 runFrame();
                 break;
+            case DATA:
+                runner.startData(count);
+                while (!runner.isDataFinished()) ;
+                break;
+            case TRAIN:
+                runner.startTraining(count);
+                while (!runner.isTrainFinished()) ;
+                break;
         }
     }
 
@@ -61,6 +69,8 @@ class GameRunnerWrapper {
     enum Command {
         WAR,
         BATCH,
-        UI
+        UI,
+        DATA,
+        TRAIN
     }
 }

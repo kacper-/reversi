@@ -1,9 +1,5 @@
 package com.km;
 
-import com.km.ui.frame.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
 import java.io.FileInputStream;
 import java.util.Properties;
 
@@ -34,7 +30,11 @@ public class Application {
         Logger.important("\t\twar EngineType EngineType");
         Logger.important("for batch mode :");
         Logger.important("\t\tbatch\n");
-        Logger.important("EngineType = [ MC | ANN3MRC | ANN4MRC | RULE | RANDOM | SUPER3M | SUPER4M | BATCH ]");
+        Logger.important("EngineType = [ MC | ANN3MRC | ANN4MRC | ANNMMRC | RULE | RANDOM | SUPER3M | SUPER4M | BATCH ]");
+        Logger.important("for data mode :");
+        Logger.important("\t\tdata");
+        Logger.important("for train mode :");
+        Logger.important("\t\ttrain");
         Logger.important("---\n");
     }
 
