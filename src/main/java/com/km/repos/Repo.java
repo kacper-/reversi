@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Repo implements Serializable {
+    // TODO switch to Map<String, Nodes> instead of List
     private List<Nodes> nodesList = new ArrayList<>();
 
     public void addNodesList(Nodes node) {

@@ -218,6 +218,7 @@ public class NetUtil {
     }
 
     public void updateRepo() {
+        // TODO switch to GameService.getMap()
         for (Nodes n : GameService.getNodes()) {
             if (validate(n))
                 repo.addNodesList(n);

@@ -68,6 +68,10 @@ public class GameService {
         return NodesRepo.getNodes();
     }
 
+    public static Map<String, Nodes> getMap() {
+        return NodesRepo.getMap();
+    }
+
     public static void clear() {
         MovesRepo.clear();
         NodesRepo.clear();
