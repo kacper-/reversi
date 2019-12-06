@@ -210,6 +210,7 @@ public class NetUtil {
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 repo = (Repo) objectIn.readObject();
                 objectIn.close();
+                Logger.important(String.format("net\tdata file size [%d]", repo.getNodesList().size()));
             } catch (Exception e) {
                 Logger.error(String.format("net\terror loading data file [%s]", repoFileName));
             }
