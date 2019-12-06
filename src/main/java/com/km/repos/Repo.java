@@ -3,18 +3,23 @@ package com.km.repos;
 import com.km.entities.Nodes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Repo implements Serializable {
-    // TODO switch to Map<String, Nodes> instead of List
-    private List<Nodes> nodesList = new ArrayList<>();
+    private Map<String, Nodes> map = new HashMap<>();
 
     public void addNodesList(Nodes node) {
-        nodesList.add(node);
+        if (map.containsKey(node.getBoard())) {
+            Nodes n = map.get(node.getBoard());
+            n.setWins(n.getWins() + node.getWins());
+            n.setLoses(n.getLoses() + node.getLoses());
+            map.put(n.getBoard(), n);
+        } else
+            map.put(node.getBoard(), node);
     }
 
-    public List<Nodes> getNodesList() {
-        return nodesList;
+    public Map<String, Nodes> getNodesMap() {
+        return map;
     }
 }

@@ -10,6 +10,7 @@ import com.km.repos.Repo;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
@@ -109,13 +110,10 @@ public class NetUtil {
         return result;
     }
 
-    public int[] runTraining(int cycle, int count) {
+    public int[] runTraining(List<Nodes> nodes, int from, int to) {
         load();
         trainCount = 0;
         Logger.trace("net\ttraining started...");
-        List<Nodes> nodes = repo.getNodesList();
-        int from = (nodes.size() * cycle) / count;
-        int to = (nodes.size() * (cycle + 1)) / count;
         for (int i = from; i < to; i++) trainNoValidate(nodes.get(i));
         int[] result = verify(nodes);
         Logger.important(String.format("net\ttraining segment from [%d] to [%d]", from, to));
@@ -182,6 +180,7 @@ public class NetUtil {
     }
 
     public void report() {
+        Logger.info(String.format("trainCount = [%d]", trainCount));
         int[] r = net.report();
         for (int i = 0; i < net.getSegments(); i++)
             Logger.info(String.format("[%d] -> [%d]", i, r[i]));
@@ -210,7 +209,7 @@ public class NetUtil {
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 repo = (Repo) objectIn.readObject();
                 objectIn.close();
-                Logger.important(String.format("net\tdata file size [%d]", repo.getNodesList().size()));
+                Logger.important(String.format("net\tdata file size [%d]", repo.getNodesMap().size()));
             } catch (Exception e) {
                 Logger.error(String.format("net\terror loading data file [%s]", repoFileName));
             }
@@ -223,6 +222,10 @@ public class NetUtil {
             if (validate(n))
                 repo.addNodesList(n);
         }
+    }
+
+    public Map<String, Nodes> getNodesMap() {
+        return repo.getNodesMap();
     }
 
     public void clearRepo() {

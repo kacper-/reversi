@@ -4,6 +4,7 @@ import com.km.Config;
 import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
+import com.km.entities.Nodes;
 import com.km.nn.NetUtil;
 
 import java.util.*;
@@ -90,6 +91,8 @@ public class GameRunner {
     public void startTraining(int cycleCount) {
         trainFinished = false;
         netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile(), Config.getDataFile());
+        if (Config.isBatchClear())
+            netUtil.clear();
         netUtil.loadRepo();
         new Thread(() -> {
             progress = new ArrayList<>();
@@ -97,10 +100,14 @@ public class GameRunner {
             Logger.info(String.format("train\ttrain mode : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
+            List<Nodes> nodes = new ArrayList<>(netUtil.getNodesMap().values());
+            int from, to;
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
+                from = (nodes.size() * i) / cycleCount;
+                to = (nodes.size() * (i + 1)) / cycleCount;
                 Logger.info(String.format("train\tcycle [%d] of [%d]", i + 1, cycleCount));
-                int[] acc = runTrainingOnlyCycle(i, cycleCount);
+                int[] acc = runTrainingOnlyCycle(nodes, from, to);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
@@ -116,8 +123,8 @@ public class GameRunner {
         }).start();
     }
 
-    private int[] runTrainingOnlyCycle(int cycle, int count) {
-        return netUtil.runTraining(cycle, count);
+    private int[] runTrainingOnlyCycle(List<Nodes> nodes, int from, int to) {
+        return netUtil.runTraining(nodes, from, to);
     }
 
     public void startBatchTrain(int cycleCount) {
