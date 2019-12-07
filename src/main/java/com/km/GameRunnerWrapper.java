@@ -39,22 +39,26 @@ class GameRunnerWrapper {
         switch (command) {
             case WAR:
                 runner.startWarGame(warOpp1, warOpp2, count);
-                while (!runner.isWarFinished()) ;
+                while (!runner.isWarFinished())
+                    Thread.yield();
                 break;
             case BATCH:
                 runner.startBatchTrain(count);
-                while (!runner.isBatchFinished()) ;
+                while (!runner.isBatchFinished())
+                    Thread.yield();
                 break;
             case UI:
                 runFrame();
                 break;
             case DATA:
                 runner.startData(count);
-                while (!runner.isDataFinished()) ;
+                while (!runner.isDataFinished())
+                    Thread.yield();
                 break;
             case TRAIN:
                 runner.startTraining(count);
-                while (!runner.isTrainFinished()) ;
+                while (!runner.isTrainFinished())
+                    Thread.yield();
                 System.out.println("wrapper end");
                 break;
         }
