@@ -4,7 +4,6 @@ import com.km.Config;
 import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
-import com.km.entities.Nodes;
 import com.km.nn.NetUtil;
 
 import java.util.*;
@@ -95,36 +94,38 @@ public class GameRunner {
             netUtil.clear();
         netUtil.loadRepo();
         new Thread(() -> {
+            long start, stop;
             progress = new ArrayList<>();
             clearHistogram();
             Logger.info(String.format("train\ttrain mode : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
-            List<Nodes> nodes = new ArrayList<>(netUtil.getNodesMap().values());
+            start = new Date().getTime();
+            int size = netUtil.getNodesMap().size();
+            netUtil.setLocalNodes();
+            stop = new Date().getTime();
+            Logger.important(String.format("train\ttrain mode : list copy int [%d] ms", stop - start));
             int from, to;
+            netUtil.load();
             for (int i = 0; i < cycleCount; i++) {
-                long start = new Date().getTime();
-                from = (nodes.size() * i) / cycleCount;
-                to = (nodes.size() * (i + 1)) / cycleCount;
-                Logger.info(String.format("train\tcycle [%d] of [%d]", i + 1, cycleCount));
-                int[] acc = runTrainingOnlyCycle(nodes, from, to);
+                start = new Date().getTime();
+                from = (size * i) / cycleCount;
+                to = (size * (i + 1)) / cycleCount;
+                int[] acc = netUtil.runTrainingFromLocalData(from, to);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
-                long stop = new Date().getTime();
+                stop = new Date().getTime();
                 Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
+            netUtil.save();
             Logger.setDefaultLevel();
-            Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
+            Logger.info(String.format("train\ttraining finished with avg : [%d]", avg / cycleCount));
             report();
             trainFinished = true;
         }).start();
-    }
-
-    private int[] runTrainingOnlyCycle(List<Nodes> nodes, int from, int to) {
-        return netUtil.runTraining(nodes, from, to);
     }
 
     public void startBatchTrain(int cycleCount) {

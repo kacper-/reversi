@@ -20,6 +20,7 @@ public class NetUtil {
     private String fileName;
     private String repoFileName;
     private Repo repo;
+    private List<Nodes> localNodes;
 
     public NetUtil(NetVersion version, String name, String repoFileName) {
         this.version = version;
@@ -31,6 +32,10 @@ public class NetUtil {
         Logger.info(String.format("net\tclearing file [%s]", fileName));
         net = createInstance();
         save();
+    }
+
+    public void setLocalNodes() {
+        this.localNodes = new ArrayList<>(getNodesMap().values());
     }
 
     private Net createInstance() {
@@ -46,7 +51,7 @@ public class NetUtil {
         }
     }
 
-    private void save() {
+    public void save() {
         Logger.trace(String.format("net\tsaving file [%s]", fileName));
         try {
             FileOutputStream fileOut = new FileOutputStream(fileName);
@@ -58,7 +63,7 @@ public class NetUtil {
         }
     }
 
-    private void load() {
+    public void load() {
         Logger.trace(String.format("net\tloading file [%s]", fileName));
         if (!new File(fileName).exists()) {
             Logger.important(String.format("net\tfile [%s] does not exist, creating new", fileName));
@@ -110,15 +115,14 @@ public class NetUtil {
         return result;
     }
 
-    public int[] runTraining(List<Nodes> nodes, int from, int to) {
-        load();
+    public int[] runTrainingFromLocalData(int from, int to) {
         trainCount = 0;
-        Logger.trace("net\ttraining started...");
-        for (int i = from; i < to; i++) trainNoValidate(nodes.get(i));
-        int[] result = verify(nodes);
-        Logger.important(String.format("net\ttraining segment from [%d] to [%d]", from, to));
-        save();
-        return result;
+        List<Nodes> tmpNodes = new ArrayList<>();
+        for (int i = from; i < to; i++) {
+            trainNoValidate(localNodes.get(i));
+            tmpNodes.add(localNodes.get(i));
+        }
+        return verify(tmpNodes);
     }
 
     private int[] verify(List<Nodes> nodes) {
@@ -217,7 +221,6 @@ public class NetUtil {
     }
 
     public void updateRepo() {
-        // TODO switch to GameService.getMap()
         for (Nodes n : GameService.getNodes()) {
             if (validate(n))
                 repo.addNodesList(n);
