@@ -104,7 +104,7 @@ public class GameRunner {
             int size = netUtil.getNodesMap().size();
             netUtil.setLocalNodes();
             stop = new Date().getTime();
-            Logger.important(String.format("train\ttrain mode : list copy int [%d] ms", stop - start));
+            Logger.important(String.format("train\ttrain mode : list copy [%d] ms", stop - start));
             int from, to;
             netUtil.load();
             for (int i = 0; i < cycleCount; i++) {
