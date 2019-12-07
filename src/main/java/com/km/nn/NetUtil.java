@@ -220,8 +220,8 @@ public class NetUtil {
         }
     }
 
-    public void updateRepo() {
-        for (Nodes n : GameService.getNodes()) {
+    public void updateRepo(List<Nodes> nodes) {
+        for (Nodes n : nodes) {
             if (validate(n))
                 repo.addNodesList(n);
         }

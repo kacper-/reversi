@@ -5,6 +5,7 @@ import com.km.LogLevel;
 import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.nn.NetUtil;
+import com.km.repos.GameService;
 
 import java.util.*;
 
@@ -67,7 +68,7 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
                 runDataCycle();
-                netUtil.updateRepo();
+                netUtil.updateRepo(GameService.getNodes());
                 long stop = new Date().getTime();
                 Logger.important(String.format("%d,%d", i + 1, (stop - start) / 1000));
             }
