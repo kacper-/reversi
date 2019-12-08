@@ -102,17 +102,18 @@ public class GameRunner {
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
             start = new Date().getTime();
-            int size = netUtil.getNodesMap().size();
+            long size = netUtil.getNodesMap().size();
             netUtil.setLocalNodes();
             stop = new Date().getTime();
             Logger.important(String.format("train\ttrain mode : list copy [%d] ms", stop - start));
-            int from, to;
+            long from, to;
             netUtil.load();
             for (int i = 0; i < cycleCount; i++) {
                 start = new Date().getTime();
                 from = (size * i) / cycleCount;
                 to = (size * (i + 1)) / cycleCount;
-                int[] acc = netUtil.runTrainingFromLocalData(from, to);
+                Logger.important(String.format("train\ttrain mode : part from [%d] to [%d]", from, to));
+                int[] acc = netUtil.runTrainingFromLocalData((int) from, (int) to);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
