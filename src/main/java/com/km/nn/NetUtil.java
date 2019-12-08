@@ -214,7 +214,8 @@ public class NetUtil {
         Logger.trace(String.format("net\tloading data file [%s]", repoFileName));
         if (!new File(repoFileName).exists()) {
             Logger.important(String.format("net\tdata file [%s] does not exist, creating new", repoFileName));
-            clear();
+            clearRepo();
+            saveRepo();
         } else {
             try {
                 FileInputStream fileIn = new FileInputStream(repoFileName);
