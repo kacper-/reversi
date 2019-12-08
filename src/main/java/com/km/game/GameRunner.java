@@ -68,9 +68,11 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
                 runDataCycle();
+                long middle = new Date().getTime();
+                int size = GameService.getNodes().size();
                 netUtil.updateRepo(GameService.getNodes());
-                long stop = new Date().getTime();
-                Logger.important(String.format("%d,%d", i + 1, (stop - start) / 1000));
+                long end = new Date().getTime();
+                Logger.important(String.format("i = %d game size = %d repo size = %d game time = %d repo update time = %d", i + 1, size, netUtil.getNodesMap().size(), (middle - start) / 1000, (end - middle) / 1000));
             }
             netUtil.saveRepo();
             Logger.setDefaultLevel();
@@ -108,20 +110,20 @@ public class GameRunner {
             Logger.important(String.format("train\ttrain mode : list copy [%d] ms", stop - start));
             long from, to;
             netUtil.load();
-            for (int i = 0; i < cycleCount; i++) {
-                start = new Date().getTime();
-                from = (size * i) / cycleCount;
-                to = (size * (i + 1)) / cycleCount;
-                Logger.important(String.format("train\ttrain mode : part from [%d] to [%d]", from, to));
-                int[] acc = netUtil.runTrainingFromLocalData((int) from, (int) to);
-                int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
-                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
-                avg += wins;
-                histogram[wins / 10]++;
-                notifyOnTrainProgress();
-                stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
-            }
+//            for (int i = 0; i < cycleCount; i++) {
+//                start = new Date().getTime();
+//                from = (size * i) / cycleCount;
+//                to = (size * (i + 1)) / cycleCount;
+//                Logger.important(String.format("train\ttrain mode : part from [%d] to [%d]", from, to));
+//                int[] acc = netUtil.runTrainingFromLocalData((int) from, (int) to);
+//                int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
+//                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
+//                avg += wins;
+//                histogram[wins / 10]++;
+//                notifyOnTrainProgress();
+//                stop = new Date().getTime();
+//                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
+//            }
             netUtil.save();
             Logger.setDefaultLevel();
             Logger.info(String.format("train\ttraining finished with avg : [%d]", avg / cycleCount));
