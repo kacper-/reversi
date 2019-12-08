@@ -114,7 +114,6 @@ public class GameRunner {
                 start = new Date().getTime();
                 from = (size * i) / cycleCount;
                 to = (size * (i + 1)) / cycleCount;
-                Logger.important(String.format("train\ttrain mode : part from [%d] to [%d]", from, to));
                 int[] acc = netUtil.runTrainingFromLocalData((int) from, (int) to);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));

@@ -36,14 +36,6 @@ public class NetUtil {
 
     public void setLocalNodes() {
         this.localNodes = new ArrayList<>(getNodesMap().values());
-        Nodes n;
-        double[] x = new double[2];
-        for (int i = 0; i < 100; i++) {
-            n = localNodes.get(i);
-            x[0] = n.getWins();
-            x[1] = n.getLoses();
-            System.out.println(String.format("%d %d %.2f %s", n.getWins(), n.getLoses(), net.expected(x), n.getBoard()));
-        }
     }
 
     private Net createInstance() {
