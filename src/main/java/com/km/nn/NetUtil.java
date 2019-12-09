@@ -20,7 +20,6 @@ public class NetUtil {
     private String fileName;
     private String repoFileName;
     private Repo repo;
-    private List<Nodes> localNodes;
 
     public NetUtil(NetVersion version, String name, String repoFileName) {
         this.version = version;
@@ -32,10 +31,6 @@ public class NetUtil {
         Logger.info(String.format("net\tclearing file [%s]", fileName));
         net = createInstance();
         save();
-    }
-
-    public void setLocalNodes() {
-        this.localNodes = new ArrayList<>(getNodesMap().values());
     }
 
     private Net createInstance() {
@@ -119,8 +114,8 @@ public class NetUtil {
         trainCount = 0;
         List<Nodes> tmpNodes = new ArrayList<>();
         for (int i = from; i < to; i++) {
-            trainNoValidate(localNodes.get(i));
-            tmpNodes.add(localNodes.get(i));
+            trainNoValidate(repo.getNodes().get(i));
+            tmpNodes.add(repo.getNodes().get(i));
         }
         return verify(tmpNodes);
     }
@@ -214,7 +209,7 @@ public class NetUtil {
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 repo = (Repo) objectIn.readObject();
                 objectIn.close();
-                Logger.important(String.format("net\tdata file size [%d]", repo.getNodesMap().size()));
+                Logger.important(String.format("net\tdata file size [%d]", repo.getNodes().size()));
             } catch (Exception e) {
                 Logger.error(String.format("net\terror loading data file [%s]", repoFileName));
             }
@@ -228,8 +223,8 @@ public class NetUtil {
         }
     }
 
-    public Map<String, Nodes> getNodesMap() {
-        return repo.getNodesMap();
+    public List<Nodes> getNodes() {
+        return repo.getNodes();
     }
 
     public void clearRepo() {

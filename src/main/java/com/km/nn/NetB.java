@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class NetB implements Net, Serializable {
     private final static int SIZE = 64;
-    private final static int BSIZE = 1024;
+    private final static int BSIZE = 256;
     private Layer front;
     private Layer back;
     private Layer middle;

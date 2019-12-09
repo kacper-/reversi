@@ -72,7 +72,7 @@ public class GameRunner {
                 int size = GameService.getNodes().size();
                 netUtil.updateRepo(GameService.getNodes());
                 long end = new Date().getTime();
-                Logger.important(String.format("%d g_size=%d\tr_size=%d\tg_time=%d\tr_time=%d", i + 1, size, netUtil.getNodesMap().size(), (middle - start) / 1000, (end - middle) / 1000));
+                Logger.important(String.format("%d g_size=%d\tr_size=%d\tg_time=%d\tr_time=%d", i + 1, size, netUtil.getNodes().size(), (middle - start) / 1000, (end - middle) / 1000));
             }
             netUtil.saveRepo();
             Logger.setDefaultLevel();
@@ -103,11 +103,7 @@ public class GameRunner {
             Logger.info(String.format("train\ttrain mode : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
-            start = new Date().getTime();
-            long size = netUtil.getNodesMap().size();
-            netUtil.setLocalNodes();
-            stop = new Date().getTime();
-            Logger.important(String.format("train\ttrain mode : list copy [%d] ms", stop - start));
+            long size = netUtil.getNodes().size();
             long from, to;
             netUtil.load();
             for (int i = 0; i < cycleCount; i++) {
