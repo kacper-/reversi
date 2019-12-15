@@ -15,9 +15,9 @@ public interface Net {
         double wins = n[0];
         double loses = n[1];
         if (loses > wins) {
-            return -(1d - (wins / loses));
+            return -(1d - Math.sqrt(wins / loses));
         } else {
-            return 1d - (loses / wins);
+            return 1d - Math.sqrt(loses / wins);
         }
     }
 
