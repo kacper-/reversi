@@ -220,8 +220,8 @@ public class NetUtil {
         repo.addNodesList(list);
     }
 
-    public List<Nodes> getNodes(int i) {
-        return repo.getNodes(i);
+    public int getLastCount() {
+        return repo.getLastCount();
     }
 
     public int getNodesListCount() {

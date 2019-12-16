@@ -20,4 +20,8 @@ public class Repo implements Serializable {
     public int getNodesListCount() {
         return list.size();
     }
+
+    public int getLastCount() {
+        return list.get(list.size() - 1).size();
+    }
 }

@@ -69,10 +69,9 @@ public class GameRunner {
                 long start = new Date().getTime();
                 runDataCycle();
                 long middle = new Date().getTime();
-                int size = GameService.getNodes().size();
                 netUtil.updateRepo(GameService.getNodes());
                 long end = new Date().getTime();
-                Logger.important(String.format("%d g_size=%d\tg_time=%d\tr_time=%d", i + 1, size, (middle - start) / 1000, (end - middle) / 1000));
+                Logger.important(String.format("%d g_size=%d\tg_time=%d\tr_time=%d", i + 1, netUtil.getLastCount(), (middle - start) / 1000, (end - middle) / 1000));
             }
             netUtil.saveRepo();
             Logger.setDefaultLevel();
