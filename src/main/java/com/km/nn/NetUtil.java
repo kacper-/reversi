@@ -10,7 +10,6 @@ import com.km.repos.Repo;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
@@ -110,14 +109,11 @@ public class NetUtil {
         return result;
     }
 
-    public int[] runTrainingFromLocalData(int from, int to) {
+    public int[] runTrainingFromLocalData(int j) {
         trainCount = 0;
-        List<Nodes> tmpNodes = new ArrayList<>();
-        for (int i = from; i < to; i++) {
-            trainNoValidate(repo.getNodes().get(i));
-            tmpNodes.add(repo.getNodes().get(i));
-        }
-        return verify(tmpNodes);
+        for (Nodes n : repo.getNodes(j))
+            trainNoValidate(n);
+        return verify(repo.getNodes(j));
     }
 
     private int[] verify(List<Nodes> nodes) {
@@ -209,7 +205,6 @@ public class NetUtil {
                 ObjectInputStream objectIn = new ObjectInputStream(fileIn);
                 repo = (Repo) objectIn.readObject();
                 objectIn.close();
-                Logger.important(String.format("net\tdata file size [%d]", repo.getNodes().size()));
             } catch (Exception e) {
                 Logger.error(String.format("net\terror loading data file [%s]", repoFileName));
             }
@@ -217,14 +212,20 @@ public class NetUtil {
     }
 
     public void updateRepo(List<Nodes> nodes) {
+        List<Nodes> list = new ArrayList<>();
         for (Nodes n : nodes) {
             if (validate(n))
-                repo.addNodesList(n);
+                list.add(n);
         }
+        repo.addNodesList(list);
     }
 
-    public List<Nodes> getNodes() {
-        return repo.getNodes();
+    public List<Nodes> getNodes(int i) {
+        return repo.getNodes(i);
+    }
+
+    public int getNodesListCount() {
+        return repo.getNodesListCount();
     }
 
     public void clearRepo() {

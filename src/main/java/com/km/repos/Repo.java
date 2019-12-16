@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Repo implements Serializable {
-    private List<Nodes> list = new ArrayList<>();
+    private List<List<Nodes>> list = new ArrayList<>();
 
-    public void addNodesList(Nodes node) {
-        list.add(node);
+    public void addNodesList(List<Nodes> nodes) {
+        list.add(nodes);
     }
 
-    public List<Nodes> getNodes() {
-        return list;
+    public List<Nodes> getNodes(int i) {
+        return list.get(i);
+    }
+
+    public int getNodesListCount() {
+        return list.size();
     }
 }

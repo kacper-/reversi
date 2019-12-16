@@ -72,7 +72,7 @@ public class GameRunner {
                 int size = GameService.getNodes().size();
                 netUtil.updateRepo(GameService.getNodes());
                 long end = new Date().getTime();
-                Logger.important(String.format("%d g_size=%d\tr_size=%d\tg_time=%d\tr_time=%d", i + 1, size, netUtil.getNodes().size(), (middle - start) / 1000, (end - middle) / 1000));
+                Logger.important(String.format("%d g_size=%d\tg_time=%d\tr_time=%d", i + 1, size, (middle - start) / 1000, (end - middle) / 1000));
             }
             netUtil.saveRepo();
             Logger.setDefaultLevel();
@@ -103,14 +103,10 @@ public class GameRunner {
             Logger.info(String.format("train\ttrain mode : cycles count [%d]", cycleCount));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
-            long size = netUtil.getNodes().size();
-            long from, to;
             netUtil.load();
-            for (int i = 0; i < cycleCount; i++) {
+            for (int i = 0; i < netUtil.getNodesListCount(); i++) {
                 start = new Date().getTime();
-                from = (size * i) / cycleCount;
-                to = (size * (i + 1)) / cycleCount;
-                int[] acc = netUtil.runTrainingFromLocalData((int) from, (int) to);
+                int[] acc = netUtil.runTrainingFromLocalData(i);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
