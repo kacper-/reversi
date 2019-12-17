@@ -89,7 +89,7 @@ public class GameRunner {
             runWar(opp, EngineType.MC);
     }
 
-    public void startTraining(int cycleCount) {
+    public void startTraining() {
         trainFinished = false;
         netUtil = new NetUtil(Config.getBatchNetVersion(), Config.getBatchNetFile(), Config.getDataFile());
         if (Config.isBatchClear())
@@ -99,7 +99,7 @@ public class GameRunner {
             long start, stop;
             progress = new ArrayList<>();
             clearHistogram();
-            Logger.info(String.format("train\ttrain mode : cycles count [%d]", cycleCount));
+            Logger.info(String.format("train\ttrain mode : cycles count [%d]", netUtil.getNodesListCount()));
             Logger.setLevel(LogLevel.IMPORTANT);
             int avg = 0;
             netUtil.load();
@@ -116,7 +116,7 @@ public class GameRunner {
             }
             netUtil.save();
             Logger.setDefaultLevel();
-            Logger.info(String.format("train\ttraining finished with avg : [%d]", avg / cycleCount));
+            Logger.info(String.format("train\ttraining finished with avg : [%d]", avg / netUtil.getNodesListCount()));
             report();
             trainFinished = true;
         }).start();

@@ -110,9 +110,10 @@ public class NetUtil {
     }
 
     public int[] runTrainingFromLocalData(int j) {
-        trainCount = 0;
+        load();
         for (Nodes n : repo.getNodes(j))
             trainNoValidate(n);
+        save();
         return verify(repo.getNodes(j));
     }
 

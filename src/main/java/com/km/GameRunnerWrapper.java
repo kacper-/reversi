@@ -56,7 +56,7 @@ class GameRunnerWrapper {
                     Thread.yield();
                 break;
             case TRAIN:
-                runner.startTraining(count);
+                runner.startTraining();
                 while (!runner.isTrainFinished())
                     Thread.yield();
                 System.out.println("wrapper end");
