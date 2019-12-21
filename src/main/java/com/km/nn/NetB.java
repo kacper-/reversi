@@ -15,7 +15,7 @@ public class NetB implements Net, Serializable {
     private Layer middle3;
 
     NetB() {
-        front = new Layer(BSIZE, SIZE, Config.getNet4LearningFactor());
+        front = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
         middle = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
         middle2 = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
         middle3 = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
@@ -24,7 +24,14 @@ public class NetB implements Net, Serializable {
 
     @Override
     public double process(double[] signal) {
-        front.process(signal);
+        double[] input = new double[BSIZE];
+        for (int i = 0; i < SIZE; i++) {
+            if (signal[i] < -0.9d)
+                input[i + SIZE] = signal[i];
+            else
+                input[i] = signal[i];
+        }
+        front.process(input);
         middle.process(front.getOutputs());
         middle2.process(middle.getOutputs());
         middle3.process(middle2.getOutputs());
