@@ -22,8 +22,7 @@ public class NetB implements Net, Serializable {
         back = new Layer(1, BSIZE, Config.getNet4LearningFactor());
     }
 
-    @Override
-    public double process(double[] signal) {
+    private double[] from64to128(double[] signal) {
         double[] input = new double[BSIZE];
         for (int i = 0; i < SIZE; i++) {
             if (signal[i] < -0.9d)
@@ -31,7 +30,12 @@ public class NetB implements Net, Serializable {
             else
                 input[i] = signal[i];
         }
-        front.process(input);
+        return input;
+    }
+
+    @Override
+    public double process(double[] signal) {
+        front.process(from64to128(signal));
         middle.process(front.getOutputs());
         middle2.process(middle.getOutputs());
         middle3.process(middle2.getOutputs());
