@@ -104,7 +104,7 @@ public class NetUtil {
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         for (Nodes node : nodes) train(node);
         int[] result = verify(nodes);
-        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%, %d %%, %d %%, %d %%] after [%d] iterations", PRECISION, result[0], result[1], result[2], result[3], trainCount));
+        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%, %d %%,] after [%d] iterations", PRECISION, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], trainCount));
         save();
         return result;
     }
@@ -127,7 +127,7 @@ public class NetUtil {
                 continue;
             actual = process(node.getBoard());
             expected = expected(node);
-            idx = (net.getSize() - node.getCount(DBSlot.EMPTY)) / (net.getSize() / net.getSegments());
+            idx = (net.getSize() - node.getCount(DBSlot.EMPTY)) / net.getSegments();
             if (inRange(expected, actual))
                 result[idx]++;
             count[idx]++;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class NetM implements Serializable, Net {
     private final static int NET_SIZE = 64;
-    private static final int SIZE = 4;
+    private static final int SIZE = 8;
     private Net[] net = new Net[SIZE];
     private int[] trainCounter = new int[SIZE];
 
@@ -42,7 +42,7 @@ public class NetM implements Serializable, Net {
             if (isZero(v))
                 i++;
         }
-        return (NET_SIZE - i) / (NET_SIZE / SIZE);
+        return (NET_SIZE - i) / SIZE;
     }
 
     private boolean isZero(double d) {
