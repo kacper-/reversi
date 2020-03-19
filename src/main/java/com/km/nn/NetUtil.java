@@ -85,9 +85,9 @@ public class NetUtil {
         trainCount++;
     }
 
-
     private double expected(Nodes n) {
-        return net.expected(new double[]{n.getWins(), n.getLoses()});
+        //return net.expected(new double[]{n.getWins(), n.getLoses()});
+        return net.expected2(new double[]{n.getWins(), n.getLoses()});
     }
 
     private boolean validate(Nodes n) {
