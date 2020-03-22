@@ -22,13 +22,12 @@ public interface Net {
     }
 
     default double expected2(double[] n) {
-        // TODO implement different approach
         double wins = n[0];
         double loses = n[1];
         if (loses > wins) {
-            return -(1d - Math.sqrt(wins / loses));
+            return -(1d - Math.pow(wins / loses, 2d));
         } else {
-            return 1d - Math.sqrt(loses / wins);
+            return 1d - Math.pow(loses / wins, 2d);
         }
     }
 
