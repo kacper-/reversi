@@ -16,10 +16,10 @@ public class NetB implements Net, Serializable {
 
     NetB() {
         front = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
-        middle = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
-        middle2 = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
-        middle3 = new Layer(BSIZE, BSIZE, Config.getNet4LearningFactor());
-        back = new Layer(1, BSIZE, Config.getNet4LearningFactor());
+        middle = new Layer(SIZE, BSIZE, Config.getNet4LearningFactor());
+        middle2 = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
+        middle3 = new Layer(SIZE, SIZE, Config.getNet4LearningFactor());
+        back = new Layer(1, SIZE, Config.getNet4LearningFactor());
     }
 
     private double[] from64to128(double[] signal) {

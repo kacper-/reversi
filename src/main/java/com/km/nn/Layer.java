@@ -7,6 +7,7 @@ import com.km.nn.dropout.DropOutFactory;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 class Layer implements Serializable {
     private final static double WEIGHT_INIT_LIMIT = 0.05d;
@@ -52,7 +53,7 @@ class Layer implements Serializable {
         weightDeltas = new double[neuronCount][weightCount];
         for (int n = 0; n < neuronCount; n++) {
             for (int w = 0; w < weightCount; w++) {
-                weights[n][w] = (new Random().nextDouble() * 2 * WEIGHT_INIT_LIMIT) - WEIGHT_INIT_LIMIT;
+                weights[n][w] = (ThreadLocalRandom.current().nextDouble() * 2 * WEIGHT_INIT_LIMIT) - WEIGHT_INIT_LIMIT;
                 weightDeltas[n][w] = 0d;
             }
         }

@@ -26,16 +26,13 @@ public class ANNEngine implements MoveEngine {
         double score;
         double bestScore = -Double.MAX_VALUE;
         Move best = null;
-        //Logger.trace(String.format("algo\tnumber of available moves = [%d]", moves.size()));
         for (Move m : moves) {
             score = scoreMove(m);
-            //Logger.debug(String.format("algo\tmove = [%d, %d] score = [%f]", m.getI(), m.getJ(), score));
             if (bestScore < score) {
                 bestScore = score;
                 best = m;
             }
         }
-        //Logger.trace(String.format("algo\tchoosing = [%d, %d]", best.getI(), best.getJ()));
         return best;
     }
 

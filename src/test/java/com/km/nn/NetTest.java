@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class NetTest {
     private static final int TRAIN_CYCLE = 2000;
@@ -87,7 +88,7 @@ public class NetTest {
         int count = TRAIN_CYCLE * test.length;
         int t;
         for (int i = 0; i < count; i++) {
-            t = new Random().nextInt(test.length);
+            t = ThreadLocalRandom.current().nextInt(test.length);
             net.teach(test[t], result(t));
         }
         for (t = 0; t < test.length; t++) {

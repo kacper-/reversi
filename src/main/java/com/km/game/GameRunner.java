@@ -8,6 +8,7 @@ import com.km.nn.NetUtil;
 import com.km.repos.GameService;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameRunner {
     private static final int HIST_SIZE = 11;
@@ -82,8 +83,8 @@ public class GameRunner {
 
     private void runDataCycle() {
         EngineType[] engineTypes = Config.getBatchTrainEngines();
-        EngineType opp = engineTypes[new Random().nextInt(engineTypes.length)];
-        if (new Random().nextBoolean())
+        EngineType opp = engineTypes[ThreadLocalRandom.current().nextInt(engineTypes.length)];
+        if (ThreadLocalRandom.current().nextBoolean())
             runWar(EngineType.MC, opp);
         else
             runWar(opp, EngineType.MC);
@@ -107,12 +108,12 @@ public class GameRunner {
                 start = new Date().getTime();
                 int[] acc = netUtil.runTrainingFromLocalData(i);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
-                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
+                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
+                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], (stop - start) / 1000));
             }
             netUtil.save();
             Logger.setDefaultLevel();
@@ -138,12 +139,12 @@ public class GameRunner {
                 Logger.info(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int[] acc = runTrainingCycle();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
-                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
+                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 long stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
+                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], (stop - start) / 1000));
             }
             Logger.setDefaultLevel();
             Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
@@ -169,8 +170,8 @@ public class GameRunner {
 
     private int[] runTrainingCycle() {
         EngineType[] engineTypes = Config.getBatchTrainEngines();
-        EngineType opp = engineTypes[new Random().nextInt(engineTypes.length)];
-        if (new Random().nextBoolean())
+        EngineType opp = engineTypes[ThreadLocalRandom.current().nextInt(engineTypes.length)];
+        if (ThreadLocalRandom.current().nextBoolean())
             runWar(EngineType.MC, opp);
         else
             runWar(opp, EngineType.MC);
@@ -189,12 +190,9 @@ public class GameRunner {
         warScoreW = 0;
         warScoreB = 0;
         for (int i = 0; i < count; i++) {
-            //Logger.info(String.format("board\tstarting war game [%d] of [%d]", i + 1, count));
             runWar(typeB, typeW);
             notifyOnWarScore(i + 1, warScoreB, warScoreW);
-            //Logger.info(String.format("board\tcurrent war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         }
-        //Logger.info(String.format("board\tfinal war score [%s] [%d] : [%s] [%d]", typeB.name(), warScoreB, typeW.name(), warScoreW));
         warFinished = true;
         return Math.max(warScoreB, warScoreW);
     }

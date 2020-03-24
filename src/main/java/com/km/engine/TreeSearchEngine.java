@@ -9,8 +9,10 @@ import com.km.repos.GameService;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TreeSearchEngine implements MoveEngine {
+    private static final boolean RANDOM = false;
     private static final double MC_FACTOR = 1.4d;
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
@@ -48,7 +50,7 @@ public class TreeSearchEngine implements MoveEngine {
         HistoryItem parent = HistoryItem.fromGB(controller.getGameBoard());
         Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = GameService.findSimulations(parent.getBoard());
         if (simulations.isEmpty()) {
-            return chooseRandomMove(moves);
+            return chooseNewMove(moves);
         } else {
             Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulationMoves = new HashMap<>();
             for (Pair<String, Integer> p : simulations.keySet()) {
@@ -91,7 +93,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     private int getTaskCount() {
         Score s = controller.getScore();
-        return tCount[(s.getBlack() + s.getWhite()) / 8];
+        return tCount[(s.getBlack() + s.getWhite()) / 16];
     }
 
     private void loadConfig() {
@@ -127,25 +129,30 @@ public class TreeSearchEngine implements MoveEngine {
         Pair<Move, Integer> best = simulations.keySet().iterator().next();
         double score = MC_DEFAULT_SCORE;
         int bigN = getBigN(simulations);
-        //Logger.trace(String.format("algo\tmoves [%d] simulations [%d]", moves.size(), simulations.size()));
         int good = 0;
         for (Pair<Move, Integer> m : simulations.keySet()) {
             Pair<Integer, Integer> p = simulations.get(m);
             double mcValue = getMCvalue(bigN, p.getFirst(), p.getSecond());
-            //Logger.debug(String.format("algo\toption from simulation node id = [%d] mcval = [%f]", m.getSecond(), mcValue));
             if (mcValue > score) {
                 best = m;
                 score = mcValue;
             }
-            if (mcValue > EXPAND_RATIO)
+            if (getMoveWLScore(p.getFirst(), p.getSecond()) > EXPAND_RATIO)
                 good++;
         }
         if (controller.isSimulation() && (good < MIN_GOOD) && (moves.size() > simulations.size())) {
             return expand(simulations, moves);
         } else {
-            //Logger.trace(String.format("algo\tchoosing from simulation node id = [%d]", best.getSecond()));
             return best.getFirst();
         }
+    }
+
+    private double getMoveWLScore(int wins, int loses) {
+        double result = 0d;
+        if (wins + loses > 1) {
+            result = ((double) wins) / ((double) (wins + loses));
+        }
+        return result;
     }
 
     private Move expand(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {
@@ -154,17 +161,78 @@ public class TreeSearchEngine implements MoveEngine {
             Move m = p.getFirst();
             nonSimulated.remove(m);
         }
-        return chooseRandomMove(nonSimulated);
+        return chooseNewMove(nonSimulated);
     }
 
-    private Move chooseRandomMove(Set<Move> moves) {
-//        Logger.debug(String.format("algo\t[%d] random options", moves.size()));
-//        for (Move m : moves) {
-//            Logger.debug(String.format("algo\toption move = [%d, %d]", m.getI(), m.getJ()));
-//        }
-        Move move = new ArrayList<>(moves).get(new Random().nextInt(moves.size()));
-//        Logger.trace(String.format("algo\tchoosing random move = [%d, %d] from [%d] options", move.getI(), move.getJ(), moves.size()));
-        return move;
+    private Move chooseNewMove(Set<Move> moves) {
+        if (RANDOM) {
+            return new ArrayList<>(moves).get(ThreadLocalRandom.current().nextInt(moves.size()));
+        }
+        double score;
+        double bestScore = -Double.MAX_VALUE;
+        Move best = null;
+        for (Move m : moves) {
+            score = scoreMove(m);
+            if (bestScore < score) {
+                bestScore = score;
+                best = m;
+            }
+        }
+        return best;
+    }
+
+    private double scoreMove(Move m) {
+        if (isCorner(m))
+            return 1d;
+        double risk = calculateRisk(m);
+        if (risk < 0)
+            return risk;
+        int count = countGain(m);
+        return ((double) count) / 64d;
+    }
+
+    private int countGain(Move m) {
+        Slot turn = controller.getGameBoard().getTurn();
+        int start = turn == Slot.BLACK ? controller.getScore().getBlack() : controller.getScore().getWhite();
+        GameController copy = controller.copy();
+        copy.updateBoard(m);
+        int end = turn == Slot.BLACK ? copy.getScore().getBlack() : copy.getScore().getWhite();
+        return end - start;
+    }
+
+    private double calculateRisk(Move m) {
+        double exposeCorner = calculateExposedCorner(m);
+        if (exposeCorner < 0)
+            return exposeCorner;
+        double exposeSemiCorner = calculateExposedSemiCorner(m);
+        if (exposeSemiCorner < 0)
+            return exposeSemiCorner;
+        return 1d;
+    }
+
+    private double calculateExposedSemiCorner(Move m) {
+        int i = GameRules.getSemiCorners().indexOf(GameRules.toSimpleMove(m));
+        if (i > -1) {
+            Move cc = GameRules.getCorners().get(i);
+            if (controller.getGameBoard().getValue(cc.getI(), cc.getJ()) == Slot.EMPTY)
+                return -0.5d;
+        }
+        return 1d;
+    }
+
+    private double calculateExposedCorner(Move m) {
+        GameController copy = controller.copy();
+        copy.updateBoard(m);
+        Set<Move> moves = GameRules.getAvailableMoves(copy.getGameBoard());
+        for (Move move : moves) {
+            if (isCorner(move))
+                return -1d;
+        }
+        return 1d;
+    }
+
+    private boolean isCorner(Move m) {
+        return GameRules.getCorners().contains(GameRules.toSimpleMove(m));
     }
 
     private double getMCvalue(int bigN, int wins, int loses) {

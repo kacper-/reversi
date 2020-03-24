@@ -138,14 +138,12 @@ public class GameController {
 
     public void updateBoard(Move move) {
         HistoryItem parent = HistoryItem.fromGB(gameBoard);
-        //Logger.trace(String.format("turn\t[%s] move = [%d, %d]", gameBoard.getTurn().name(), move.getI(), move.getJ()));
         GameRules.updateBoard(move, gameBoard);
         if (gameBoard.getTurn() == Slot.BLACK) {
             historyBlack.add(HistoryItem.fromGBWithParent(gameBoard, parent));
         } else {
             historyWhite.add(HistoryItem.fromGBWithParent(gameBoard, parent));
         }
-        //Logger.trace(String.format("score\t[%d, %d]", getScore().getBlack(), getScore().getWhite()));
         nextTurn();
     }
 
@@ -177,7 +175,6 @@ public class GameController {
         boolean finished = GameRules.isGameFinished(gameBoard);
         if (finished && !gameSaved) {
             gameSaved = true;
-            printStats();
         }
         return finished;
     }
@@ -185,12 +182,6 @@ public class GameController {
     public void updateRepos() {
         Score score = getScore();
         GameService.updateScores(historyWhite, historyBlack, getWins(score, Slot.WHITE), getLoses(score, Slot.WHITE), getWins(score, Slot.BLACK), getLoses(score, Slot.BLACK));
-    }
-
-    private void printStats() {
-        Score score = getScore();
-        //Logger.info(String.format("game\tfinished BLACK = [%d] WHITE = [%d]", score.getBlack(), score.getWhite()));
-        //GameService.printStats();
     }
 
     private int getWins(Score score, Slot s) {
