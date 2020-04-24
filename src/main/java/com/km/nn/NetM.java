@@ -8,11 +8,6 @@ public class NetM implements Serializable, Net {
     private Net[] net = new Net[SIZE];
     private int[] trainCounter = new int[SIZE];
 
-    @Override
-    public int getSegments() {
-        return SIZE;
-    }
-
     NetM(NetVersion v) {
         for (int i = 0; i < SIZE; i++) {
             switch (v) {
@@ -29,6 +24,11 @@ public class NetM implements Serializable, Net {
                     throw new IllegalArgumentException();
             }
         }
+    }
+
+    @Override
+    public int getSegments() {
+        return SIZE;
     }
 
     @Override

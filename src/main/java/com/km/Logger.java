@@ -69,10 +69,10 @@ public class Logger {
     }
 
     public static void printStats() {
-        System.out.println("debug = "+cDebug);
-        System.out.println("trace = "+cTrace);
-        System.out.println("info = "+cInfo);
-        System.out.println("important = "+cImportant);
-        System.out.println("error = "+cError);
+        System.out.println("debug = " + cDebug);
+        System.out.println("trace = " + cTrace);
+        System.out.println("info = " + cInfo);
+        System.out.println("important = " + cImportant);
+        System.out.println("error = " + cError);
     }
 }

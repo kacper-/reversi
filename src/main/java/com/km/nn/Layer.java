@@ -6,7 +6,6 @@ import com.km.nn.dropout.DropOut;
 import com.km.nn.dropout.DropOutFactory;
 
 import java.io.Serializable;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Layer implements Serializable {
