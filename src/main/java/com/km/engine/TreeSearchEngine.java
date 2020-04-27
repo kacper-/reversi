@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class TreeSearchEngine implements MoveEngine {
     private static final double MC_FACTOR = 1.4d;
@@ -90,8 +91,7 @@ public class TreeSearchEngine implements MoveEngine {
             executor.execute(() -> startSingleSimulation(simController));
         }
         executor.shutdown();
-        while (!executor.isTerminated())
-            Thread.sleep(50);
+        executor.awaitTermination(1, TimeUnit.DAYS);
     }
 
     private int getTaskCount() {

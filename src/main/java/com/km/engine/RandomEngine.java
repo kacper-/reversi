@@ -21,4 +21,9 @@ public class RandomEngine implements MoveEngine {
         List<Move> list = new ArrayList<>(moves);
         return list.get(ThreadLocalRandom.current().nextInt(moves.size()));
     }
+
+    public static Move getRandomMove(Set<Move> moves) {
+        List<Move> list = new ArrayList<>(moves);
+        return list.get(ThreadLocalRandom.current().nextInt(moves.size()));
+    }
 }

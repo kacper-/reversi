@@ -4,6 +4,7 @@ import com.km.Logger;
 import com.km.engine.EngineFactory;
 import com.km.engine.EngineType;
 import com.km.engine.MoveEngine;
+import com.km.engine.RandomEngine;
 import com.km.repos.GameService;
 
 import java.util.ArrayList;
@@ -17,14 +18,12 @@ public class GameController {
     private List<HistoryItem> historyBlack;
     private List<HistoryItem> historyWhite;
     private MoveEngine moveEngine;
-    private MoveEngine randomEngine;
     private boolean simulation;
     private boolean warMode = false;
     private GameController controllerB;
     private GameController controllerW;
 
     public GameController() {
-        randomEngine = EngineFactory.createMoveEngine(this, EngineType.RANDOM);
     }
 
     public GameController copy() {
@@ -34,7 +33,6 @@ public class GameController {
         controller.historyBlack = historyBlack.stream().map(HistoryItem::copy).collect(Collectors.toList());
         controller.historyWhite = historyWhite.stream().map(HistoryItem::copy).collect(Collectors.toList());
         controller.moveEngine = moveEngine;
-        controller.randomEngine = randomEngine;
         controller.simulation = simulation;
         return controller;
     }
@@ -166,7 +164,13 @@ public class GameController {
     }
 
     public void makeRandomMove() {
-        makeMoveInternal(randomEngine);
+        Set<Move> moves = GameRules.getAvailableMoves(gameBoard);
+        if (!moves.isEmpty()) {
+            Move move = RandomEngine.getRandomMove(moves);
+            updateBoard(move);
+        } else {
+            nextTurn();
+        }
     }
 
     public boolean isFinished() {
