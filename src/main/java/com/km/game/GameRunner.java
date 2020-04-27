@@ -18,7 +18,7 @@ public class GameRunner {
     private int warScoreB = 0;
     private int warScoreW = 0;
     private List<List<Integer>> progress;
-    private int[] histogram = new int[HIST_SIZE];
+    private final int[] histogram = new int[HIST_SIZE];
     private NetUtil netUtil;
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
@@ -108,12 +108,12 @@ public class GameRunner {
                 start = new Date().getTime();
                 int[] acc = netUtil.runTrainingFromLocalData(i);
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
-                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], wins));
+                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], (stop - start) / 1000));
+                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
             netUtil.save();
             Logger.setDefaultLevel();
@@ -139,12 +139,12 @@ public class GameRunner {
                 Logger.info(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int[] acc = runTrainingCycle();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
-                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], wins));
+                progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 long stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], (stop - start) / 1000));
+                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
             Logger.setDefaultLevel();
             Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));

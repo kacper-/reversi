@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TreeSearchEngine implements MoveEngine {
-    private static final boolean RANDOM = false;
+    private static final boolean RANDOM = true;
     private static final double MC_FACTOR = 1.4d;
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
@@ -93,7 +93,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     private int getTaskCount() {
         Score s = controller.getScore();
-        return tCount[(s.getBlack() + s.getWhite()) / 16];
+        return tCount[(s.getBlack() + s.getWhite()) / tCount.length];
     }
 
     private void loadConfig() {
