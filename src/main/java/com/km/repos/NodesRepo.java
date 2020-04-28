@@ -16,10 +16,6 @@ class NodesRepo {
         return list;
     }
 
-    static Map<String, Nodes> getMap() {
-        return map;
-    }
-
     static Nodes findByBoard(String board) {
         return map.get(board);
     }

@@ -12,11 +12,10 @@ import java.util.List;
 
 public class NetUtil {
     private static final double PRECISION = 0.1d;
+    private final NetVersion version;
+    private final String fileName;
+    private final String repoFileName;
     private Net net;
-    private NetVersion version;
-    private int trainCount;
-    private String fileName;
-    private String repoFileName;
     private Repo repo;
 
     public NetUtil(NetVersion version, String name, String repoFileName) {
@@ -78,7 +77,6 @@ public class NetUtil {
 
     private void trainNoValidate(Nodes n) {
         net.teach(translate(n.getBoard()), expected(n));
-        trainCount++;
     }
 
     private double expected(Nodes n) {
@@ -94,7 +92,6 @@ public class NetUtil {
 
     public int[] runTraining() {
         load();
-        trainCount = 0;
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         for (Nodes node : nodes) train(node);
         int[] result = verify(nodes);
@@ -169,7 +166,6 @@ public class NetUtil {
     }
 
     public void report() {
-        System.out.println(String.format("trainCount = [%d]", trainCount));
         int[] r = net.report();
         for (int i = 0; i < net.getSegments(); i++)
             System.out.println(String.format("[%d] -> [%d]", i, r[i]));

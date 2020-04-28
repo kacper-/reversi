@@ -22,7 +22,7 @@ public class GameRules {
         for (int i = 0; i < GameBoard.S2; i++) {
             if (gameBoard.getValue(i) == Slot.EMPTY) {
                 Move move = new Move(GameBoard.getI(i), GameBoard.getJ(i));
-                if (!isMoveAvailable(move, gameBoard).isEmpty()) {
+                if (isMoveAvailableFast(move, gameBoard)) {
                     moves.add(move);
                 }
             }
@@ -41,6 +41,15 @@ public class GameRules {
             }
         }
         return directions;
+    }
+
+    static boolean isMoveAvailableFast(Move move, GameBoard gameBoard) {
+        for (Move m : getProperNeighbours(move, gameBoard)) {
+            if (isDirectionValid(move, m, gameBoard)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isDirectionValid(Move move, Move m, GameBoard gameBoard) {

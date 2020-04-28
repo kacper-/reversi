@@ -1,9 +1,6 @@
 package com.km.game;
 
-import com.km.engine.EngineFactory;
-import com.km.engine.EngineType;
-import com.km.engine.MoveEngine;
-import com.km.engine.RandomEngine;
+import com.km.engine.*;
 import com.km.repos.GameService;
 
 import java.util.ArrayList;
@@ -79,9 +76,10 @@ public class GameController {
         return controllerB.isFinished();
     }
 
-    public void prepareSimulationGame(GameController copyFrom, EngineType type) {
+    public void prepareSimulationGame(GameController copyFrom, TreeSearchEngine engine) {
         warMode = false;
-        prepareMoveEngine(type);
+        moveEngine = engine;
+        moveEngine.setGameController(this);
         this.gameBoard = copyFrom.gameBoard.copy();
         initHistoryForSimulation(copyFrom.historyBlack, copyFrom.historyWhite);
         gameSaved = false;

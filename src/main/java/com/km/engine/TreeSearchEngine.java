@@ -1,6 +1,5 @@
 package com.km.engine;
 
-import com.km.Config;
 import com.km.entities.Pair;
 import com.km.game.*;
 import com.km.repos.GameService;
@@ -16,13 +15,9 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    private final int[] tCount = new int[8];
+    private final int[] tCount = new int[]{2500, 2200, 1500, 800, 600, 500, 400, 200};
     private GameController controller;
     private GameController[] sims;
-
-    TreeSearchEngine() {
-        loadConfig();
-    }
 
     @Override
     public void setGameController(GameController controller) {
@@ -71,7 +66,7 @@ public class TreeSearchEngine implements MoveEngine {
         for (int i = 0; i < taskCount; i++) {
             GameController simController = new GameController();
             sims[i] = simController;
-            executor.execute(() -> startSingleSimulation(simController));
+            executor.execute(() -> startSingleSimulation(simController, new TreeSearchEngine()));
         }
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.DAYS);
@@ -82,19 +77,8 @@ public class TreeSearchEngine implements MoveEngine {
         return tCount[(s.getBlack() + s.getWhite()) / tCount.length];
     }
 
-    private void loadConfig() {
-        tCount[0] = Config.getSimCountL0();
-        tCount[1] = Config.getSimCountL1();
-        tCount[2] = Config.getSimCountL2();
-        tCount[3] = Config.getSimCountL3();
-        tCount[4] = Config.getSimCountL4();
-        tCount[5] = Config.getSimCountL5();
-        tCount[6] = Config.getSimCountL6();
-        tCount[7] = Config.getSimCountL7();
-    }
-
-    private void startSingleSimulation(GameController simController) {
-        simController.prepareSimulationGame(controller, EngineType.MC);
+    private void startSingleSimulation(GameController simController, TreeSearchEngine engine) {
+        simController.prepareSimulationGame(controller, engine);
         while (!simController.isFinished()) {
             simController.makeMove();
             simController.makeRandomMove();
