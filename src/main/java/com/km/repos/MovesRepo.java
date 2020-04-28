@@ -1,6 +1,7 @@
 package com.km.repos;
 
 import com.km.entities.Moves;
+import com.km.entities.Nodes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 class MovesRepo {
-    private static Map<Integer, List<Moves>> map = new HashMap<>();
+    private static Map<Nodes, List<Moves>> map = new HashMap<>();
 
-    static List<Moves> findByParent(int snodeId) {
-        return map.get(snodeId);
+    static List<Moves> findByParent(Nodes snode) {
+        return map.get(snode);
     }
 
     static void save(Moves m) {

@@ -5,9 +5,7 @@ import com.km.entities.Nodes;
 import com.km.entities.Pair;
 import com.km.game.HistoryItem;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameService {
 
@@ -25,7 +23,7 @@ public class GameService {
             if (snode == null) {
                 snode = NodesRepo.save(new Nodes(item.getParent().getBoard(), w, l));
             }
-            MovesRepo.save(new Moves(snode.getId(), node.getId()));
+            MovesRepo.save(new Moves(snode, node));
             addGameNode(item.getParent(), w, l);
         }
     }
@@ -41,15 +39,14 @@ public class GameService {
         }
     }
 
-    public static Map<Pair<String, Integer>, Pair<Integer, Integer>> findSimulations(String board) {
-        Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = new HashMap<>();
+    public static Set<Nodes> findSimulations(String board) {
+        Set<Nodes> simulations = new HashSet<>();
         Nodes node = NodesRepo.findByBoard(board);
         if (node != null) {
-            List<Moves> moves = MovesRepo.findByParent(node.getId());
+            List<Moves> moves = MovesRepo.findByParent(node);
             if (moves != null) {
                 for (Moves move : moves) {
-                    Nodes n = NodesRepo.findById(move.getEnode());
-                    simulations.put(Pair.of(n.getBoard(), n.getId()), Pair.of(n.getWins(), n.getLoses()));
+                    simulations.add(move.getEnode());
                 }
                 return simulations;
             }

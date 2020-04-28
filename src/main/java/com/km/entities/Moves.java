@@ -1,38 +1,35 @@
 package com.km.entities;
 
+import java.util.Objects;
+
 public class Moves {
-    private int snodeId;
-    private int enodeId;
+    private Nodes snode;
+    private Nodes enode;
 
-    public Moves(int snodeId, int enodeId) {
-        this.snodeId = snodeId;
-        this.enodeId = enodeId;
+    public Moves(Nodes snode, Nodes enode) {
+        this.snode= snode;
+        this.enode = enode;
     }
 
-    public int getSnode() {
-        return snodeId;
+    public Nodes getSnode() {
+        return snode;
     }
 
-    public int getEnode() {
-        return enodeId;
+    public Nodes getEnode() {
+        return enode;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Moves moves = (Moves) o;
-
-        if (snodeId != moves.snodeId) return false;
-        return enodeId == moves.enodeId;
-
+        return snode.equals(moves.snode) &&
+                enode.equals(moves.enode);
     }
 
     @Override
     public int hashCode() {
-        int result = snodeId;
-        result = 31 * result + enodeId;
-        return result;
+        return Objects.hash(snode, enode);
     }
 }

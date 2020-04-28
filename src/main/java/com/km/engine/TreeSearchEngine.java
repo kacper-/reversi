@@ -1,5 +1,6 @@
 package com.km.engine;
 
+import com.km.entities.Nodes;
 import com.km.entities.Pair;
 import com.km.game.*;
 import com.km.repos.GameService;
@@ -15,7 +16,7 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    private final int[] tCount = new int[]{2500, 2200, 1500, 800, 600, 500, 400, 200};
+    private final int[] tCount = new int[]{10000, 10000, 10000, 10000, 10000, 10000, 6000, 2000};
     private GameController controller;
     private GameController[] sims;
 
@@ -33,13 +34,13 @@ public class TreeSearchEngine implements MoveEngine {
 
     private Move moveLogic(Set<Move> moves) {
         HistoryItem parent = HistoryItem.fromGB(controller.getGameBoard());
-        Map<Pair<String, Integer>, Pair<Integer, Integer>> simulations = GameService.findSimulations(parent.getBoard());
+        Set<Nodes> simulations = GameService.findSimulations(parent.getBoard());
         if (simulations.isEmpty()) {
             return chooseRandomMove(moves);
         } else {
-            Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulationMoves = new HashMap<>();
-            for (Pair<String, Integer> p : simulations.keySet()) {
-                simulationMoves.put(Pair.of(boardDiff(p.getFirst(), parent.getBoard()), p.getSecond()), simulations.get(p));
+            Map<Move, Nodes> simulationMoves = new HashMap<>();
+            for (Nodes p : simulations) {
+                simulationMoves.put(boardDiff(p.getBoard(), parent.getBoard()), p);
             }
             return evaluateSimulations(simulationMoves, moves);
         }
@@ -85,25 +86,25 @@ public class TreeSearchEngine implements MoveEngine {
         }
     }
 
-    private Move evaluateSimulations(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {
-        Pair<Move, Integer> best = simulations.keySet().iterator().next();
+    private Move evaluateSimulations(Map<Move, Nodes> simulations, Set<Move> moves) {
+        Move best = simulations.keySet().iterator().next();
         double score = MC_DEFAULT_SCORE;
         int bigN = getBigN(simulations);
         int good = 0;
-        for (Pair<Move, Integer> m : simulations.keySet()) {
-            Pair<Integer, Integer> p = simulations.get(m);
-            double mcValue = getMCvalue(bigN, p.getFirst(), p.getSecond());
+        for (Move m : simulations.keySet()) {
+            Nodes p = simulations.get(m);
+            double mcValue = getMCvalue(bigN, p.getWins(), p.getLoses());
             if (mcValue > score) {
                 best = m;
                 score = mcValue;
             }
-            if (getMoveWLScore(p.getFirst(), p.getSecond()) > EXPAND_RATIO)
+            if (getMoveWLScore(p.getWins(), p.getLoses()) > EXPAND_RATIO)
                 good++;
         }
         if (controller.isSimulation() && (good < MIN_GOOD) && (moves.size() > simulations.size())) {
             return expand(simulations, moves);
         } else {
-            return best.getFirst();
+            return best;
         }
     }
 
@@ -115,10 +116,9 @@ public class TreeSearchEngine implements MoveEngine {
         return result;
     }
 
-    private Move expand(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {
+    private Move expand(Map<Move, Nodes> simulations, Set<Move> moves) {
         Set<Move> nonSimulated = new HashSet<>(moves);
-        for (Pair<Move, Integer> p : simulations.keySet()) {
-            Move m = p.getFirst();
+        for (Move m : simulations.keySet()) {
             nonSimulated.remove(m);
         }
         return chooseRandomMove(nonSimulated);
@@ -131,10 +131,10 @@ public class TreeSearchEngine implements MoveEngine {
         return ar + br;
     }
 
-    private int getBigN(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations) {
+    private int getBigN(Map<Move, Nodes> simulations) {
         int n = 0;
-        for (Pair<Integer, Integer> p : simulations.values())
-            n += p.getFirst() + p.getSecond();
+        for (Nodes p : simulations.values())
+            n += p.getWins() + p.getLoses();
         return n;
     }
 
