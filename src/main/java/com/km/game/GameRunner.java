@@ -146,6 +146,7 @@ public class GameRunner {
     }
 
     private void report() {
+        System.out.println("Nodes = " + GameService.getNodes().size());
         printHistogram();
         System.out.println("NET report : ");
         netUtil.report();
