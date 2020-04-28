@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class GameRules {
-    private static Move[] vectors = new Move[]{
+    private static final Move[] vectors = new Move[]{
             new Move(-1, -1),
             new Move(-1, 1),
             new Move(-1, 0),

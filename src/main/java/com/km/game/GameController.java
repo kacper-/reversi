@@ -179,15 +179,15 @@ public class GameController {
     }
 
     private int getWins(Score score, Slot s) {
-        if (score.getWinner().opposite() == s)
-            return 0;
-        if (score.getWinner() == Slot.EMPTY)
+        if (score.getWinner() == s)
             return 1;
-        return 2 + (Math.abs(score.getBlack() - score.getWhite()) / 10);
+        return 0;
     }
 
     private int getLoses(Score score, Slot s) {
-        return getWins(new Score(score.getWhite(), score.getBlack(), score.getWinner().opposite()), s);
+        if (score.getWinner().opposite() == s)
+            return 1;
+        return 0;
     }
 
     public Score getScore() {
