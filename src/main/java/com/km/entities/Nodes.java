@@ -5,17 +5,9 @@ import com.km.game.DBSlot;
 import java.io.Serializable;
 
 public class Nodes implements Serializable {
-    private int id;
-    private String board;
+    private final String board;
     private int wins;
     private int loses;
-
-    public Nodes(int id, String board, int wins, int loses) {
-        this.id = id;
-        this.board = board;
-        this.wins = wins;
-        this.loses = loses;
-    }
 
     public Nodes(String board, int wins, int loses) {
         this.board = board;
@@ -30,7 +22,6 @@ public class Nodes implements Serializable {
 
         Nodes nodes = (Nodes) o;
 
-        if (id != nodes.id) return false;
         if (wins != nodes.wins) return false;
         if (loses != nodes.loses) return false;
         return board.equals(nodes.board);
@@ -39,8 +30,7 @@ public class Nodes implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + board.hashCode();
+        int result = board.hashCode();
         result = 31 * result + wins;
         result = 31 * result + loses;
         return result;
@@ -64,10 +54,6 @@ public class Nodes implements Serializable {
 
     public void setLoses(int loses) {
         this.loses = loses;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getCount(DBSlot s) {

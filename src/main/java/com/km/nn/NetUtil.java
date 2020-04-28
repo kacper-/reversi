@@ -8,6 +8,7 @@ import com.km.repos.Repo;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class NetUtil {
@@ -198,7 +199,7 @@ public class NetUtil {
         }
     }
 
-    public void updateRepo(List<Nodes> nodes) {
+    public void updateRepo(Collection<Nodes> nodes) {
         List<Nodes> list = new ArrayList<>();
         for (Nodes n : nodes) {
             if (validate(n))

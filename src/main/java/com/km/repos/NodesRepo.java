@@ -2,18 +2,13 @@ package com.km.repos;
 
 import com.km.entities.Nodes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class NodesRepo {
-    private static int id = -1;
     private static Map<String, Nodes> map = new HashMap<>();
-    private static List<Nodes> list = new ArrayList<>();
 
-    static List<Nodes> getNodes() {
-        return list;
+    static Collection<Nodes> getNodes() {
+        return map.values();
     }
 
     static Nodes findByBoard(String board) {
@@ -21,25 +16,16 @@ class NodesRepo {
     }
 
     static Nodes save(Nodes node) {
-        id++;
-        Nodes n = new Nodes(id, node.getBoard(), node.getWins(), node.getLoses());
-        list.add(id, n);
+        Nodes n = new Nodes(node.getBoard(), node.getWins(), node.getLoses());
         map.put(n.getBoard(), n);
         return n;
     }
 
     static void update(Nodes node) {
-        list.set(node.getId(), node);
         map.put(node.getBoard(), node);
     }
 
-    static Nodes findById(int nodeId) {
-        return list.get(nodeId);
-    }
-
     static void clear() {
-        id = -1;
         map = new HashMap<>();
-        list = new ArrayList<>();
     }
 }

@@ -54,7 +54,7 @@ public class GameService {
         return simulations;
     }
 
-    public static List<Nodes> getNodes() {
+    public static Collection<Nodes> getNodes() {
         return NodesRepo.getNodes();
     }
 

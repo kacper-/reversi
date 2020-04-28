@@ -16,7 +16,7 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    private final int[] tCount = new int[]{10000, 10000, 10000, 10000, 10000, 10000, 6000, 2000};
+    private final int[] tCount = new int[]{4000, 4000, 4000, 4000, 4000, 4000, 3000, 800};
     private GameController controller;
     private GameController[] sims;
 
