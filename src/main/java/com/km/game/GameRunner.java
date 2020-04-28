@@ -1,8 +1,6 @@
 package com.km.game;
 
 import com.km.Config;
-import com.km.LogLevel;
-import com.km.Logger;
 import com.km.engine.EngineType;
 import com.km.nn.NetUtil;
 import com.km.repos.GameService;
@@ -12,13 +10,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GameRunner {
     private static final int HIST_SIZE = 11;
+    private final int[] histogram = new int[HIST_SIZE];
     private ScoreListener scoreListener;
     private UIListener uiListener;
     private GameController controller;
     private int warScoreB = 0;
     private int warScoreW = 0;
     private List<List<Integer>> progress;
-    private final int[] histogram = new int[HIST_SIZE];
     private NetUtil netUtil;
     private volatile boolean warFinished = false;
     private volatile boolean batchFinished = false;
@@ -64,19 +62,17 @@ public class GameRunner {
         netUtil.clearRepo();
         new Thread(() -> {
             progress = new ArrayList<>();
-            Logger.info(String.format("data\tdata mode : cycles count [%d]", cycleCount));
-            Logger.setLevel(LogLevel.IMPORTANT);
+            System.out.println(String.format("data\tdata mode : cycles count [%d]", cycleCount));
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
                 runDataCycle();
                 long middle = new Date().getTime();
                 netUtil.updateRepo(GameService.getNodes());
                 long end = new Date().getTime();
-                Logger.important(String.format("%d g_size=%d\tg_time=%d\tr_time=%d", i + 1, netUtil.getLastCount(), (middle - start) / 1000, (end - middle) / 1000));
+                System.out.println(String.format("%d g_size=%d\tg_time=%d\tr_time=%d", i + 1, netUtil.getLastCount(), (middle - start) / 1000, (end - middle) / 1000));
             }
             netUtil.saveRepo();
-            Logger.setDefaultLevel();
-            Logger.info("data\tdata mode finished");
+            System.out.println("data\tdata mode finished");
             dataFinished = true;
         }).start();
     }
@@ -100,8 +96,7 @@ public class GameRunner {
             long start, stop;
             progress = new ArrayList<>();
             clearHistogram();
-            Logger.info(String.format("train\ttrain mode : cycles count [%d]", netUtil.getNodesListCount()));
-            Logger.setLevel(LogLevel.IMPORTANT);
+            System.out.println(String.format("train\ttrain mode : cycles count [%d]", netUtil.getNodesListCount()));
             int avg = 0;
             netUtil.load();
             for (int i = 0; i < netUtil.getNodesListCount(); i++) {
@@ -113,11 +108,10 @@ public class GameRunner {
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
+                System.out.println(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
             netUtil.save();
-            Logger.setDefaultLevel();
-            Logger.info(String.format("train\ttraining finished with avg : [%d]", avg / netUtil.getNodesListCount()));
+            System.out.println(String.format("train\ttraining finished with avg : [%d]", avg / netUtil.getNodesListCount()));
             report();
             trainFinished = true;
         }).start();
@@ -131,12 +125,10 @@ public class GameRunner {
         new Thread(() -> {
             progress = new ArrayList<>();
             clearHistogram();
-            Logger.info(String.format("batch\tbatch train : cycles count [%d]", cycleCount));
-            Logger.setLevel(LogLevel.IMPORTANT);
+            System.out.println(String.format("batch\tbatch train : cycles count [%d]", cycleCount));
             int avg = 0;
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
-                Logger.info(String.format("batch\tcycle [%d] of [%d]", i + 1, cycleCount));
                 int[] acc = runTrainingCycle();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
@@ -144,10 +136,9 @@ public class GameRunner {
                 histogram[wins / 10]++;
                 notifyOnTrainProgress();
                 long stop = new Date().getTime();
-                Logger.important(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
+                System.out.println(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
-            Logger.setDefaultLevel();
-            Logger.info(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
+            System.out.println(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
             report();
             notifyOnUI();
             batchFinished = true;
@@ -156,16 +147,14 @@ public class GameRunner {
 
     private void report() {
         printHistogram();
-        Logger.info("NET report : ");
+        System.out.println("NET report : ");
         netUtil.report();
-        Logger.info("Logger report : ");
-        Logger.printStats();
     }
 
     private void printHistogram() {
-        Logger.info("Histogram : ");
+        System.out.println("Histogram : ");
         for (int i = 0; i < HIST_SIZE; i++)
-            Logger.info(String.format("batch\thistogram [%d] -> [%d]", i * 10, histogram[i]));
+            System.out.println(String.format("batch\thistogram [%d] -> [%d]", i * 10, histogram[i]));
     }
 
     private int[] runTrainingCycle() {

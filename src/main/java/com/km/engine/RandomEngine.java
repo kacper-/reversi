@@ -11,6 +11,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomEngine implements MoveEngine {
     private GameController controller;
 
+    public static Move getRandomMove(Set<Move> moves) {
+        List<Move> list = new ArrayList<>(moves);
+        return list.get(ThreadLocalRandom.current().nextInt(moves.size()));
+    }
+
     @Override
     public void setGameController(GameController controller) {
         this.controller = controller;
@@ -18,11 +23,6 @@ public class RandomEngine implements MoveEngine {
 
     @Override
     public Move chooseMove(Set<Move> moves) {
-        List<Move> list = new ArrayList<>(moves);
-        return list.get(ThreadLocalRandom.current().nextInt(moves.size()));
-    }
-
-    public static Move getRandomMove(Set<Move> moves) {
         List<Move> list = new ArrayList<>(moves);
         return list.get(ThreadLocalRandom.current().nextInt(moves.size()));
     }

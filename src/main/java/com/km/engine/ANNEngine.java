@@ -1,6 +1,5 @@
 package com.km.engine;
 
-import com.km.Logger;
 import com.km.game.GameController;
 import com.km.game.Move;
 import com.km.nn.NetUtil;
@@ -38,10 +37,8 @@ public class ANNEngine implements MoveEngine {
 
     double scoreMove(Move m) {
         GameController copy = controller.copy();
-        Logger.setOff();
         copy.updateBoard(m);
         copy.nextTurn();
-        Logger.setOn();
         String board = copy.getGameBoard().toDBString();
         return netUtil.process(board);
     }

@@ -15,27 +15,27 @@ public class Application {
         if (wrapper.parseArgs(args)) {
             wrapper.run();
         } else {
-            Logger.error("app\terror parsing args");
+            System.out.println("app\terror parsing args");
             printUsage();
             System.exit(0);
         }
     }
 
     private static void printUsage() {
-        Logger.important("\nUSAGE : \n");
-        Logger.important("---");
-        Logger.important("for ui mode :");
-        Logger.important("\t\tui");
-        Logger.important("for war mode :");
-        Logger.important("\t\twar EngineType EngineType");
-        Logger.important("for batch mode :");
-        Logger.important("\t\tbatch\n");
-        Logger.important("EngineType = [ MC | ANN3MRC | ANN4MRC | ANNMMRC | RULE | RANDOM | SUPER3M | SUPER4M | BATCH ]");
-        Logger.important("for data mode :");
-        Logger.important("\t\tdata");
-        Logger.important("for train mode :");
-        Logger.important("\t\ttrain");
-        Logger.important("---\n");
+        System.out.println("\nUSAGE : \n");
+        System.out.println("---");
+        System.out.println("for ui mode :");
+        System.out.println("\t\tui");
+        System.out.println("for war mode :");
+        System.out.println("\t\twar EngineType EngineType");
+        System.out.println("for batch mode :");
+        System.out.println("\t\tbatch\n");
+        System.out.println("EngineType = [ MC | ANN3MRC | ANN4MRC | ANNMMRC | RULE | RANDOM | SUPER3M | SUPER4M | BATCH ]");
+        System.out.println("for data mode :");
+        System.out.println("\t\tdata");
+        System.out.println("for train mode :");
+        System.out.println("\t\ttrain");
+        System.out.println("---\n");
     }
 
     private static void loadConfig(String configFile) {
@@ -47,6 +47,5 @@ public class Application {
             System.exit(0);
         }
         Config.setProperties(properties);
-        Logger.trace(String.format("app\tconfig loaded from [%s]", configFile));
     }
 }

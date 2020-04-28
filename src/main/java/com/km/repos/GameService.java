@@ -26,6 +26,7 @@ public class GameService {
                 snode = NodesRepo.save(new Nodes(item.getParent().getBoard(), w, l));
             }
             MovesRepo.save(new Moves(snode.getId(), node.getId()));
+            addGameNode(item.getParent(), w, l);
         }
     }
 

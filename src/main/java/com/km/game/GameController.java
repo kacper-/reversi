@@ -1,6 +1,5 @@
 package com.km.game;
 
-import com.km.Logger;
 import com.km.engine.EngineFactory;
 import com.km.engine.EngineType;
 import com.km.engine.MoveEngine;
@@ -44,7 +43,6 @@ public class GameController {
     void startNewGame(Slot human, EngineType type) {
         simulation = false;
         warMode = false;
-        Logger.info(String.format("game\t[%s] plays [%s]", type.name(), human.opposite().name()));
         GameService.clear();
         prepareMoveEngine(type);
         GameRules.initGameBoard(gameBoard);
@@ -78,13 +76,7 @@ public class GameController {
     }
 
     private boolean isWarFinished() {
-        boolean b = controllerB.isFinished();
-        boolean w = controllerW.isFinished();
-        if (b != w) {
-            Logger.error("board paradox");
-            System.exit(0);
-        }
-        return b;
+        return controllerB.isFinished();
     }
 
     public void prepareSimulationGame(GameController copyFrom, EngineType type) {

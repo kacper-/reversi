@@ -43,13 +43,6 @@ public class Config {
             throw new IllegalArgumentException();
     }
 
-    public static LogLevel getLevel() {
-        if (properties.getProperty("level") != null)
-            return LogLevel.valueOf(properties.getProperty("level").toUpperCase());
-        else
-            throw new IllegalArgumentException();
-    }
-
     public static int getTestLen() {
         if (properties.getProperty("test.len") != null)
             return Integer.parseInt(properties.getProperty("test.len"));
@@ -220,8 +213,5 @@ public class Config {
 
     public static void setProperties(Properties properties) {
         Config.properties = properties;
-        for (Object o : properties.keySet()) {
-            Logger.trace(String.format("app\tkey=[%s] value=[%s]", o.toString(), properties.getProperty(o.toString())));
-        }
     }
 }

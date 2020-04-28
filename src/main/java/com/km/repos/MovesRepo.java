@@ -1,6 +1,5 @@
 package com.km.repos;
 
-import com.km.Logger;
 import com.km.entities.Moves;
 
 import java.util.ArrayList;
@@ -31,9 +30,4 @@ class MovesRepo {
     static void clear() {
         map = new HashMap<>();
     }
-
-    static void printStats() {
-        Logger.trace(String.format("db\tmoves map count = [%d]", map.size()));
-    }
-
 }

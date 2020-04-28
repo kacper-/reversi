@@ -1,7 +1,6 @@
 package com.km.nn;
 
 import com.km.Config;
-import com.km.Logger;
 import com.km.entities.Nodes;
 import com.km.game.DBSlot;
 import com.km.repos.GameService;
@@ -27,7 +26,7 @@ public class NetUtil {
     }
 
     public void clear() {
-        Logger.info(String.format("net\tclearing file [%s]", fileName));
+        System.out.println(String.format("net\tclearing file [%s]", fileName));
         net = createInstance();
         save();
     }
@@ -46,7 +45,6 @@ public class NetUtil {
     }
 
     public void save() {
-        Logger.trace(String.format("net\tsaving file [%s]", fileName));
         try {
             FileOutputStream fileOut = new FileOutputStream(fileName);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
@@ -58,9 +56,7 @@ public class NetUtil {
     }
 
     public void load() {
-        Logger.trace(String.format("net\tloading file [%s]", fileName));
         if (!new File(fileName).exists()) {
-            Logger.important(String.format("net\tfile [%s] does not exist, creating new", fileName));
             clear();
         } else {
             try {
@@ -69,7 +65,7 @@ public class NetUtil {
                 net = (Net) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.error(String.format("net\terror loading file [%s]", fileName));
+                e.printStackTrace();
             }
         }
     }
@@ -99,11 +95,9 @@ public class NetUtil {
     public int[] runTraining() {
         load();
         trainCount = 0;
-        Logger.trace("net\ttraining started...");
         List<Nodes> nodes = new ArrayList<>(GameService.getNodes());
         for (Nodes node : nodes) train(node);
         int[] result = verify(nodes);
-        Logger.info(String.format("net\ttraining accuracy : [%.2f] -> [%d %%, %d %%, %d %%, %d %%] after [%d] iterations", PRECISION, result[0], result[1], result[2], result[3], trainCount));
         save();
         return result;
     }
@@ -175,14 +169,13 @@ public class NetUtil {
     }
 
     public void report() {
-        Logger.info(String.format("trainCount = [%d]", trainCount));
+        System.out.println(String.format("trainCount = [%d]", trainCount));
         int[] r = net.report();
         for (int i = 0; i < net.getSegments(); i++)
-            Logger.info(String.format("[%d] -> [%d]", i, r[i]));
+            System.out.println(String.format("[%d] -> [%d]", i, r[i]));
     }
 
     public void saveRepo() {
-        Logger.trace(String.format("net\tsaving data file [%s]", repoFileName));
         try {
             FileOutputStream fileOut = new FileOutputStream(repoFileName);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
@@ -194,9 +187,7 @@ public class NetUtil {
     }
 
     public void loadRepo() {
-        Logger.trace(String.format("net\tloading data file [%s]", repoFileName));
         if (!new File(repoFileName).exists()) {
-            Logger.important(String.format("net\tdata file [%s] does not exist, creating new", repoFileName));
             clearRepo();
             saveRepo();
         } else {
@@ -206,7 +197,7 @@ public class NetUtil {
                 repo = (Repo) objectIn.readObject();
                 objectIn.close();
             } catch (Exception e) {
-                Logger.error(String.format("net\terror loading data file [%s]", repoFileName));
+                e.printStackTrace();
             }
         }
     }

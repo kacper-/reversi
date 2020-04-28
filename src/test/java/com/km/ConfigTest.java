@@ -52,11 +52,6 @@ public class ConfigTest {
     }
 
     @Test
-    public void getLevel() {
-        assertSame(Config.getLevel(), LogLevel.INFO);
-    }
-
-    @Test
     public void getTestLen() {
         Assert.assertEquals(Config.getTestLen(), 100);
     }

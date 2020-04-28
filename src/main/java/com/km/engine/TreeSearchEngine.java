@@ -1,7 +1,6 @@
 package com.km.engine;
 
 import com.km.Config;
-import com.km.Logger;
 import com.km.entities.Pair;
 import com.km.game.*;
 import com.km.repos.GameService;
@@ -17,12 +16,9 @@ public class TreeSearchEngine implements MoveEngine {
     private static final double MC_DEFAULT_SCORE = -1d;
     private static final double EXPAND_RATIO = 0.75d;
     private static final int MIN_GOOD = 2;
-    private int simCount = 0;
-    private int wins = 0;
-    private int loses = 0;
+    private final int[] tCount = new int[8];
     private GameController controller;
     private GameController[] sims;
-    private final int[] tCount = new int[8];
 
     TreeSearchEngine() {
         loadConfig();
@@ -35,13 +31,7 @@ public class TreeSearchEngine implements MoveEngine {
 
     public Move chooseMove(Set<Move> moves) {
         if (!controller.isSimulation()) {
-            long start = new Date().getTime();
             runSimulations();
-            Move m = moveLogic(moves);
-            long stop = new Date().getTime();
-            Score s = controller.getScore();
-            Logger.info(String.format("algo\tprogress = [%d], task count = [%d], sim time = [%d] ms", s.getBlack() + s.getWhite(), getTaskCount(), stop - start));
-            return m;
         }
         return moveLogic(moves);
     }
@@ -65,11 +55,6 @@ public class TreeSearchEngine implements MoveEngine {
     }
 
     private void runSimulations() {
-        Logger.trace("algo\tstarting simulations");
-        simCount = 1;
-        wins = 0;
-        loses = 0;
-        Logger.setOff();
         try {
             startSimulationPool();
         } catch (InterruptedException e) {
@@ -77,8 +62,6 @@ public class TreeSearchEngine implements MoveEngine {
         }
         for (GameController c : sims)
             c.updateRepos();
-        Logger.setOn();
-        Logger.trace(String.format("algo\t[%d] simulations with result = [%d, %d] success ratio = [%.2f]", simCount - 1, wins, loses, ((float) wins) / (float) (loses + wins)));
     }
 
     private void startSimulationPool() throws InterruptedException {
@@ -116,16 +99,6 @@ public class TreeSearchEngine implements MoveEngine {
             simController.makeMove();
             simController.makeRandomMove();
         }
-        updateSimResults(simController);
-    }
-
-    private void updateSimResults(GameController simController) {
-        Score s = simController.getScore();
-        if (s.getWinner() == controller.getGameBoard().getTurn())
-            wins++;
-        else
-            loses++;
-        simCount++;
     }
 
     private Move evaluateSimulations(Map<Pair<Move, Integer>, Pair<Integer, Integer>> simulations, Set<Move> moves) {

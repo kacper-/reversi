@@ -1,6 +1,5 @@
 package com.km.repos;
 
-import com.km.Logger;
 import com.km.entities.Nodes;
 
 import java.util.ArrayList;
@@ -46,10 +45,5 @@ class NodesRepo {
         id = -1;
         map = new HashMap<>();
         list = new ArrayList<>();
-    }
-
-    static void printStats() {
-        Logger.trace(String.format("db\tnodes map count = [%d]", map.size()));
-        Logger.trace(String.format("db\tnodes list count = [%d]", list.size()));
     }
 }

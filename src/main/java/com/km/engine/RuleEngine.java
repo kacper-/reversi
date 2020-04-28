@@ -1,6 +1,5 @@
 package com.km.engine;
 
-import com.km.Logger;
 import com.km.game.GameController;
 import com.km.game.GameRules;
 import com.km.game.Move;
@@ -21,28 +20,23 @@ public class RuleEngine implements MoveEngine {
         double score;
         double bestScore = -Double.MAX_VALUE;
         Move best = null;
-        Logger.trace(String.format("algo\tnumber of available moves = [%d]", moves.size()));
         for (Move m : moves) {
             score = scoreMove(m);
-            Logger.debug(String.format("algo\tmove = [%d, %d] score = [%f]", m.getI(), m.getJ(), score));
             if (bestScore < score) {
                 bestScore = score;
                 best = m;
             }
         }
-        Logger.trace(String.format("algo\tchoosing [%d, %d] score = [%f]", best.getI(), best.getJ(), bestScore));
         return best;
     }
 
     double scoreMove(Move m) {
-        Logger.setOff();
         if (isCorner(m))
             return 1d;
         double risk = calculateRisk(m);
         if (risk < 0)
             return risk;
         int count = countGain(m);
-        Logger.setOn();
         return ((double) count) / 64d;
     }
 
