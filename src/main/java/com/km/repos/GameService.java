@@ -5,10 +5,7 @@ import com.km.entities.Nodes;
 import com.km.game.HistoryItem;
 import com.km.nn.NetUtil;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GameService {
 
@@ -62,17 +59,19 @@ public class GameService {
     }
 
     public static void filter() {
-        Set<Nodes> toDelete = new HashSet<>();
+        Map<String, Nodes> nodesMap = new HashMap<>();
+        Map<Nodes, List<Moves>> movesMap = new HashMap<>();
         for (Nodes n : NodesRepo.map.values()) {
-            if (!NetUtil.validate(n))
-                toDelete.add(n);
+            if (NetUtil.validate(n)) {
+                nodesMap.put(n.getBoard(), n);
+                List<Moves> moves = MovesRepo.findByParent(n);
+                if (moves != null)
+                    movesMap.put(n, moves);
+            }
         }
         System.out.println("Before = " + NodesRepo.map.size());
-        System.out.println("toDelete = " + toDelete.size());
-        for (Nodes n : toDelete) {
-            MovesRepo.map.remove(n);
-            NodesRepo.map.remove(n.getBoard());
-        }
+        NodesRepo.map = nodesMap;
+        MovesRepo.map = movesMap;
         System.out.println("After  = " + NodesRepo.map.size());
     }
 
