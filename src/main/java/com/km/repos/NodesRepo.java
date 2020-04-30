@@ -2,10 +2,12 @@ package com.km.repos;
 
 import com.km.entities.Nodes;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 class NodesRepo {
-    private static Map<String, Nodes> map = new HashMap<>();
+    static Map<String, Nodes> map = new HashMap<>();
 
     static Collection<Nodes> getNodes() {
         return map.values();

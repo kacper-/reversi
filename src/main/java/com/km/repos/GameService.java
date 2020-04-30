@@ -2,10 +2,13 @@ package com.km.repos;
 
 import com.km.entities.Moves;
 import com.km.entities.Nodes;
-import com.km.entities.Pair;
 import com.km.game.HistoryItem;
+import com.km.nn.NetUtil;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GameService {
 
@@ -56,6 +59,21 @@ public class GameService {
 
     public static Collection<Nodes> getNodes() {
         return NodesRepo.getNodes();
+    }
+
+    public static void filter() {
+        Set<Nodes> toDelete = new HashSet<>();
+        for (Nodes n : NodesRepo.map.values()) {
+            if (!NetUtil.validate(n))
+                toDelete.add(n);
+        }
+        System.out.println("Before = " + NodesRepo.map.size());
+        System.out.println("toDelete = " + toDelete.size());
+        for (Nodes n : toDelete) {
+            MovesRepo.map.remove(n);
+            NodesRepo.map.remove(n.getBoard());
+        }
+        System.out.println("After  = " + NodesRepo.map.size());
     }
 
     public static void clear() {

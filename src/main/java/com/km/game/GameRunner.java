@@ -123,7 +123,6 @@ public class GameRunner {
         if (Config.isBatchClear())
             netUtil.clear();
         new Thread(() -> {
-            int nodes = 0;
             progress = new ArrayList<>();
             clearHistogram();
             System.out.println(String.format("batch\tbatch train : cycles count [%d]", cycleCount));
@@ -131,7 +130,6 @@ public class GameRunner {
             for (int i = 0; i < cycleCount; i++) {
                 long start = new Date().getTime();
                 int[] acc = runTrainingCycle();
-                nodes += GameService.getNodes().size();
                 int wins = runWars(EngineType.BATCH, EngineType.RANDOM, Config.getTestLen());
                 progress.add(Arrays.asList(acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], wins));
                 avg += wins;
@@ -141,7 +139,6 @@ public class GameRunner {
                 System.out.println(String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", i + 1, wins, acc[0], acc[1], acc[2], acc[3], acc[4], acc[5], acc[6], acc[7], (stop - start) / 1000));
             }
             System.out.println(String.format("batch\ttraining finished with avg : [%d]", avg / cycleCount));
-            System.out.println("Nodes = " + nodes);
             report();
             notifyOnUI();
             batchFinished = true;
@@ -167,6 +164,7 @@ public class GameRunner {
             runWar(EngineType.MC, opp);
         else
             runWar(opp, EngineType.MC);
+        GameService.filter();
         return netUtil.runTraining();
     }
 

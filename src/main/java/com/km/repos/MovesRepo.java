@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 class MovesRepo {
-    private static Map<Nodes, List<Moves>> map = new HashMap<>();
+    static Map<Nodes, List<Moves>> map = new HashMap<>();
 
     static List<Moves> findByParent(Nodes snode) {
         return map.get(snode);

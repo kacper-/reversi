@@ -84,7 +84,7 @@ public class NetUtil {
         return net.expected(new double[]{n.getWins(), n.getLoses()});
     }
 
-    private boolean validate(Nodes n) {
+    public static boolean validate(Nodes n) {
         int sum = n.getLoses() + n.getWins();
         if (n.getCount(DBSlot.EMPTY) == 0)
             return false;

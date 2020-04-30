@@ -40,7 +40,6 @@ public class GameController {
     void startNewGame(Slot human, EngineType type) {
         simulation = false;
         warMode = false;
-        GameService.clear();
         prepareMoveEngine(type);
         GameRules.initGameBoard(gameBoard);
         initHistory();
